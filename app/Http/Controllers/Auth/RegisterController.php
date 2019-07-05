@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use App\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
 
 class RegisterController extends Controller
 {
@@ -67,6 +70,22 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'role_id' => Role::getIdByCode('ADM')
         ]);
+    }
+
+    /*
+     * ============ THIS METHOD WAS OVERRIDEN ============
+     * In order to reject auto-login after register
+     */
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        event(new Registered($user = $this->create($request->all())));
+
+        //$this->guard()->login($user); // Here is where it auto-login
+
+        return $this->registered($request, $user) ?: redirect($this->redirectPath());
     }
 }
