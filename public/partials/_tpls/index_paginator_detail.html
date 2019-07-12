@@ -1,0 +1,19 @@
+<div class="col-sm-12">
+	<nav class="cls-pagination">
+		<ul class="pagination">
+			<li ng-click="paginateDetail('first')">
+				<span aria-hidden="true">&laquo; &laquo;</span>
+			</li>
+			<li ng-click="paginateDetail('previous')">
+				<span aria-hidden="true">&laquo;</span>
+			</li>-
+			<li><span>{{ pageDetailInfo }}</span></li>
+			<li ng-click="paginateDetail('next')">
+				<span aria-hidden="true">&raquo;</span>
+			</li>
+			<li ng-click="paginateDetail('last')">
+				<span aria-hidden="true">&raquo; &raquo;</span>
+			</li>
+		</ul>
+	</nav>
+</div>

@@ -1,0 +1,7 @@
+<div ng-hide="rec.status_loading">
+	<span class="label label-default cls-pointer" ng-if="rec.active" ng-click="setInactive(rec)">Activo</span>
+	<span class="label label-warning cls-pointer" ng-if="!rec.active" ng-click="setActive(rec)">Inactivo</span>
+</div>
+<div ng-show="rec.status_loading">
+	<img src="/images/loading.gif">
+</div>

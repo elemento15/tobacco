@@ -1,0 +1,13 @@
+<div class="row cls-toolbar">
+	<div class="col-sm-12">
+		<button class="btn btn-primary btn-sm" ng-click="save()" ng-hide="savingForm">
+			<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Guardar
+		</button>
+		<button class="btn btn-primary btn-sm" ng-show="savingForm" disabled="disabled">
+			<span class="glyphicon glyphicon-hourglass" aria-hidden="true"></span> Guardando
+		</button>
+		<button class="btn btn-default btn-sm" ng-click="close()">
+			<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cerrar
+		</button>
+	</div>
+</div>

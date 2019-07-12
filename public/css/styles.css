@@ -1,0 +1,304 @@
+body {
+	background-color: #eee;
+}
+
+.navbar {
+	margin-bottom: 5px;
+	background-color: #d0d3f1;
+}
+
+.navbar-brand img {
+	width: 130px;
+	margin-top: -13px;
+}
+
+.cls-main-container {
+	margin-top: 50px;
+}
+
+
+.cls-left-menu {
+	background-color: #fff;
+	padding: 0px;
+}
+
+.cls-left-menu div:first-child {
+	background-color: #ddd;
+	padding: 5px 15px;
+	border-bottom: 1px solid #ddd;
+}
+
+.cls-left-menu ul {
+	padding: 0px;
+	margin: 0px;
+}
+
+.cls-left-menu li {
+	display: block;
+	padding: 3px 10px;
+	border-bottom: 1px solid #ddd;
+}
+
+.cls-left-menu li a {
+	display: block;
+	text-decoration: none;
+}
+
+.cls-left-menu li:hover {
+	background-color: #eee;
+}
+
+
+.cls-toolbar {
+	padding: 5px 0px;
+}
+
+.cls-toolbar-gray {
+	background-color: #dedeff;
+	padding: 5px 0px;
+}
+
+.cls-filters-title {
+	font-size: 18px;
+	text-align: center;
+	color: #bbb;
+	margin-top: 10px;
+	margin-bottom: 6px;
+	border-bottom: 1px solid #d8d8d8;
+}
+
+textarea {
+	resize: none;
+}
+
+h3.cls-title {
+	color: #5D88C3;
+	margin: 10px 0px;
+	padding-bottom: 5px;
+	border-bottom: 1px solid #5D88C3;
+	font-size: 22px;
+}
+
+h5.cls-title {
+	color: #5D88C3;
+	margin: 10px 0px;
+	padding-bottom: 5px;
+	border-bottom: 1px solid #5D88C3;
+	font-size: 16px;
+}
+
+table.cls-table,
+table.cls-table-sm {
+	margin-bottom: 5px;
+}
+
+table.cls-table, 
+table.cls-table-sm, 
+form {
+	font-size: 13px;
+}
+
+table.cls-table thead tr,
+table.cls-table-sm thead tr {
+	background-color: #d0d3f1;
+	color: #337ab7;
+}
+
+table.cls-table tbody,
+table.cls-table-sm tbody {
+	background-color: #fff;
+}
+
+table.cls-table tbody td {
+	line-height: 16px;
+	height: 30px;
+}
+
+table.cls-table-sm tbody td {
+	line-height: 14px;
+}
+
+table.cls-table tbody tr:hover,
+table.cls-table-sm tbody tr:hover {
+	background-color: #edf0ff;
+}
+
+table.cls-table tr td .cls-actions,
+table.cls-table-sm tr td .cls-actions {
+	display: none;
+	text-align: center;
+}
+
+table.cls-table tr:hover td .cls-actions,
+table.cls-table-sm tr:hover td .cls-actions {
+	padding: 0px;
+	display: block;
+}
+
+.modal-dialog .modal-header {
+	background-color: #ddd;
+	border-bottom: 1px solid #bbb;
+}
+
+.modal-dialog .modal-footer {
+	background-color: #ddd;
+	border-top: 1px solid #bbb;
+}
+
+.modal-dialog .modal-content {
+	background-color: #eee;
+}
+
+.cls-actions button.btn {
+	line-height: 15px;
+	font-size: 10px;
+}
+
+table td .cls-small {
+	font-size: 12px;
+	line-height: 16px;
+	color: #666;
+	margin-top: 3px;
+}
+
+table td .cls-xsmall {
+	font-size: 11px;
+	line-height: 11px;
+	color: #666;
+	margin-top: 2px;
+}
+
+table td .cls-small-collapsed {
+	line-height: 16px;
+	height: 16px;
+	overflow: hidden;
+}
+
+
+.btn-block {
+	margin-top: 5px;
+}
+
+.cls-pointer {
+	cursor: pointer;
+}
+
+.cls-small {
+	font-size: 12px;
+}
+
+.cls-xsmall {
+	font-size: 11px;
+}
+
+.cls-form-detail {
+	margin: 6px 0px;
+}
+
+.cls-form-detail input {
+	font-size: 13px;
+	padding: 5px;
+	height: 28px;
+}
+
+.cls-filters {
+	padding: 10px 5px 5px 5px;
+	margin-bottom: 5px;
+	background-color: #e2e2e2;
+	border-radius: 5px;
+	font-size: 12px;
+}
+
+.cls-filters .row {
+	margin-bottom: 5px;
+}
+
+.cls-nav-tabs {
+
+}
+
+.cls-nav-tabs li a {
+	padding: 5px 10px;
+}
+
+.cls-tab-contents {
+	padding: 10px;
+	border: 1px solid #ddd; 
+	border-top: 0px;
+}
+
+.cls-tab-pill-contents {
+	padding: 20px 30px;
+}
+
+.cls-form-text {
+	color: #3841a7;
+	font-size: 14px;
+}
+
+.cls-selected {
+	background-color: #fff7c0;
+}
+
+
+.label-light {
+	background-color: #bbb;
+}
+
+input.cls-input-large { width: 250px !important; }
+input.cls-input-medium { width: 150px !important; }
+input.cls-input-small { width: 90px !important; }
+
+
+.cls-switch {
+	border: 1px solid #bbb;
+	border-radius: 3px;
+	padding: 2px;
+	margin-top: 8px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.cls-switch-no {
+	background-color: #d0d0d0;
+}
+
+.cls-switch-yes {
+	color: #fff;
+	background-color: #5cb85c;
+}
+
+input.cls-error {
+	border-color: #bd0000;
+	color: #bd0000;
+}
+
+.cls-negative {
+	color: #ff0000;
+	font-weight: bold;
+}
+
+.cls-bold {
+	font-weight: bold;
+}
+
+.cls-receipt-title {
+	text-align: center;
+	border: 1px solid #aaa;
+	border-radius: 4px;
+}
+
+/* overriding cg-busy styles */
+.cg-busy-backdrop {
+	background-color: #000000;
+	opacity: .2;
+}
+
+.cg-busy-default-sign {
+	border-radius: 7px;
+}
+
+.cg-busy-default-wrapper {
+	top: 40% !important;
+}
+/* ------------------------  */
