@@ -1,13 +1,15 @@
-<?php namespace App\Http\Controllers;
+<?php 
 
-use App\Http\Controllers\Controller;
+namespace App\Http\Controllers;
 
 use Response;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class BaseController extends Controller {
 
+    protected $savedRecord;
     protected $msgError = false;
 
     public function __construct()
@@ -24,6 +26,7 @@ class BaseController extends Controller {
     {
         $search = $request->search;
         $filters = $request->filters;
+        $order = $request->order;
         $model = new $this->mainModel;
 
         // set relationships
@@ -55,8 +58,7 @@ class BaseController extends Controller {
             });
         }
 
-        if (isset($this->orderBy)) {
-            $order = $this->orderBy;
+        if ($order) {
             $model = $model->orderBy($order['field'], $order['type']);
         }
 
@@ -111,7 +113,15 @@ class BaseController extends Controller {
             $data = $this->getSavingFields($request->all(), 'store');
 
             try {
-                return $mainModel::create($data);
+                $this->savedRecord = $mainModel::create($data);
+
+                if (method_exists($this, 'afterStore')) {
+                    if (! $this->afterStore($request)) {
+                        return Response::json(array('msg' => $this->msgError), 500);
+                    }
+                }
+
+                return $this->savedRecord;
             } catch (Exception $e) {
                 return Response::json(array('msg' => 'Error al guardar'), 500);
             }
@@ -192,6 +202,15 @@ class BaseController extends Controller {
 
             try {
                 $record->fill($data)->save();
+                $this->savedRecord = $record;
+                
+                if (method_exists($this, 'afterUpdate')) {
+                    if (! $this->afterUpdate($request)) {
+                        return Response::json(array('msg' => $this->msgError), 500);
+                    }
+                }
+
+                return $this->savedRecord;
             } catch (Exception $e) {
                 return Response::json(array('msg' => 'Error al guardar'), 500);
             }

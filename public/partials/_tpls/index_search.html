@@ -1,7 +1,7 @@
 <div class="input-group">
 	<input type="text" class="form-control" placeholder="Buscar" 
-	       ng-model="$parent.search"
-	       ng-change="searchData()"
+	       ng-model="$parent.table.search"
+	       ng-change="read(1)"
 	       ng-model-options="{updateOn : 'change blur'}">
 	<span class="input-group-btn">
 		<button class="btn btn-default" type="button" ng-click="clearSearch()">

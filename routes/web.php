@@ -21,4 +21,8 @@ Auth::routes();
 
 Route::group(['middleware' => ['auth']], function () {
 	Route::get('/', 'HomeController@index')->name('home');
+
+	Route::resource('brands', 'BrandsController');
+	Route::post('brands/{id}/activate', 'BrandsController@activate');
+	Route::post('brands/{id}/deactivate', 'BrandsController@deactivate');
 });

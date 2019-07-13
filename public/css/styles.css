@@ -168,6 +168,10 @@ table td .cls-xsmall {
 	margin-top: 2px;
 }
 
+table tr.cls-inactive {
+	color: red;
+}
+
 table td .cls-small-collapsed {
 	line-height: 16px;
 	height: 16px;
