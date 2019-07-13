@@ -43,3 +43,26 @@ app.factory('SalespersonService', ['$http', function($http) {
 		}
 	} 
 }]);
+
+app.factory('WarehouseService', ['$http', function($http) {
+	return {
+		get      : function (data) {
+			return $http.get('warehouses/'+ data.id);
+		},
+		save     : function (data) {
+			return (data.id) ? $http.patch('warehouses/'+ data.id, data) : $http.post('warehouses', data);
+		},
+		read     : function(data) {
+			return $http.get('warehouses?'+ jQuery.param(data), data);
+		},
+		delete   : function(data) {
+			return $http.delete('warehouses/'+ data.id);
+		},
+		activate : function(data) {
+			return $http.post('warehouses/'+ data.id +'/activate');
+		},
+		deactivate : function(data) {
+			return $http.post('warehouses/'+ data.id +'/deactivate');
+		}
+	} 
+}]);
