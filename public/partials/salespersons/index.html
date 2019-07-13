@@ -1,0 +1,59 @@
+<h3 class="cls-title">Vendedores</h3>
+
+<div class="row">
+	<div class="col-sm-offset-1 col-sm-10" cg-busy="loading">
+		<div class="row">
+			<div class="col-sm-3 col-md-2">
+				<div class="cls-filters-title">Filtros</div>
+
+				<!-- status filter -->
+				<div ng-include="tpls.filter_status"></div>
+			</div>
+			
+			<div class="col-sm-9 col-md-10">
+				<div class="row cls-toolbar">
+					<!-- new button -->
+					<div class="col-sm-8" ng-include="tpls.new_button"></div>
+
+					<!-- search input -->
+					<div class="col-sm-4" ng-include="tpls.search"></div>
+				</div>
+
+				<table class="table table-condensed table-bordered cls-table">
+					<thead>
+						<tr>
+							<th width="75">Acciones</th>
+							<th>
+								<span class="cls-pointer text-info" ng-click="setOrder('name')">Nombre
+									<span class="glyphicon glyphicon-chevron-up" ng-show="showOrderIcon('name', 'asc')"></span>
+									<span class="glyphicon glyphicon-chevron-down" ng-show="showOrderIcon('name', 'desc')"></span>
+								</span>
+							</th>
+							<th>
+								<span class="cls-pointer text-info" ng-click="setOrder('mobile')">Celular
+									<span class="glyphicon glyphicon-chevron-up" ng-show="showOrderIcon('mobile', 'asc')"></span>
+									<span class="glyphicon glyphicon-chevron-down" ng-show="showOrderIcon('mobile', 'desc')"></span>
+								</span>
+							</th>
+							<th width="100" class="text-center">Estado</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="(key, rec) in table.data" ng-dblclick="view(rec.id)" ng-class="{'cls-inactive': !rec.active}">
+							<!-- actions buttons -->
+							<td ng-include="tpls.actions"></td>
+							<td>{{ rec.name }}</td>
+							<td>{{ rec.mobile }}</td>
+							<!-- change status component -->
+							<td align="center" ng-include="tpls.change_status"></td>
+						</tr>
+					</tbody>
+				</table>
+
+				<!-- paginator -->
+				<ul uib-pagination ng-model="table.page" items-per-page="table.items" total-items="table.total" max-size="5"
+				    ng-change="read()"class="pagination-sm" boundary-link-numbers="true" rotate="true"></ul>
+			</div>
+		</div>
+	</div>
+</div>

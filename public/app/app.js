@@ -18,7 +18,7 @@ app.config(function ($routeProvider, $provide, toastrConfig) {
 				templateUrl: '/partials/home.html'
 			})
 		.when('/salespersons',{
-				controller: 'SalespersonController',
+				controller: 'SalespersonsController',
 				templateUrl: '/partials/salespersons/index.html'
 			})
 		.when('/brands',{
