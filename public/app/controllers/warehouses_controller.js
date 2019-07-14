@@ -7,6 +7,7 @@ app.controller('WarehousesController', function ($scope, $http, $route, $locatio
 		total: 0,
 		items: 5,
 		search: '',
+		selected: null,
 		order: { field: 'name', type: 'asc' },
 		filters: { active: '1' }
 	};
@@ -47,6 +48,7 @@ app.controller('WarehousesController', function ($scope, $http, $route, $locatio
 			$scope.table.page = response.current_page;
 			$scope.table.total = response.total;
 			$scope.table.items = response.per_page;
+			$scope.table.selected = null;
 			
 			if ($scope.afterRead) $scope.afterRead();
 		}).error(function (response) {

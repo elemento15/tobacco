@@ -1,4 +1,4 @@
-<h3 class="cls-title">Marcas</h3>
+<h3 class="cls-title">Usuarios</h3>
 
 <div class="row">
 	<div class="col-sm-offset-1 col-sm-10" cg-busy="loading">
@@ -13,7 +13,7 @@
 			<div class="col-sm-9 col-md-10">
 				<div class="row cls-toolbar">
 					<!-- new button -->
-					<div class="col-sm-8" ng-include="tpls.new_button"></div>
+					<div class="col-sm-8"></div>
 
 					<!-- search input -->
 					<div class="col-sm-4" ng-include="tpls.search"></div>
@@ -29,13 +29,13 @@
 									<span class="glyphicon glyphicon-chevron-down" ng-show="showOrderIcon('name', 'desc')"></span>
 								</span>
 							</th>
-							<th class="text-center">Paquetes por caja</th>
 							<th>
-								<span class="cls-pointer text-info" ng-click="setOrder('cost')">Costo
-									<span class="glyphicon glyphicon-chevron-up" ng-show="showOrderIcon('cost', 'asc')"></span>
-									<span class="glyphicon glyphicon-chevron-down" ng-show="showOrderIcon('cost', 'desc')"></span>
+								<span class="cls-pointer text-info" ng-click="setOrder('email')">Email
+									<span class="glyphicon glyphicon-chevron-up" ng-show="showOrderIcon('email', 'asc')"></span>
+									<span class="glyphicon glyphicon-chevron-down" ng-show="showOrderIcon('email', 'desc')"></span>
 								</span>
 							</th>
+							<th class="">Rol</th>
 							<th width="100" class="text-center">Estado</th>
 						</tr>
 					</thead>
@@ -45,8 +45,8 @@
 							<!-- actions buttons -->
 							<td ng-include="tpls.actions"></td>
 							<td>{{ rec.name }}</td>
-							<td class="text-center">{{ rec.packs_per_box | number }}</td>
-							<td class="text-right">{{ rec.cost | currency }}</td>
+							<td class="">{{ rec.email }}</td>
+							<td class="">{{ rec.role.name }}</td>
 							<!-- change status component -->
 							<td align="center" ng-include="tpls.change_status"></td>
 						</tr>

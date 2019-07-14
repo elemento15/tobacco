@@ -1,5 +1,5 @@
-app.controller('BrandsController', function ($scope, $http, $route, $location, $ngConfirm, $uibModal, $timeout, 
-	                                         toastr, BrandService) {
+app.controller('UsersController', function ($scope, $http, $route, $location, $ngConfirm, $uibModal, $timeout, 
+	                                        toastr, UserService) {
 
 	$scope.table = {
 		data: [],
@@ -15,8 +15,8 @@ app.controller('BrandsController', function ($scope, $http, $route, $location, $
 	$scope.model = {
 		id: 0,
 		name: '',
-		packs_per_box: 0,
-		cost: 0,
+		email: '',
+		role: '',
 		_saving: false
 	};
 
@@ -36,19 +36,11 @@ app.controller('BrandsController', function ($scope, $http, $route, $location, $
 			invalid = toastr.warning('Nombre requerido', 'Validaciones');
 		}
 
-		if (! data.packs_per_box) {
-			invalid = toastr.warning('Paquetes por caja requerido', 'Validaciones');
-		}
-
-		if (! data.cost) {
-			invalid = toastr.warning('Costo requerido', 'Validaciones');
-		}
-
 		return (invalid) ? false : data;
 	}
 
 	$scope.read = function (page) {
-		$scope.loading = BrandService.read({
+		$scope.loading = UserService.read({
 			page: page || $scope.table.page,
 			filters: $scope.mapFiltersBase(),
 			search: $scope.table.search,
@@ -73,7 +65,7 @@ app.controller('BrandsController', function ($scope, $http, $route, $location, $
 	$scope.view = function (id) {
 		$scope.clearModel();
 
-		$scope.loading = BrandService.get({
+		$scope.loading = UserService.get({
 			id : id
 		}).success(function(response) {
 			$scope.openForm(response);
@@ -89,7 +81,7 @@ app.controller('BrandsController', function ($scope, $http, $route, $location, $
 		if (data) {
 			$scope.model._saving = true;
 
-			$scope.loading = BrandService.save(data)
+			$scope.loading = UserService.save(data)
 				.success(function(response) {
 					toastr.success('Registro guardado');
 					$scope.modalForm.dismiss();
@@ -120,8 +112,8 @@ app.controller('BrandsController', function ($scope, $http, $route, $location, $
 		$scope.model = {
 			id: 0,
 			name: '',
-			packs_per_box: 0,
-			cost: 0
+			email: '',
+			role: ''
 		};
 	}
 
@@ -146,7 +138,7 @@ app.controller('BrandsController', function ($scope, $http, $route, $location, $
 	$scope.setActive = function (record) {
 		record.status_loading = true;
 		
-		BrandService.activate({
+		UserService.activate({
 			id: record.id
 		}).success(function (response) {
 			record.active = response.active;
@@ -160,7 +152,7 @@ app.controller('BrandsController', function ($scope, $http, $route, $location, $
 	$scope.setInactive = function (record) {
 		record.status_loading = true;
 
-		BrandService.deactivate({
+		UserService.deactivate({
 			id: record.id
 		}).success(function (response) {
 			record.active = response.active;
@@ -181,7 +173,7 @@ app.controller('BrandsController', function ($scope, $http, $route, $location, $
 					text: 'Aceptar',
 					btnClass: 'btn-red',
 					action: function () {
-						$scope.loading = BrandService.delete({
+						$scope.loading = UserService.delete({
 							id: id
 						}).success(function (response) {
 							toastr.warning('Registro eliminado');
@@ -206,7 +198,7 @@ app.controller('BrandsController', function ($scope, $http, $route, $location, $
 		$scope.modalForm = $uibModal.open({
 			ariaLabelledBy: 'modal-title',
 			ariaDescribedBy: 'modal-body',
-			templateUrl: '/partials/brands/form.html',
+			templateUrl: '/partials/users/form.html',
 			size: 'md',
 			backdrop: 'static',
 			controller: function ($scope) {

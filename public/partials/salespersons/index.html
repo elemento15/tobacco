@@ -39,7 +39,8 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="(key, rec) in table.data" ng-dblclick="view(rec.id)" ng-class="{'cls-inactive': !rec.active}">
+						<tr ng-repeat="(key, rec) in table.data" ng-dblclick="view(rec.id)" ng-click="table.selected = key"
+						    ng-class="{'cls-inactive': !rec.active, 'cls-selected': key === table.selected}">
 							<!-- actions buttons -->
 							<td ng-include="tpls.actions"></td>
 							<td>{{ rec.name }}</td>

@@ -33,4 +33,8 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::resource('warehouses', 'WarehousesController');
 	Route::post('warehouses/{id}/activate', 'WarehousesController@activate');
 	Route::post('warehouses/{id}/deactivate', 'WarehousesController@deactivate');
+
+	Route::resource('users', 'UsersController');
+	Route::post('users/{id}/activate', 'UsersController@activate');
+	Route::post('users/{id}/deactivate', 'UsersController@deactivate');
 });
