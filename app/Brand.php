@@ -11,4 +11,9 @@ class Brand extends Model
     protected $casts = [
     	'cost' => 'float'
     ];
+
+    public function prices()
+    {
+        return $this->hasMany('App\Price');
+    }
 }

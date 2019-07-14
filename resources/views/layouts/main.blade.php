@@ -24,6 +24,7 @@
     <script src="/libs/jquery.js"></script>
     <script src="/libs/bootstrap.min.js"></script>
     <script src="/libs/moment.min.js"></script>
+    <script src="/libs/lodash.js"></script>
     <script src="/libs/angular.min.js"></script>
     <script src="/libs/angular-locale_es-mx.js"></script>
     <script src="/libs/angular-route.min.js"></script>

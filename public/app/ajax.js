@@ -40,6 +40,12 @@ app.factory('SalespersonService', ['$http', function($http) {
 		},
 		deactivate : function(data) {
 			return $http.post('salespersons/'+ data.id +'/deactivate');
+		},
+		prices : function(data) {
+			return $http.get('salespersons/'+ data.id +'/prices');
+		},
+		savePrices : function(data) {
+			return $http.post('salespersons/'+ data.id +'/prices', data);
 		}
 	} 
 }]);

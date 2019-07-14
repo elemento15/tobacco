@@ -2,7 +2,9 @@
 
 <div class="row">
 	<div class="col-sm-offset-1 col-sm-10" cg-busy="loading">
-		<div class="row">
+		
+		<!-- Screen for Salespersons CRUD -->
+		<div class="row" ng-hide="showPrices">
 			<div class="col-sm-3 col-md-2">
 				<div class="cls-filters-title">Filtros</div>
 
@@ -13,8 +15,13 @@
 			<div class="col-sm-9 col-md-10">
 				<div class="row cls-toolbar">
 					<!-- new button -->
-					<div class="col-sm-8" ng-include="tpls.new_button"></div>
-
+					<div class="col-sm-8">
+						<div ng-include="tpls.new_button" style="display: inline;"></div>
+						<button class="btn btn-info btn-sm" ng-click="showPricesScreen()" ng-hide="table.selected === null">
+							<span class="glyphicon glyphicon-usd" aria-hidden="true"></span> Precios
+						</button>
+					</div>
+					
 					<!-- search input -->
 					<div class="col-sm-4" ng-include="tpls.search"></div>
 				</div>
@@ -54,6 +61,54 @@
 				<!-- paginator -->
 				<ul uib-pagination ng-model="table.page" items-per-page="table.items" total-items="table.total" max-size="5"
 				    ng-change="read()"class="pagination-sm" boundary-link-numbers="true" rotate="true"></ul>
+			</div>
+		</div>
+
+		<!-- Screen for prices management -->
+		<div class="row" ng-show="showPrices">
+			<div class="col-sm-offset-3 col-sm-6">
+				<h5 class="cls-title">Precios por Marca</h5>
+				
+				<div class="row mb5">
+					<div class="col-sm-7">
+						<span>Vendedor: </span>
+						<span class="text-warning"><b>{{ selectedSalesPerson.name }}</b></span>
+					</div>
+					<div class="col-sm-5">
+						<button class="btn btn-default btn-sm pull-right" ng-click="showPrices = false">
+							<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Regresar
+						</button>
+
+						<button class="btn btn-success btn-sm pull-right mr3" ng-click="savePrices()">
+							<span class="glyphicon glyphicon-check" aria-hidden="true"></span> Guardar
+						</button>
+					</div>
+				</div>
+
+				<!-- Brands and prices table -->
+				<div class="row">
+					<div class="col-sm-12">
+						<table class="table table-condensed table-bordered cls-table">
+							<thead>
+								<tr>
+									<th>Marca</th>
+									<th>Precio</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="(key, rec) in brandsPrices">
+									<td>{{ rec.name }}</td>
+									<td width="120">
+										<input type="number" class="form-control input-sm text-right" autocomplete="off"
+										       ng-model="brandsPrices[key].price" style="width: 100px;" min="0">
+									</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<br>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Salesperson;
+use App\Price;
 use Illuminate\Http\Request;
+use Response;
 
 class SalespersonsController extends BaseController
 {
@@ -29,4 +32,25 @@ class SalespersonsController extends BaseController
     protected $allowUpdate = true;
     protected $allowStore  = true;
     protected $except = [];
+
+
+    public function getPrices($id)
+    {
+        $salesperson = Salesperson::findOrFail($id);
+        return $salesperson->prices;
+    }
+
+    public function savePrices($id, Request $request)
+    {
+        $salesperson = Salesperson::findOrFail($id);
+        
+        foreach ($request->data as $item) {
+            Price::updateOrCreate(
+                ['brand_id' => $item['id'], 'salesperson_id' => $salesperson->id],
+                ['price' => $item['price']]
+            );
+        }
+
+        return Response::json(array('success' => true));
+    }
 }
