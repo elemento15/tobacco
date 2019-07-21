@@ -39,4 +39,9 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::resource('users', 'UsersController');
 	Route::post('users/{id}/activate', 'UsersController@activate');
 	Route::post('users/{id}/deactivate', 'UsersController@deactivate');
+
+	Route::resource('movements', 'MovementsController');
+	Route::post('movements/{id}/cancel', 'MovementsController@cancel');
+	//Route::post('movements/{id}/activate', 'MovementsController@activate');
+	//Route::post('movements/{id}/deactivate', 'MovementsController@deactivate');
 });

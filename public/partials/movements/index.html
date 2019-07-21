@@ -1,0 +1,247 @@
+<h3 class="cls-title">Movimientos de Inventario</h3>
+
+<!-- Index for movements -->
+<div class="row" ng-hide="show_form">
+	<div class="col-sm-offset-1 col-sm-10" cg-busy="loading">
+		<div class="row">
+			<div class="col-sm-3 col-md-2">
+				<div class="cls-filters-title">Filtros</div>
+
+				<!-- status filter -->
+				<div ng-include="tpls.filter_status"></div>
+			</div>
+			
+			<div class="col-sm-9 col-md-10">
+				<div class="row cls-toolbar">
+					<div class="col-sm-4">
+						<!-- new button -->
+						<div ng-include="tpls.new_button" style="display: inline;"></div>
+						<button class="btn btn-danger btn-sm" ng-click="openCancel()" ng-hide="table.selected === null">
+							<span class="glyphicon glyphicon-delete" aria-hidden="true"></span> Cancelar
+						</button>
+					</div>
+
+					<!-- warehouse selection -->
+					<div class="col-sm-4">
+						<select class="form-control" ng-model="table.filters.warehouse_id" ng-change="read(1)">
+							<option value="">-- Seleccione almacén --</option>
+							<option ng-repeat="(key, opt) in warehouses" value="{{opt.id}}">{{ opt.name }}</option>
+						</select>
+					</div>
+
+					<!-- search input -->
+					<div class="col-sm-4" ng-include="tpls.search"></div>
+				</div>
+
+				<table class="table table-condensed table-bordered cls-table">
+					<thead>
+						<tr>
+							<th width="75">Acciones</th>
+							<th class="text-center" width="70">#</th>
+							<th class="text-center" width="110">Fecha</th>
+							<th class="text-center" width="80">Tipo</th>
+							<th class="text-center">Origen</th>
+							<th class="text-center">Destino</th>
+							<th width="100" class="text-center">Estado</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="(key, rec) in table.data" ng-dblclick="view(rec.id)" ng-click="table.selected = key"
+						    ng-class="{'cls-inactive': !rec.active, 'cls-selected': key === table.selected}"
+						    ng-show="table.filters.warehouse_id">
+							<!-- actions buttons -->
+							<td>
+								<div class="cls-actions">
+									<button class="btn btn-info btn-xs" ng-click="view(rec.id)">
+										<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+									</button>
+								</div>
+							</td>
+							<td class="text-right">{{ rec.id }}</td>
+							<td class="text-center">{{ rec.mov_date.substr(0, 10) }}</td>
+							<td class="text-center">
+								<span class="text-primary" ng-show="rec.type == 'E'">Entrada</span>
+								<span class="text-danger" ng-show="rec.type == 'S'">Salida</span>
+								<span class="text-warning" ng-show="rec.type == 'T'">Traspaso</span>
+							</td>
+							<td>
+								<span class="cls-xsmall text-muted" ng-show="rec.transfer_from">{{ rec.transfer_from }} - {{ rec.transfer_from_warehouse }}</span>
+							</td>
+							<td>
+								<span class="cls-xsmall text-muted" ng-show="rec.transfer_to">{{ rec.transfer_to }} - {{ rec.transfer_to_warehouse }}</span>
+							</td>
+							<!-- change status component -->
+							<td align="center">
+								<div>
+									<span class="label label-default cls-pointer" ng-if="rec.active">Activo</span>
+									<span class="label label-danger cls-pointer" ng-if="!rec.active">Cancelado</span>
+								</div>
+							</td>
+						</tr>
+						<tr ng-hide="table.filters.warehouse_id">
+							<td colspan="7">
+								<h4 class="text-center text-muted">Seleccione un almacén para visualizar movimientos</h4>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<!-- paginator -->
+				<ul uib-pagination ng-model="table.page" items-per-page="table.items" total-items="table.total" max-size="5"
+				    ng-change="read()"class="pagination-sm" boundary-link-numbers="true" rotate="true"></ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Form for movements -->
+<div class="row" ng-show="show_form">
+	<div class="col-sm-offset-1 col-sm-10" cg-busy="loading">
+		<div class="row">
+			<div class="col-sm-12">
+				<!-- movement panel -->
+				<div class="panel panel-default cls-panel">
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-sm-4">
+								<div class="row">
+									<div class="col-sm-12">
+										<span class="text-info" ng-show="model.id">
+											<b>Movimiento: {{ model.id }}</b>
+										</span>
+										<span class="text-info" ng-hide="model.id">
+											<b>Nuevo Movimiento</b>
+										</span>
+									</div>
+								</div>
+
+								<div class="row mt3">
+									<div class="col-sm-12">
+										<div class="form-inline">
+											<div class="form-group">
+												<label class="mr5">Tipo: </label>
+												<select class="form-control input-sm" ng-model="model.type">
+													<option value="E">Entrada</option>
+													<option value="S">Salida</option>
+													<option value="T">Traspaso</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+			
+							<div class="col-sm-4">
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="cls-bold text-info">{{ selWarehouse.name }}</div>
+									</div>
+								</div>
+								
+								<div class="row mt3">
+									<div class="col-sm-12" ng-hide="model.id">
+										<div class="form-inline" ng-show="model.type == 'T'">
+											<div class="form-group">
+												<label class="mr5">Destino: </label>
+												<select class="form-control input-sm" ng-model="model.warehouse_target">
+													<option value="">-- Seleccione almacén destino --</option>
+													<option ng-repeat="(key, opt) in warehousesTarget" value="{{opt.id}}">{{ opt.name }}</option>
+												</select>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-sm-12" ng-show="model.id">
+										<div class="form-inline" ng-show="model.transfer_to">
+											<div class="form-group">
+												<label class="mr5">Destino: </label>
+												<span class="text-info">{{ model.transfer_to }} - {{ model.transfer_to_warehouse }}</span>
+											</div>
+										</div>
+										<div class="form-inline" ng-show="model.transfer_from">
+											<div class="form-group">
+												<label class="mr5">Origen: </label>
+												<span>{{ model.transfer_from }} - {{ model.transfer_from_warehouse }}</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="col-sm-4">
+								<textarea class="form-control" ng-model="model.comments" placeholder="Comentarios"></textarea>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- brands panel -->
+				<div class="panel panel-default cls-panel" ng-hide="model.id">
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="form-inline">
+									<div class="form-group mr10">
+										<label>Marca: </label>
+										<select class="form-control input-sm" ng-model="selBrandId">
+											<option value="">-- Seleccione --</option>
+											<option ng-repeat="(key, opt) in brands" value="{{opt.id}}">{{ opt.name }}</option>
+										</select>
+									</div>
+
+									<div class="form-group mr10">
+										<label>Cantidad: </label>
+										<input type="number" class="form-control input-sm text-right" ng-model="quantityDetail"
+										       ng-keyup="enterQuantity($event)" min="0" style="width: 100px;">
+									</div>
+
+									<div class="form-group mr10">
+										<button class="btn btn-xs btn-primary" ng-click="addDetail()">
+											<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- details panel -->
+				<div class="row">
+					<div class="col-sm-12">
+						<table class="table table-condensed table-bordered cls-table">
+							<thead>
+								<th>Acciones</th>
+								<th>Marca</th>
+								<th>Cantidad</th>
+							</thead>
+							<tbody>
+								<tr ng-repeat="(key, rec) in model.details">
+									<td width="80">
+										<div class="cls-actions">
+											<button class="btn btn-danger btn-xs" ng-click="deleteDetail(key)">
+												<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+											</button>
+										</div>
+									</td>
+									<td>{{ rec.brand.name }}</td>
+									<td>{{ rec.quantity }}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-offset-6 col-sm-6 text-right">
+				<button class="btn btn-success" ng-click="save()" ng-hide="model._saving || model.id">Guardar</button>
+				<button class="btn btn-success" ng-show="model._saving" disabled="disabled">
+			        <img src="images/loading.gif"> Espere
+			    </button>
+				<button class="btn btn-default" ng-click="show_form = false">Cerrar</button>
+			</div>
+		</div>
+	</div>
+</div>

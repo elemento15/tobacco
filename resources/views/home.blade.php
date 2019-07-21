@@ -26,7 +26,7 @@
                 <ul class="nav navbar-nav">
                     <li><a href="#/allocations">Repartos</a></li>
                     <li><a href="#/expenses">Gastos</a></li>
-                    <li><a href="#/inventories">Inventarios</a></li>
+                    <li><a href="#/movements">Movimientos</a></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             Catálogos <span class="caret"></span>
@@ -35,9 +35,8 @@
                             <li><a href="#/salespersons">Vendedores</a></li>
                             <li><a href="#/brands">Marcas</a></li>
                             <li><a href="#/warehouses">Almacenes</a></li>
-                            <li><a href="#/users">Usuarios</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="#/prices">Precios</a></li>
+                            <li><a href="#/users">Usuarios</a></li>
                         </ul>
                     </li>
                     <li><a href="#/reports">Reportes</a></li>

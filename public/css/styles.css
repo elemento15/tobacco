@@ -317,3 +317,10 @@ input.cls-error {
 .mr3  { margin-right: 3px; }
 .mr5  { margin-right: 5px; }
 .mr10 { margin-right: 10px; }
+
+.cls-panel {
+	border-color: #ccc; 
+}
+.cls-panel .panel-body {
+	background-color: #e1e1e1;
+}

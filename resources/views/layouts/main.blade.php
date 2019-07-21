@@ -59,5 +59,6 @@
     <script src="/app/controllers/salespersons_controller.js"></script>
     <script src="/app/controllers/warehouses_controller.js"></script>
     <script src="/app/controllers/users_controller.js"></script>
+    <script src="/app/controllers/movements_controller.js"></script>
 </body>
 </html>

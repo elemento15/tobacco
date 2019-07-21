@@ -16,4 +16,9 @@ class Brand extends Model
     {
         return $this->hasMany('App\Price');
     }
+
+    public function stocks()
+    {
+        return $this->hasMany('App\Stock');
+    }
 }

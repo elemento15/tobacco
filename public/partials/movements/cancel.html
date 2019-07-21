@@ -1,0 +1,36 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Cancelar Movimiento</h4>
+</div>
+<div class="modal-body" id="modal-body">
+    <div>
+        <div class="row">
+            <div class="col-md-offset-1 col-md-10">
+                <h4 class="text-danger mb10">¿Desea cancelar el movimiento seleccionado?</h4>
+                <div class="row">
+                    <div class="col-sm-offset-1 col-sm-2">Almacén:</div>
+                    <div class="col-sm-8">{{ $parent.selWarehouse.name }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-offset-1 col-sm-2">Tipo:</div>
+                    <div class="col-sm-8">
+                        <span ng-show="$parent.selectedMovement.type == 'E'">Entrada</span>
+                        <span ng-show="$parent.selectedMovement.type == 'S'">Salida</span>
+                        <span ng-show="$parent.selectedMovement.type == 'T'">Traspaso</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-offset-1 col-sm-2">Fecha:</div>
+                    <div class="col-sm-8">{{ $parent.selectedMovement.mov_date }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-danger" type="button" 
+            ng-click="$parent.cancel(); is_canceling = true" ng-hide="is_canceling">Aceptar</button>
+    <button class="btn btn-danger" type="button" ng-show="is_canceling" disabled="disabled">
+        <img src="images/loading.gif"> Espere
+    </button>
+    <button class="btn btn-default" type="button" ng-click="$dismiss()">Cerrar</button>
+</div>

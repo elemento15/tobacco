@@ -33,6 +33,10 @@ app.config(function ($routeProvider, $provide, toastrConfig) {
 				controller: 'UsersController',
 				templateUrl: '/partials/users/index.html'
 			})
+		.when('/movements',{
+				controller: 'MovementsController',
+				templateUrl: '/partials/movements/index.html'
+			})
 
 		.otherwise({ redirectTo: '/' });
 

@@ -6,10 +6,12 @@ use Response;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class BaseController extends Controller {
 
     protected $savedRecord;
+    protected $request;
     protected $msgError = false;
 
     public function __construct()
@@ -88,6 +90,8 @@ class BaseController extends Controller {
      */
     public function store(Request $request)
     {
+        $this->request = $request;
+        
         if (! $this->allowStore) {
             return Response::json(array('msg' => 'Modelo no permite insertar'), 500);
         }
@@ -95,34 +99,46 @@ class BaseController extends Controller {
         $mainModel = $this->mainModel;
 
         if (method_exists($this, 'beforeStore')) {
-            if (! $this->beforeStore($request)) {
+            if (! $this->beforeStore()) {
                 return Response::json(array('msg' => $this->msgError), 500);
             }
         }
 
         foreach ($this->defaultNulls as $item) {
-            $request[$item] = ($request[$item] == '') ? null : $request[$item];
+            $this->request[$item] = ($this->request[$item] == '') ? null : $this->request[$item];
         }
 
         $rules = $this->parseFormRules(0);
-        $validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make($this->request->all(), $rules);
 
         if ($validator->fails()) {
             return Response::json(array('errors' => $validator->errors()->all()), 422);
         } else {
-            $data = $this->getSavingFields($request->all(), 'store');
+            $data = $this->getSavingFields($this->request->all(), 'store');
 
             try {
+                if ($this->useTransactions) {
+                    DB::beginTransaction();
+                }
+
                 $this->savedRecord = $mainModel::create($data);
 
                 if (method_exists($this, 'afterStore')) {
-                    if (! $this->afterStore($request)) {
+                    if (! $this->afterStore()) {
                         return Response::json(array('msg' => $this->msgError), 500);
                     }
                 }
 
+                if ($this->useTransactions) {
+                    DB::commit();
+                }
+
                 return $this->savedRecord;
             } catch (Exception $e) {
+                if ($this->useTransactions) {
+                    DB::rollBack();
+                }
+                
                 return Response::json(array('msg' => 'Error al guardar'), 500);
             }
         }
@@ -170,6 +186,8 @@ class BaseController extends Controller {
      */
     public function update($id, Request $request)
     {
+        $this->request = $request;
+
         if (! $this->allowUpdate) {
             return Response::json(array('msg' => 'Modelo no permite actualizar'), 500);
         }
@@ -177,17 +195,17 @@ class BaseController extends Controller {
         $mainModel = $this->mainModel;
 
         if (method_exists($this, 'beforeUpdate')) {
-            if (! $this->beforeStore($request)) {
+            if (! $this->beforeUpdate()) {
                 return Response::json(array('msg' => $this->msgError), 500);
             }
         }
         
         foreach ($this->defaultNulls as $item) {
-            $request[$item] = ($request[$item] == '') ? null : $request[$item];
+            $this->request[$item] = ($this->request[$item] == '') ? null : $this->request[$item];
         }
 
         $rules = $this->parseFormRules($id);
-        $validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make($this->request->all(), $rules);
 
         if ($validator->fails()) {
             return Response::json(array('errors' => $validator->errors()->all()), 422);
@@ -198,14 +216,14 @@ class BaseController extends Controller {
                 return Response::json(array('msg' => 'Registro no encontrado'), 500);
             }
 
-            $data = $this->getSavingFields($request->all(), 'update');
+            $data = $this->getSavingFields($this->request->all(), 'update');
 
             try {
                 $record->fill($data)->save();
                 $this->savedRecord = $record;
                 
                 if (method_exists($this, 'afterUpdate')) {
-                    if (! $this->afterUpdate($request)) {
+                    if (! $this->afterUpdate()) {
                         return Response::json(array('msg' => $this->msgError), 500);
                     }
                 }

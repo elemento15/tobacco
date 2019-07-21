@@ -95,3 +95,29 @@ app.factory('UserService', ['$http', function($http) {
 		}
 	} 
 }]);
+
+app.factory('MovementService', ['$http', function($http) {
+	return {
+		get      : function (data) {
+			return $http.get('movements/'+ data.id);
+		},
+		save     : function (data) {
+			return (data.id) ? $http.patch('movements/'+ data.id, data) : $http.post('movements', data);
+		},
+		read     : function (data) {
+			return $http.get('movements?'+ jQuery.param(data), data);
+		},
+		delete   : function (data) {
+			return $http.delete('movements/'+ data.id);
+		},
+		cancel   : function (data) {
+			return $http.post('movements/'+ data.id +'/cancel');
+		}
+		/*activate : function(data) {
+			return $http.post('movements/'+ data.id +'/activate');
+		},
+		deactivate : function(data) {
+			return $http.post('movements/'+ data.id +'/deactivate');
+		}*/
+	} 
+}]);
