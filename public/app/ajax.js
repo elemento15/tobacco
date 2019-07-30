@@ -113,11 +113,25 @@ app.factory('MovementService', ['$http', function($http) {
 		cancel   : function (data) {
 			return $http.post('movements/'+ data.id +'/cancel');
 		}
-		/*activate : function(data) {
-			return $http.post('movements/'+ data.id +'/activate');
+	} 
+}]);
+
+app.factory('AllocationService', ['$http', function($http) {
+	return {
+		get      : function (data) {
+			return $http.get('allocations/'+ data.id);
 		},
-		deactivate : function(data) {
-			return $http.post('movements/'+ data.id +'/deactivate');
-		}*/
+		save     : function (data) {
+			return (data.id) ? $http.patch('allocations/'+ data.id, data) : $http.post('allocations', data);
+		},
+		read     : function (data) {
+			return $http.get('allocations?'+ jQuery.param(data), data);
+		},
+		delete   : function (data) {
+			return $http.delete('allocations/'+ data.id);
+		},
+		cancel   : function (data) {
+			return $http.post('allocations/'+ data.id +'/cancel');
+		}
 	} 
 }]);
