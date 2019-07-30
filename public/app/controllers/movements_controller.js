@@ -39,6 +39,7 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 	$scope.selBrand = {};
 
 	$scope.quantityDetail = 0;
+	$scope.boxesUnityDetail = 0; // 0: packages | 1: boxes
 
 	$scope.selectedMovement = {};
 
@@ -154,6 +155,8 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 			details: [],
 			_saving: false
 		};
+
+		$scope.boxesUnityDetail = 0;
 	}
 
 	$scope.setOrder = function (field) {
@@ -327,14 +330,17 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 			return false;
 		}
 
-		//console.log( $scope.model.details );
-		//console.log( $scope.selBrandId );
-
 		if (_.find($scope.model.details, { brandID: $scope.selBrand.id })) {
 			toastr.warning('Marca ya agregada a los detalles', 'Validaciones');
 			return false;
 		}
 
+
+		// if boxes selected, calculate total of packages
+		let quantity = $scope.quantityDetail;
+		if ($scope.boxesUnityDetail) {
+			quantity = $scope.quantityDetail * $scope.selBrand.packs_per_box;
+		}
 
 		$scope.model.details.push({
 			brandID: $scope.selBrand.id,
@@ -342,7 +348,7 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 				id: $scope.selBrand.id,
 				name: $scope.selBrand.name
 			},
-			quantity: $scope.quantityDetail
+			quantity: quantity
 		});
 
 		$scope.clearDetail();

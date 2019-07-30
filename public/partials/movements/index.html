@@ -196,9 +196,26 @@
 									</div>
 
 									<div class="form-group mr10">
+										<button type="button" class="btn btn-xs btn-info" ng-model="boxesUnityDetail" uib-btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+											<span ng-show="boxesUnityDetail">Cajas</span>
+											<span ng-hide="boxesUnityDetail">Paquetes</span>
+										</button>
+									</div>
+
+									<div class="form-group mr10">
 										<button class="btn btn-xs btn-primary" ng-click="addDetail()">
 											<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 										</button>
+									</div>
+
+									<div class="form-group mr10" ng-show="selBrandId">
+										<span class="text-warning" ng-show="boxesUnityDetail">Total {{ selBrand.packs_per_box * quantityDetail }} paquetes</span>
+									</div>
+
+									<div class="form-group pull-right mr10 mt5" ng-show="selBrandId">
+										<span class="text-muted">
+											<i>Paquetes por caja: <b>{{ selBrand.packs_per_box }}</b></i>
+										</span>
 									</div>
 								</div>
 							</div>
