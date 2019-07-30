@@ -60,5 +60,8 @@
     <script src="/app/controllers/warehouses_controller.js"></script>
     <script src="/app/controllers/users_controller.js"></script>
     <script src="/app/controllers/movements_controller.js"></script>
+    <script src="/app/controllers/distributions/allocations_controller.js"></script>
+    <script src="/app/controllers/distributions/liquidations_controller.js"></script>
+    <script src="/app/controllers/distributions/devolutions_controller.js"></script>
 </body>
 </html>

@@ -24,7 +24,16 @@
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">
-                    <li><a href="#/allocations">Repartos</a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            Repartos <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#/allocations">Entregas</a></li>
+                            <li><a href="#/liquidations">Liquidaciones</a></li>
+                            <li><a href="#/devolutions">Devoluciones</a></li>
+                        </ul>
+                    </li>
                     <li><a href="#/expenses">Gastos</a></li>
                     <li><a href="#/movements">Movimientos</a></li>
                     <li class="dropdown">
