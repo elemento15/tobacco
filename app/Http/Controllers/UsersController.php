@@ -30,6 +30,8 @@ class UsersController extends BaseController
     protected $allowStore  = false;
     protected $except = [];
 
+    protected $useTransactions = false;
+
 
     /**
      * Display a listing of the resource.

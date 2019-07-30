@@ -33,6 +33,8 @@ class SalespersonsController extends BaseController
     protected $allowStore  = true;
     protected $except = [];
 
+    protected $useTransactions = false;
+
 
     public function getPrices($id)
     {

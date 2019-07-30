@@ -29,4 +29,6 @@ class WarehousesController extends BaseController
     protected $allowUpdate = true;
     protected $allowStore  = true;
     protected $except = [];
+
+    protected $useTransactions = false;
 }
