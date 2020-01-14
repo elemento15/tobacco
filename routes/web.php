@@ -22,28 +22,62 @@ Auth::routes();
 Route::group(['middleware' => ['auth']], function () {
 	Route::get('/', 'HomeController@index')->name('home');
 
-	Route::resource('roles', 'RolesController');
+	//Brands
+	Route::resource('brands', 'BrandsController')->only(['index','show']);
 
-	Route::resource('brands', 'BrandsController');
-	Route::post('brands/{id}/activate', 'BrandsController@activate');
-	Route::post('brands/{id}/deactivate', 'BrandsController@deactivate');
+	// Salespersons
+	Route::resource('salespersons', 'SalespersonsController')->only(['index','show']);
 
-	Route::resource('salespersons', 'SalespersonsController');
-	Route::post('salespersons/{id}/activate', 'SalespersonsController@activate');
-	Route::post('salespersons/{id}/deactivate', 'SalespersonsController@deactivate');
-	Route::get('salespersons/{id}/prices', 'SalespersonsController@getPrices');
-	Route::post('salespersons/{id}/prices', 'SalespersonsController@savePrices');
 
-	Route::resource('warehouses', 'WarehousesController');
-	Route::post('warehouses/{id}/activate', 'WarehousesController@activate');
-	Route::post('warehouses/{id}/deactivate', 'WarehousesController@deactivate');
+	// Only for: SYS, ADM, INV, ALM
+	Route::group(['middleware' => ['role:SYS,ADM,INV,ALM']], function () {
+		// Warehouses
+		Route::resource('warehouses', 'WarehousesController')->only(['index','show']);
+		
+		// Movements
+		Route::resource('movements', 'MovementsController')->only(['index','show']);
+		
 
-	Route::resource('users', 'UsersController');
-	Route::post('users/{id}/activate', 'UsersController@activate');
-	Route::post('users/{id}/deactivate', 'UsersController@deactivate');
+		// Only for: SYS, ADM, INV
+		Route::group(['middleware' => ['role:SYS,ADM,INV']], function () {
+			// Warehouses
+			Route::resource('warehouses', 'WarehousesController')->only(['store','update','destroy']);
+			Route::post('warehouses/{id}/activate', 'WarehousesController@activate');
+			Route::post('warehouses/{id}/deactivate', 'WarehousesController@deactivate');
 
-	Route::resource('movements', 'MovementsController');
-	Route::post('movements/{id}/cancel', 'MovementsController@cancel');
-	//Route::post('movements/{id}/activate', 'MovementsController@activate');
-	//Route::post('movements/{id}/deactivate', 'MovementsController@deactivate');
+
+			// Only for: SYS, ADM
+			Route::group(['middleware' => ['role:SYS,ADM']], function () {
+				// Roles
+				Route::resource('roles', 'RolesController')->only(['index']);
+				
+				// Users
+				Route::resource('users', 'UsersController')->except(['create','edit']);
+				Route::post('users/{id}/activate', 'UsersController@activate');
+				Route::post('users/{id}/deactivate', 'UsersController@deactivate');
+
+				// Brands
+				Route::resource('brands', 'BrandsController')->only(['store','update','destroy']);
+				Route::post('brands/{id}/activate', 'BrandsController@activate');
+				Route::post('brands/{id}/deactivate', 'BrandsController@deactivate');
+
+				// Salespersons
+				Route::resource('salespersons', 'SalespersonsController')->only(['store','update','destroy']);
+				Route::post('salespersons/{id}/activate', 'SalespersonsController@activate');
+				Route::post('salespersons/{id}/deactivate', 'SalespersonsController@deactivate');
+				Route::get('salespersons/{id}/prices', 'SalespersonsController@getPrices');
+				Route::post('salespersons/{id}/prices', 'SalespersonsController@savePrices');
+
+				// Movements
+				Route::resource('movements', 'MovementsController')->only(['store']);
+				Route::post('movements/{id}/cancel', 'MovementsController@cancel');
+
+
+				// Only for: SYS
+				Route::group(['middleware' => ['role:SYS']], function () {
+					// ---
+				});
+			});
+		});
+	});
 });
