@@ -20,13 +20,7 @@ class UsersTableSeeder extends Seeder
         		'role_id' => Role::getIdByCode('SYS'),
         		'password' => bcrypt('sysadministrator'),
         		'active' => true
-        	],[
-                'name' => 'Juan Perez',
-                'email' => 'juan@example.com',
-                'role_id' => Role::getIdByCode('ADM'),
-                'password' => bcrypt('administrator'),
-                'active' => true
-            ]
+        	]
         ];
 
         foreach ($users as $key => $item) {

@@ -1,3 +1,14 @@
+app.factory('RoleService', ['$http', function($http) {
+	return {
+		get  : function (data) {
+			return $http.get('roles/'+ data.id);
+		},
+		read : function(data) {
+			return $http.get('roles?'+ jQuery.param(data), data);
+		}
+	} 
+}]);
+
 app.factory('BrandService', ['$http', function($http) {
 	return {
 		get      : function (data) {

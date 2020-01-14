@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UsersController extends BaseController
 {
@@ -19,7 +20,7 @@ class UsersController extends BaseController
     // params needed for store/update
     // protected $saveFields = [];
     protected $storeFields = [];
-    protected $updateFields = ['name'];
+    protected $updateFields = ['name','role_id'];
     protected $defaultNulls = [];
     protected $formRules = [
         'name' => 'required|min:8'

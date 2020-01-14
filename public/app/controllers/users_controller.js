@@ -1,5 +1,5 @@
 app.controller('UsersController', function ($scope, $http, $route, $location, $ngConfirm, $uibModal, $timeout, 
-	                                        toastr, UserService) {
+	                                        toastr, UserService, RoleService) {
 
 	this.list = {
 		order: { field: 'name', type: 'asc' },
@@ -31,9 +31,33 @@ app.controller('UsersController', function ($scope, $http, $route, $location, $n
 			id: 0,
 			name: '',
 			email: '',
-			role: '',
+			role_id: '',
 			_saving: false
 		};
+	}
+
+	this.beforeViewLoaded = function () {
+		$scope.fetchRoles();
+	}
+
+
+	$scope.roles = [];
+
+
+	$scope.fetchRoles = function () {
+		RoleService.read({
+			//filters: [{ field: 'active', value: 1 }],
+			//order: { field: 'name', type: 'asc' }
+		}).success(function (response) {
+			// do not add "SYS" role
+			response.forEach(function (item) {
+				if (item.code != 'SYS') {
+					$scope.roles.push(item);
+				}
+			});
+		}).error(function (response) {
+			toastr.error(response.msg || 'Error en el servidor');
+		});
 	}
 
 

@@ -17,16 +17,18 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">Email:</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" ng-model="$parent.model.email" readonly
-                                   autocomplete="off" placeholder="">
+                            <input type="text" class="form-control" ng-model="$parent.model.email" autocomplete="off" readonly 
+                                   placeholder="correo@dominio.com">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-sm-3 control-label">Rol:</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" ng-model="$parent.model.role.name" readonly
-                                   autocomplete="off" placeholder="">
+                            <select class="form-control" ng-model="$parent.model.role_id">
+                                <option value="">-- Seleccione el Rol --</option>
+                            <option ng-repeat="(key, opt) in roles" value="{{opt.id}}">{{ opt.name }}</option>
+                        </select>
                         </div>
                     </div>
                 </div>

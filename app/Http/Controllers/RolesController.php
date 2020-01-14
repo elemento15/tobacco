@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class WarehousesController extends BaseController
+class RolesController extends BaseController
 {
-    protected $mainModel = 'App\Warehouse';
+    protected $mainModel = 'App\Role';
 
     // params needen for index
-    protected $searchFields = ['name'];
+    protected $searchFields = ['name','code'];
     protected $indexPaginate = 10;
     protected $indexJoins = [];
 
@@ -22,12 +22,13 @@ class WarehousesController extends BaseController
     // protected $updateFields = [];
     protected $defaultNulls = [];
     protected $formRules = [
-        'name' => 'required|min:5'
+        'name' => 'required|min:5',
+        'code' => 'required|min:3',
     ];
 
-    protected $allowDelete = true;
-    protected $allowUpdate = true;
-    protected $allowStore  = true;
+    protected $allowDelete = false;
+    protected $allowUpdate = false;
+    protected $allowStore  = false;
     protected $except = [];
 
     protected $useTransactions = false;
