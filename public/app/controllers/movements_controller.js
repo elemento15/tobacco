@@ -222,6 +222,7 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 
 		if (data) {
 			$scope.model._saving = true;
+			$scope.model.warehouse_id = $scope.table.filters.warehouse_id;
 
 			$scope.loading = MovementService.save(data)
 				.success(function(response) {
