@@ -20,7 +20,8 @@ class CheckRole
                 return $next($request);
             }
         }
-        
-        abort(403);
+
+        return response()->json([ 'error'=> 403, 'msg' => 'Acceso Restringido' ], 403);
+        //abort(403);
     }
 }
