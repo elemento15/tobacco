@@ -35,7 +35,16 @@
                         </ul>
                     </li>
                     <li><a href="#/expenses">Gastos</a></li>
-                    <li><a href="#/movements">Movimientos</a></li>
+                    <!--<li><a href="#/movements">Movimientos</a></li>-->
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            Inventarios <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#/stocks">Existencias</a></li>
+                            <li><a href="#/movements">Movimientos</a></li>
+                        </ul>
+                    </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             Catálogos <span class="caret"></span>

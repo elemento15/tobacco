@@ -84,6 +84,17 @@ app.factory('WarehouseService', ['$http', function($http) {
 	} 
 }]);
 
+app.factory('StockService', ['$http', function($http) {
+	return {
+		get  : function (data) {
+			return $http.get('stocks/'+ data.id);
+		},
+		read : function(data) {
+			return $http.get('stocks?'+ jQuery.param(data), data);
+		}
+	} 
+}]);
+
 app.factory('UserService', ['$http', function($http) {
 	return {
 		get      : function (data) {

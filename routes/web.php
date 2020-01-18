@@ -36,7 +36,9 @@ Route::group(['middleware' => ['auth']], function () {
 		
 		// Movements
 		Route::resource('movements', 'MovementsController')->only(['index','show']);
-		
+
+		// Stocks
+		Route::resource('stocks', 'StocksController')->only(['index']);
 
 		// Only for: SYS, ADM, INV
 		Route::group(['middleware' => ['role:SYS,ADM,INV']], function () {
@@ -45,6 +47,9 @@ Route::group(['middleware' => ['auth']], function () {
 			Route::post('warehouses/{id}/activate', 'WarehousesController@activate');
 			Route::post('warehouses/{id}/deactivate', 'WarehousesController@deactivate');
 
+			// Movements
+			Route::resource('movements', 'MovementsController')->only(['store']);
+			Route::post('movements/{id}/cancel', 'MovementsController@cancel');
 
 			// Only for: SYS, ADM
 			Route::group(['middleware' => ['role:SYS,ADM']], function () {
@@ -67,11 +72,6 @@ Route::group(['middleware' => ['auth']], function () {
 				Route::post('salespersons/{id}/deactivate', 'SalespersonsController@deactivate');
 				Route::get('salespersons/{id}/prices', 'SalespersonsController@getPrices');
 				Route::post('salespersons/{id}/prices', 'SalespersonsController@savePrices');
-
-				// Movements
-				Route::resource('movements', 'MovementsController')->only(['store']);
-				Route::post('movements/{id}/cancel', 'MovementsController@cancel');
-
 
 				// Only for: SYS
 				Route::group(['middleware' => ['role:SYS']], function () {

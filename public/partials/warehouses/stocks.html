@@ -1,0 +1,55 @@
+<h3 class="cls-title">Existencias por Almacén</h3>
+
+<div class="row">
+	<div class="col-sm-offset-2 col-sm-6" cg-busy="loading">
+		<div class="row">
+			<div class="col-sm-4 col-md-3">
+				<div class="cls-filters-title">Filtros</div>
+
+				<!-- status filter -->
+				<div ng-include="tpls.filter_status"></div>
+			</div>
+			
+			<div class="col-sm-8 col-md-9">
+				<div class="row cls-toolbar">
+					<!-- warehouse selection -->
+					<div class="col-sm-6">
+						<select class="form-control" ng-model="table.filters.warehouse_id" ng-change="read(1)">
+							<option value="">-- Seleccione almacén --</option>
+							<option ng-repeat="(key, opt) in warehouses" value="{{opt.id}}">{{ opt.name }}</option>
+						</select>
+					</div>
+
+					<!-- search input -->
+					<div class="col-sm-6" ng-include="tpls.search"></div>
+				</div>
+
+				<table class="table table-condensed table-bordered cls-table">
+					<thead>
+						<tr>
+							<th class="text-center" width="70%">Marca</th>
+							<th class="text-center">Paquetes</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="(key, item) in table.data" ng-dblclick="view(rec.id)" ng-click="table.selected = key"
+						    ng-class="{'cls-inactive': !item.active, 'cls-selected': key === table.selected}"
+						    ng-show="table.filters.warehouse_id">
+							<td class="">{{ item.name }}</td>
+							<td class="text-right">{{ item.stock | number }}</td>
+						</tr>
+						<tr ng-hide="table.filters.warehouse_id">
+							<td colspan="7">
+								<h4 class="text-center text-muted">Seleccione un almacén para visualizar la existencia</h4>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<!-- paginator -->
+				<ul uib-pagination ng-model="table.page" items-per-page="table.items" total-items="table.total" max-size="5"
+				    ng-change="read()"class="pagination-sm" boundary-link-numbers="true" rotate="true"></ul>
+			</div>
+		</div>
+	</div>
+</div>
