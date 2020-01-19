@@ -26,27 +26,6 @@
                 <ul class="nav navbar-nav">
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                            Repartos <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#/allocations">Entregas</a></li>
-                            <li><a href="#/liquidations">Liquidaciones</a></li>
-                            <li><a href="#/devolutions">Devoluciones</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="#/expenses">Gastos</a></li>
-                    <!--<li><a href="#/movements">Movimientos</a></li>-->
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                            Inventarios <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#/stocks">Existencias</a></li>
-                            <li><a href="#/movements">Movimientos</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             Catálogos <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
@@ -57,7 +36,27 @@
                             <li><a href="#/users">Usuarios</a></li>
                         </ul>
                     </li>
-                    <li><a href="#/reports">Reportes</a></li>
+                    <!--<li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            Ventas <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#/allocations">Entregas</a></li>
+                            <li><a href="#/liquidations">Liquidaciones</a></li>
+                            <li><a href="#/devolutions">Devoluciones</a></li>
+                        </ul>
+                    </li>-->
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            Inventarios <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#/stocks">Existencias</a></li>
+                            <li><a href="#/movements">Movimientos</a></li>
+                        </ul>
+                    </li>
+                    <!--<li><a href="#/expenses">Gastos</a></li>-->
+                    <!--<li><a href="#/reports">Reportes</a></li>-->
                 </ul>
 
                 <!-- Right Side Of Navbar -->
