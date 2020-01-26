@@ -324,3 +324,13 @@ input.cls-error {
 .cls-panel .panel-body {
 	background-color: #e1e1e1;
 }
+
+.panel-filters .panel-heading {
+	text-align: center;
+	color: #888;
+	background-color: #ddd;
+}
+
+.panel-filters .panel-body {
+	background-color: #f6f6f6;
+}

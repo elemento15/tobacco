@@ -4,10 +4,13 @@
 	<div class="col-sm-offset-2 col-sm-6" cg-busy="loading">
 		<div class="row">
 			<div class="col-sm-4 col-md-3">
-				<div class="cls-filters-title">Filtros</div>
-
-				<!-- status filter -->
-				<div ng-include="tpls.filter_status"></div>
+				<div class="panel panel-default panel-filters">
+					<div class="panel-heading">Filtros</div>
+					<div class="panel-body">
+						<!-- status filter -->
+						<div ng-include="tpls.filter_status"></div>
+					</div>
+				</div>
 			</div>
 			
 			<div class="col-sm-8 col-md-9">
