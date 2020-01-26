@@ -29,7 +29,7 @@
                             Catálogos <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="#/salespersons">Vendedores</a></li>
+                            <!--<li><a href="#/salespersons">Vendedores</a></li>-->
                             <li><a href="#/brands">Marcas</a></li>
                             <li><a href="#/warehouses">Almacenes</a></li>
                             <li role="separator" class="divider"></li>

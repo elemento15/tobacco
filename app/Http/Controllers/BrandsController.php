@@ -22,7 +22,7 @@ class BrandsController extends BaseController
     // protected $updateFields = [];
     protected $defaultNulls = [];
     protected $formRules = [
-        'name' => 'required|min:5',
+        'name' => 'required|min:3',
         'packs_per_box' => 'required|min:1',
         'cost' => 'required|min:1',
     ];
