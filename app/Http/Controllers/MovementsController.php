@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Movement;
 use App\MovementBrand;
+use App\MovementConcept;
 use App\Stock;
 use App\Warehouse;
 use Illuminate\Http\Request;
@@ -20,11 +21,11 @@ class MovementsController extends BaseController
     protected $indexJoins = ['warehouse'];
 
     // params needer for show
-    protected $showJoins = ['warehouse', 'details.brand'];
+    protected $showJoins = ['warehouse', 'concept', 'details.brand'];
 
     // params needed for store/update
     // protected $saveFields = [];
-    protected $storeFields = ['mov_date','type','warehouse_id','transfer_to','user_id','comments'];
+    protected $storeFields = ['mov_date','type','warehouse_id','concept_id','transfer_to','user_id','comments'];
     // protected $updateFields = [];
     protected $defaultNulls = ['transfer_to', 'transfer_from','cancel_user_id','cancel_date','user_id','comments'];
     protected $formRules = [];
@@ -113,6 +114,7 @@ class MovementsController extends BaseController
         $this->request['mov_date'] = date('Y-m-d H:i:s');
         $this->request['type'] = $req->type;
         $this->request['warehouse_id'] = $req->warehouse_id;
+        $this->request['concept_id'] = $req->concept_id;
         $this->request['warehouse_target'] = ($req->type == 'T') ? $target->id : null;
         $this->request['user_id'] = 1; // @LMNT: set current user
         $this->request['comments'] = $req->comments;
@@ -158,13 +160,17 @@ class MovementsController extends BaseController
         $data = $this->request;
         $details = $this->request['details'];
 
+        // get concept for income
+        $concept = MovementConcept::getByCode('REC-TRASP');
+
         $mov = new Movement;
         $mov->mov_date = date('Y-m-d H:i:s');
         $mov->type = 'E';
         $mov->warehouse_id = $data['warehouse_target'];
+        $mov->concept_id = ($concept) ? $concept->id : null;
         $mov->transfer_from = $transfer->id;
         $mov->user_id = 1; // @LMNT: set current user
-        $mov->comments = '';
+        $mov->comments = 'Entrada automática por traspaso de otro almacén';
         $mov->save();
 
         foreach ($details as $key => $item) {

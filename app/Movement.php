@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Movement extends Model
 {
-	protected $fillable = ['mov_date','type','warehouse_id','transfer_to','user_id','comments'];
+	protected $fillable = ['mov_date','type','warehouse_id','concept_id','transfer_to','user_id','comments'];
 
     protected $appends = ['transfer_to_warehouse','transfer_from_warehouse'];
 
@@ -15,6 +15,11 @@ class Movement extends Model
 	public function warehouse()
     {
         return $this->belongsTo('App\Warehouse');
+    }
+
+    public function concept()
+    {
+        return $this->belongsTo('App\MovementConcept');
     }
 
     public function details()

@@ -1,5 +1,5 @@
 app.controller('MovementsController', function ($scope, $http, $route, $location, $ngConfirm, $uibModal, $timeout, 
-	                                            toastr, MovementService, WarehouseService, BrandService) {
+	                                            toastr, MovementService, WarehouseService, BrandService, ConceptService) {
 	var self = this;
 
 	this.list = {
@@ -37,6 +37,7 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 			mov_date: '',
 			//warehouse_id: '',
 			type: 'E',
+			concept_id: '',
 			warehouse_target: '',
 			transfer_to: '',
 			transfer_from: '',
@@ -54,8 +55,8 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 	this.beforeViewLoaded = function () {
 		$scope.fetchWarehouses();
 		$scope.fetchBrands();
+		$scope.fetchConcepts();
 	}
-
 
 
 	$scope.show_form = false;
@@ -63,6 +64,9 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 	$scope.warehouses = [];
 	$scope.warehousesTarget = [];
 	$scope.selWarehouse = {};
+
+	$scope.concepts = [];
+	$scope.filteredConcepts = [];
 
 	$scope.brands = [];
 	$scope.selBrandId = '';
@@ -127,6 +131,17 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 		});
 	}
 
+	$scope.fetchConcepts = function () {
+		ConceptService.read({
+			filters: [{ field: 'active', value: 1 },{ field: 'is_automatic', value: 0 }],
+			order: { field: 'name', type: 'asc' }
+		}).success(function (response) {
+			$scope.concepts = response;
+		}).error(function (response) {
+			toastr.error(response.msg || 'Error en el servidor');
+		});
+	}
+
 	$scope.clearDetail = function () {
 		$scope.selBrandId = '';
 		$scope.quantityDetail = 0;
@@ -177,6 +192,12 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 	$scope.deleteDetail = function (index) {
 		$scope.model.details.splice(index, 1);
 	}
+
+	$scope.filterConcepts = function (option) {
+		$scope.filteredConcepts = _.filter($scope.concepts || [], function (o) {
+			return o.type == option;
+		});
+	}
 	// ========================================================
 
 
@@ -202,6 +223,11 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 		});
 	});
 
+	$scope.$watch('model.type', function(newVal, oldVal) {
+		$scope.model.concept_id = '';
+		$scope.filterConcepts(newVal);
+	});
+
 
 	BaseController.call(this, $scope, $http, $route, $location, $ngConfirm, $uibModal, $timeout, toastr, MovementService);
 
@@ -215,6 +241,7 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 
 		self.clearModel();
 		$scope.openForm(false);
+		$scope.filterConcepts('E');
 	}
 
 	$scope.save = function () {

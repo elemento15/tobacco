@@ -33,6 +33,9 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::group(['middleware' => ['role:SYS,ADM,INV,ALM']], function () {
 		// Warehouses
 		Route::resource('warehouses', 'WarehousesController')->only(['index','show']);
+
+		// Movement Concepts
+		Route::resource('concepts', 'MovementConceptsController')->only(['index','show']);
 		
 		// Movements
 		Route::resource('movements', 'MovementsController')->only(['index','show']);
