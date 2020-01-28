@@ -39,7 +39,7 @@ class MovementsController extends BaseController
     protected $useTransactions = true;
 
 
-    public function cancel($id)
+    public function cancel($id, Request $request)
     {
         $mainModel = $this->mainModel;
         $record = $mainModel::find($id);
@@ -55,10 +55,14 @@ class MovementsController extends BaseController
         if ($record->transfer_from) {
             return Response::json(array('msg' => 'No puede cancelar una entrada generada por traspaso'), 500);
         }
+
+        if (empty($request->comments) ||  strlen($request->comments) < 5) {
+            return Response::json(array('msg' => 'Comentario inválido ó muy corto'), 500);
+        }
         
         DB::beginTransaction();
 
-        $cancellation = $this->generateCancellation($record);
+        $cancellation = $this->generateCancellation($record, $request->comments);
 
         $record->active = 0;
         $record->cancellation_id = $cancellation->id;
@@ -198,10 +202,12 @@ class MovementsController extends BaseController
     private function cancelTargetMovement($id)
     {
         $mov = Movement::findOrFail($id);
+
+        $comments = 'Cancelación automática por ser entrada de un traspaso';
+        $cancellation = $this->generateCancellation($mov, $comments);
+
         $mov->active = 0;
-        $mov->cancel_user_id = session('userID');
-        $mov->cancel_date = date('Y-m-d H:i:s');
-        $mov->comments = $mov->comments.' - Cancelación automática por ser entrada de un traspaso';
+        $mov->cancellation_id = $cancellation->id;
         $mov->save();
 
         foreach ($mov->details as $item) {
@@ -209,12 +215,12 @@ class MovementsController extends BaseController
         }
     }
 
-    private function generateCancellation($movement)
+    private function generateCancellation($movement, $comments)
     {
         return MovementCancellation::create([
             'cancel_date' => date('Y-m-d H:i:s'),
             'user_id' => session('userID'),
-            'comments' => 'XXXXX'
+            'comments' => $comments
         ]);
     }
 }

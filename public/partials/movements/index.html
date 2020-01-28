@@ -123,6 +123,9 @@
 				<span class="text-info" ng-hide="model.id">
 					<b>Nuevo Movimiento</b>
 				</span>
+				<span class="text-danger" ng-hide="model.active || !model.id" style="margin-left: 15px;">
+					<b>*** Cancelado ***</b>
+				</span>
 			</div>
 		</div>
 

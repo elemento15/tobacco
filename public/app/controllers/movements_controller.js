@@ -77,6 +77,9 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 
 	$scope.selectedMovement = {};
 
+	$scope.is_cancelling = false;
+	$scope.cancel_comment = '';
+
 
 	// ========================================================
 	// - Specific methods -
@@ -90,7 +93,7 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 			size: 'md',
 			backdrop: 'static',
 			controller: function ($scope) {
-				$scope.is_canceling = false;
+				//
 			},
 			controllerAs: '$ctrl',
 			scope: $scope
@@ -99,12 +102,15 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 
 	$scope.cancel = function () {
 		$scope.loading = MovementService.cancel({
-			id: $scope.selectedMovement.id
+			id: $scope.selectedMovement.id,
+			comments: $scope.cancel_comment
 		}).success(function (response) {
 			$scope.modalCancel.dismiss();
+			$scope.is_cancelling = false;
+			$scope.cancel_comment = '';
 			$scope.read(1);
 		}).error(function (response) {
-			$scope.modalCancel.dismiss();
+			$scope.is_cancelling = false;
 			toastr.error(response.msg || 'Error en el servidor');
 		});
 	}

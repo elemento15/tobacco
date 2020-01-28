@@ -144,7 +144,7 @@ app.factory('MovementService', ['$http', function($http) {
 			return $http.delete('movements/'+ data.id);
 		},
 		cancel   : function (data) {
-			return $http.post('movements/'+ data.id +'/cancel');
+			return $http.post('movements/'+ data.id +'/cancel', data);
 		}
 	} 
 }]);
