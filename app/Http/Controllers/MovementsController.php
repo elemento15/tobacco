@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Movement;
 use App\MovementBrand;
 use App\MovementConcept;
+use App\MovementCancellation;
 use App\Stock;
 use App\Warehouse;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class MovementsController extends BaseController
     // params needen for index
     protected $searchFields = ['id'];
     protected $indexPaginate = 10;
-    protected $indexJoins = ['warehouse'];
+    protected $indexJoins = ['warehouse', 'concept'];
 
     // params needer for show
     protected $showJoins = ['warehouse', 'concept', 'details.brand'];
@@ -54,12 +55,13 @@ class MovementsController extends BaseController
         if ($record->transfer_from) {
             return Response::json(array('msg' => 'No puede cancelar una entrada generada por traspaso'), 500);
         }
-
-        $record->active = 0;
-        $record->cancel_date = date('Y-m-d H:i:s');
-        $record->cancel_user_id = 1; // @LMNT set current user
         
         DB::beginTransaction();
+
+        $cancellation = $this->generateCancellation($record);
+
+        $record->active = 0;
+        $record->cancellation_id = $cancellation->id;
 
         if ($record->save()) {
             // update stock
@@ -94,6 +96,12 @@ class MovementsController extends BaseController
             return false;
         }
 
+        $concept = MovementConcept::find($req->concept_id);
+        if ($concept->is_automatic) {
+            $this->msgError = 'No puede agregrar conceptos automáticos';
+            return false;
+        }
+
         if ($req->type == 'T') {
             if (! $target = Warehouse::find($req->warehouse_target)) {
                 $this->msgError = 'Especifique el almacén destino';
@@ -116,7 +124,7 @@ class MovementsController extends BaseController
         $this->request['warehouse_id'] = $req->warehouse_id;
         $this->request['concept_id'] = $req->concept_id;
         $this->request['warehouse_target'] = ($req->type == 'T') ? $target->id : null;
-        $this->request['user_id'] = 1; // @LMNT: set current user
+        $this->request['user_id'] = session('userID');
         $this->request['comments'] = $req->comments;
         $this->request['details'] = $req->details;
 
@@ -169,7 +177,7 @@ class MovementsController extends BaseController
         $mov->warehouse_id = $data['warehouse_target'];
         $mov->concept_id = ($concept) ? $concept->id : null;
         $mov->transfer_from = $transfer->id;
-        $mov->user_id = 1; // @LMNT: set current user
+        $mov->user_id = session('userID');
         $mov->comments = 'Entrada automática por traspaso de otro almacén';
         $mov->save();
 
@@ -191,7 +199,7 @@ class MovementsController extends BaseController
     {
         $mov = Movement::findOrFail($id);
         $mov->active = 0;
-        $mov->cancel_user_id = 1; // @LMNT use current user
+        $mov->cancel_user_id = session('userID');
         $mov->cancel_date = date('Y-m-d H:i:s');
         $mov->comments = $mov->comments.' - Cancelación automática por ser entrada de un traspaso';
         $mov->save();
@@ -199,5 +207,14 @@ class MovementsController extends BaseController
         foreach ($mov->details as $item) {
             Stock::substractStock($item->brand_id, $mov->warehouse_id, $item['quantity']);
         }
+    }
+
+    private function generateCancellation($movement)
+    {
+        return MovementCancellation::create([
+            'cancel_date' => date('Y-m-d H:i:s'),
+            'user_id' => session('userID'),
+            'comments' => 'XXXXX'
+        ]);
     }
 }
