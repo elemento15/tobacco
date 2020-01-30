@@ -28,7 +28,6 @@ Route::group(['middleware' => ['auth']], function () {
 	// Salespersons
 	Route::resource('salespersons', 'SalespersonsController')->only(['index','show']);
 
-
 	// Only for: SYS, ADM, INV, ALM
 	Route::group(['middleware' => ['role:SYS,ADM,INV,ALM']], function () {
 		// Warehouses
@@ -42,6 +41,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 		// Stocks
 		Route::resource('stocks', 'StocksController')->only(['index']);
+		Route::get('stocks/report/{warehouse}', 'StocksController@report');
 
 		// Only for: SYS, ADM, INV
 		Route::group(['middleware' => ['role:SYS,ADM,INV']], function () {
