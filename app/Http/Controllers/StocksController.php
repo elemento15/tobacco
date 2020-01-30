@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Brand;
 use App\Stock;
+use App\Warehouse;
+use PDF;
 
 class StocksController extends BaseController
 {
@@ -84,5 +86,26 @@ class StocksController extends BaseController
 
         $model->data = $data;
         return json_encode($model);
+    }
+
+    public function report(Warehouse $warehouse, Request $request)
+    {
+        $stocks = Stock::join('brands', 'brand_id', '=', 'brands.id')
+                       ->select('name', 'packs_per_box', 'cost', 'quantity')
+                       ->where('warehouse_id', $warehouse->id)
+                       ->orderBy('name')
+                       ->get();
+
+        $boxes = $request->boxes ?? 1;
+
+        $data = [
+            'warehouse' => $warehouse->name,
+            'use_boxes' => $boxes,
+            'stocks'    => $stocks,
+            'total'     => 0
+        ];
+
+        $pdf = PDF::loadView('reports/stocks', $data);
+        return $pdf->stream('rpt_existencias.pdf', ['Attachment' => false]);
     }
 }

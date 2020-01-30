@@ -12,9 +12,15 @@
 					</div>
 				</div>
 
-				<div class="row">
-					<div class="col-sm-12">
-						<button type="button" class="btn btn-block btn-info" ng-model="boxesUnityDetail" uib-btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+				<div class="panel panel-default panel-filters">
+					<div class="panel-heading">Opciones</div>
+					<div class="panel-body">
+						<a class="btn btn-block btn-sm btn-default" target="_blank"
+						   href="stocks/report/{{ table.filters.warehouse_id }}/?boxes={{ boxesUnityDetail }}" >
+							<span class="glyphicon glyphicon-print" aria-hidden="true"></span> Imprimir
+						</a>
+
+						<button type="button" class="btn btn-block btn-sm btn-info" ng-model="boxesUnityDetail" uib-btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
 							<span ng-show="boxesUnityDetail">Cajas</span>
 							<span ng-hide="boxesUnityDetail">Paquetes</span>
 						</button>
