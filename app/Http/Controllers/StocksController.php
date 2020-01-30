@@ -12,7 +12,7 @@ class StocksController extends BaseController
 
     // params needen for index
     protected $searchFields = [];
-    protected $indexPaginate = 20;
+    protected $indexPaginate = 10;
     protected $indexJoins = [];
 
     // params needer for show
@@ -77,7 +77,8 @@ class StocksController extends BaseController
                 'id'     => $item->id,
                 'name'   => $item->name,
                 'active' => $item->active,
-                'stock'  => $quantity
+                'stock'  => floatval($quantity),
+                'packs_per_box' => $item->packs_per_box
             ];
         }
 

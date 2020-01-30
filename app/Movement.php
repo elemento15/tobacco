@@ -22,6 +22,16 @@ class Movement extends Model
         return $this->belongsTo('App\MovementConcept');
     }
 
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+
+    public function cancellation()
+    {
+        return $this->belongsTo('App\MovementCancellation');
+    }
+
     public function details()
     {
         return $this->hasMany('App\MovementBrand');

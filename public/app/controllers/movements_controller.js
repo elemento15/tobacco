@@ -23,6 +23,10 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 			invalid = toastr.warning('Almacén destino requerido', 'Validaciones');
 		}
 
+		if (! data.concept_id) {
+			invalid = toastr.warning('Concepto requerido', 'Validaciones');
+		}
+
 		if (data.details.length < 1) {
 			invalid = toastr.warning('Capture detalles al movimiento', 'Validaciones');
 		}
@@ -49,7 +53,9 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 			_saving: false
 		};
 
-		$scope.boxesUnityDetail = 0;
+		$scope.boxesUnityDetail = 1;
+		$scope.quantityDetail = 0;
+		$scope.selBrandId = '';
 	}
 
 	this.beforeViewLoaded = function () {
@@ -73,7 +79,7 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 	$scope.selBrand = {};
 
 	$scope.quantityDetail = 0;
-	$scope.boxesUnityDetail = 0; // 0: packages | 1: boxes
+	$scope.boxesUnityDetail = 1; // 0: packages | 1: boxes
 
 	$scope.selectedMovement = {};
 
@@ -160,7 +166,7 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 	}
 
 	$scope.addDetail = function () {
-		if ($scope.quantityDetail < 1) {
+		if ($scope.quantityDetail < 0) {
 			toastr.warning('Cantidad inválida', 'Validaciones');
 			return false;
 		}
@@ -188,7 +194,8 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 				id: $scope.selBrand.id,
 				name: $scope.selBrand.name
 			},
-			quantity: quantity
+			quantity: quantity,
+			packs_per_box: $scope.selBrand.packs_per_box
 		});
 
 		$scope.clearDetail();

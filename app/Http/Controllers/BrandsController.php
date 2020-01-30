@@ -17,9 +17,9 @@ class BrandsController extends BaseController
     protected $showJoins = [];
 
     // params needed for store/update
-    protected $saveFields = ['name','packs_per_box','cost'];
-    // protected $storeFields = [];
-    // protected $updateFields = [];
+    //protected $saveFields = ['name','packs_per_box','cost'];
+    protected $storeFields = ['name','packs_per_box','cost'];
+    protected $updateFields = ['name','cost'];
     protected $defaultNulls = [];
     protected $formRules = [
         'name' => 'required|min:3',

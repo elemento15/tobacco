@@ -22,7 +22,7 @@ class MovementsController extends BaseController
     protected $indexJoins = ['warehouse', 'concept'];
 
     // params needer for show
-    protected $showJoins = ['warehouse', 'concept', 'details.brand'];
+    protected $showJoins = ['warehouse', 'concept', 'details.brand', 'user', 'cancellation.user'];
 
     // params needed for store/update
     // protected $saveFields = [];
@@ -97,6 +97,11 @@ class MovementsController extends BaseController
 
         if (! in_array($req->type, ['E', 'S', 'T'])) {
             $this->msgError = 'Tipo de inválido';
+            return false;
+        }
+
+        if (! $req->concept_id) {
+            $this->msgError = 'Especifique el concepto';
             return false;
         }
 

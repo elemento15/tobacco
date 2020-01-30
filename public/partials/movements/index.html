@@ -113,18 +113,17 @@
 <div class="row" ng-show="show_form">
 	<div class="col-md-offset-1 col-md-10 col-sm-12" cg-busy="loading">
 		<div class="row">
-			<div class="col-sm-12 mb5">
+			<div class="col-sm-6 mb5">
 				<span class="text-info">
-					<b>{{ selWarehouse.name }} - </b>
+					<b>{{ selWarehouse.name }}</b>
 				</span>
 				<span class="text-info" ng-show="model.id">
-					<b>Movimiento: {{ model.id }}</b>
+					<b> - Folio: {{ model.id }}</b>
 				</span>
-				<span class="text-info" ng-hide="model.id">
-					<b>Nuevo Movimiento</b>
-				</span>
-				<span class="text-danger" ng-hide="model.active || !model.id" style="margin-left: 15px;">
-					<b>*** Cancelado ***</b>
+			</div>
+			<div class="col-sm-6 mb5">
+				<span class="text-danger pull-right" ng-hide="model.active || !model.id" style="margin-left: 15px;">
+					<b>*** CANCELADO ***</b>
 				</span>
 			</div>
 		</div>
@@ -196,6 +195,19 @@
 								</div>
 							</div>
 						</div>
+
+						<div class="row" ng-show="model.id">
+							<div class="col-sm-4 mt10">
+								<span class="text-muted small">
+									<i>Creado por: {{ model.user.name }} - {{ model.mov_date }}</i>
+								</span>
+							</div>
+							<div class="col-sm-4 mt10" ng-show="model.cancellation">
+								<span class="text-danger small">
+									<i>Cancelado por: {{ model.cancellation.user.name }} - {{ model.cancellation.cancel_date }}</i>
+								</span>
+							</div>
+						</div>
 					</div>
 				</div>
 
@@ -238,17 +250,17 @@
 								</div>
 
 								<div class="row">
-									<div class="col-sm-6">
-										<div class="mr10 mt5" ng-show="selBrandId">
+									<div class="col-sm-5">
+										<div class="mt5">
 											<span class="text-muted">
-												<i>Paquetes por caja: <b>{{ selBrand.packs_per_box }}</b></i>
+												<i>Paquetes por caja: <b>{{ selBrand.packs_per_box || '-' }}</b></i>
 											</span>
 										</div>
 									</div>
 
-									<div class="col-sm-6">
-										<div class="mr10 mt5" ng-show="selBrandId">
-											<span class="text-warning" ng-show="boxesUnityDetail">
+									<div class="col-sm-5">
+										<div class="mt5" ng-show="selBrandId">
+											<span class="text-muted" ng-show="boxesUnityDetail">
 												<i>Total <b>{{ selBrand.packs_per_box * quantityDetail }}</b> paquetes</i>
 											</span>
 										</div>
@@ -264,19 +276,21 @@
 									<thead>
 										<th>Acciones</th>
 										<th>Marca</th>
-										<th>Cantidad</th>
+										<th ng-show="boxesUnityDetail" width="200">Cajas</th>
+										<th ng-hide="boxesUnityDetail" width="200">Paquetes</th>
 									</thead>
 									<tbody>
 										<tr ng-repeat="(key, rec) in model.details">
 											<td width="80">
 												<div class="cls-actions">
-													<button class="btn btn-danger btn-xs" ng-click="deleteDetail(key)">
+													<button class="btn btn-danger btn-xs" ng-click="deleteDetail(key)" ng-hide="model.id">
 														<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
 													</button>
 												</div>
 											</td>
 											<td>{{ rec.brand.name }}</td>
-											<td>{{ rec.quantity }}</td>
+											<td ng-show="boxesUnityDetail">{{ rec.quantity / (rec.packs_per_box || rec.brand.packs_per_box) }}</td>
+											<td ng-hide="boxesUnityDetail">{{ rec.quantity }}</td>
 										</tr>
 									</tbody>
 								</table>

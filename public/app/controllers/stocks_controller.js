@@ -19,6 +19,8 @@ app.controller('StocksController', function ($scope, $http, $route, $location, $
 
 	$scope.warehouses = [];
 
+	$scope.boxesUnityDetail = 1; // 0: packages | 1: boxes
+
 
 	// ========================================================
 	$scope.fetchWarehouses = function () {

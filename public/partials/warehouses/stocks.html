@@ -11,6 +11,15 @@
 						<div ng-include="tpls.filter_status"></div>
 					</div>
 				</div>
+
+				<div class="row">
+					<div class="col-sm-12">
+						<button type="button" class="btn btn-block btn-info" ng-model="boxesUnityDetail" uib-btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+							<span ng-show="boxesUnityDetail">Cajas</span>
+							<span ng-hide="boxesUnityDetail">Paquetes</span>
+						</button>
+					</div>
+				</div>
 			</div>
 			
 			<div class="col-sm-8 col-md-9">
@@ -31,7 +40,10 @@
 					<thead>
 						<tr>
 							<th class="text-center" width="70%">Marca</th>
-							<th class="text-center">Paquetes</th>
+							<th class="text-center">
+								<span ng-show="boxesUnityDetail">Cajas</span>
+								<span ng-hide="boxesUnityDetail">Paquetes</span>
+							</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -39,7 +51,10 @@
 						    ng-class="{'cls-inactive': !item.active, 'cls-selected': key === table.selected}"
 						    ng-show="table.filters.warehouse_id">
 							<td class="">{{ item.name }}</td>
-							<td class="text-right">{{ item.stock | number }}</td>
+							<td class="">
+								<span ng-show="boxesUnityDetail">{{ item.stock / item.packs_per_box | number }}</span>
+								<span ng-hide="boxesUnityDetail">{{ item.stock | number }}</span>
+							</td>
 						</tr>
 						<tr ng-hide="table.filters.warehouse_id">
 							<td colspan="7">
