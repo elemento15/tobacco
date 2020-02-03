@@ -42,6 +42,7 @@ Route::group(['middleware' => ['auth']], function () {
 		// Stocks
 		Route::resource('stocks', 'StocksController')->only(['index']);
 		Route::get('stocks/report/{warehouse}', 'StocksController@report');
+		Route::get('stocks/kardex/{warehouse}/{brand}', 'StocksController@kardex');
 
 		// Only for: SYS, ADM, INV
 		Route::group(['middleware' => ['role:SYS,ADM,INV']], function () {

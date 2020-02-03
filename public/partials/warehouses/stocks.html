@@ -17,7 +17,7 @@
 					<div class="panel-body">
 						<a class="btn btn-block btn-sm btn-default" target="_blank"
 						   href="stocks/report/{{ table.filters.warehouse_id }}/?boxes={{ boxesUnityDetail }}" >
-							<span class="glyphicon glyphicon-print" aria-hidden="true"></span> Imprimir
+							<span class="glyphicon glyphicon-print" aria-hidden="true"></span> Existencias
 						</a>
 
 						<button type="button" class="btn btn-block btn-sm btn-info" ng-model="boxesUnityDetail" uib-btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
@@ -45,7 +45,8 @@
 				<table class="table table-condensed table-bordered cls-table">
 					<thead>
 						<tr>
-							<th class="text-center" width="70%">Marca</th>
+							<th>&nbsp;</th>
+							<th class="text-center">Marca</th>
 							<th class="text-center">
 								<span ng-show="boxesUnityDetail">Cajas</span>
 								<span ng-hide="boxesUnityDetail">Paquetes</span>
@@ -53,11 +54,19 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="(key, item) in table.data" ng-dblclick="view(rec.id)" ng-click="table.selected = key"
+						<tr ng-repeat="(key, item) in table.data" ng-click="table.selected = key"
 						    ng-class="{'cls-inactive': !item.active, 'cls-selected': key === table.selected}"
 						    ng-show="table.filters.warehouse_id">
+						    <td class="text-center" width="80">
+						    	<div class="cls-actions">
+							    	<a class="btn btn-xs btn-default" target="_blank"
+									   href="stocks/kardex/{{ table.filters.warehouse_id }}/{{ item.id }}/?boxes={{ boxesUnityDetail }}" >
+										<span class="glyphicon glyphicon-print" aria-hidden="true"></span> Kardex
+									</a>
+								</div>
+						    </td>
 							<td class="">{{ item.name }}</td>
-							<td class="">
+							<td class="text-right" ng-class="{'cls-negative': item.stock < 0}">
 								<span ng-show="boxesUnityDetail">{{ item.stock / item.packs_per_box | number }}</span>
 								<span ng-hide="boxesUnityDetail">{{ item.stock | number }}</span>
 							</td>

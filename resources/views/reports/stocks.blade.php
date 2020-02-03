@@ -54,7 +54,7 @@
 					@endphp
 					
 					<tr>
-						<td align="center" style="font-size: 11px;">{{ $key }}</td>
+						<td align="center" style="font-size: 11px;">{{ $key + 1 }}</td>
 						<td>{{ $stock['name'] }}</td>
 						<td align="right">
 							@if ($quantity >= 0)
