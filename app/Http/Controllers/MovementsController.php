@@ -128,6 +128,14 @@ class MovementsController extends BaseController
             return false;
         }
 
+        // validate quantities in details
+        foreach ($req->details as $item) {
+            if ($item['quantity'] <= 0) {
+                $this->msgError = 'Cantidad inválida en detalles ('. $item['quantity'] .')';
+                return false;
+            }
+        }
+
         $this->request['mov_date'] = date('Y-m-d H:i:s');
         $this->request['type'] = $req->type;
         $this->request['warehouse_id'] = $req->warehouse_id;

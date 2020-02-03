@@ -166,7 +166,7 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 	}
 
 	$scope.addDetail = function () {
-		if ($scope.quantityDetail < 0) {
+		if ($scope.quantityDetail <= 0) {
 			toastr.warning('Cantidad inválida', 'Validaciones');
 			return false;
 		}
