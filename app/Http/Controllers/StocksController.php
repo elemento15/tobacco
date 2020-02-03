@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Brand;
 use App\Stock;
 use App\Warehouse;
+use App\MovementBrand;
 use PDF;
 
 class StocksController extends BaseController
@@ -93,6 +94,7 @@ class StocksController extends BaseController
         $stocks = Stock::join('brands', 'brand_id', '=', 'brands.id')
                        ->select('name', 'packs_per_box', 'cost', 'quantity')
                        ->where('warehouse_id', $warehouse->id)
+                       ->where('quantity', '!=', 0)
                        ->orderBy('name')
                        ->get();
 
@@ -107,5 +109,31 @@ class StocksController extends BaseController
 
         $pdf = PDF::loadView('reports/stocks', $data);
         return $pdf->stream('rpt_existencias.pdf', ['Attachment' => false]);
+    }
+
+    public function kardex(Warehouse $warehouse, Brand $brand, Request $request)
+    {
+        $details = MovementBrand::join('movements as mov', 'mov.id', '=', 'movement_brands.movement_id')
+                                ->join('brands as b', 'b.id', '=', 'movement_brands.brand_id')
+                                ->join('movement_concepts as mc', 'mc.id', '=', 'mov.concept_id')
+                                ->select('mov.id AS movID', 'quantity', 'mov.mov_date', 'mov.type', 'b.packs_per_box', 'mc.name', 'mov.comments')
+                                ->where('b.id', $brand->id)
+                                ->where('mov.warehouse_id', $warehouse->id)
+                                ->where('mov.active', true)
+                                ->orderBy('mov.mov_date')
+                                ->get();
+
+        $boxes = $request->boxes ?? 1;
+
+        $data = [
+            'warehouse' => $warehouse->name,
+            'brand'     => $brand->name,
+            'use_boxes' => $boxes,
+            'details'   => $details,
+            'balance'   => 0
+        ];
+
+        $pdf = PDF::loadView('reports/kardex', $data);
+        return $pdf->stream('rpt_kardex.pdf', ['Attachment' => false]);
     }
 }
