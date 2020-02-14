@@ -58,9 +58,9 @@
 						<td>{{ $stock['name'] }}</td>
 						<td align="right">
 							@if ($quantity >= 0)
-							<span>{{ number_format($quantity) }}</span>
+							<span>{{ number_format($quantity, 2) }}</span>
 							@else
-							<span class="cls-negative">{{ number_format($quantity) }}</span>
+							<span class="cls-negative">{{ number_format($quantity, 2) }}</span>
 							@endif
 						</td>
 					</tr>
@@ -68,7 +68,7 @@
 
 				<tr class="cls-total">
 					<td colspan="2" align="right">Total: </td>
-					<td align="right">{{ number_format($total) }}</td>
+					<td align="right">{{ number_format($total, 2) }}</td>
 				</tr>
 			</tbody>
 		</table>
