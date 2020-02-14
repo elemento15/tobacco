@@ -17,7 +17,7 @@
                 <!-- Branding Image -->
                 <a class="navbar-brand" href="#/">
                     <!--<img src="images/Logo.png" \>-->
-                    Distribuidora
+                    {{ config('app.name', 'Laravel') }}
                 </a>
             </div>
 
