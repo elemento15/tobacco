@@ -61,7 +61,7 @@ app.controller('SalespersonsController', function ($scope, $http, $route, $locat
 		}).success(function (response) {
 			var brands = response;
 			$scope.brandsPrices = _.map(brands, function (item) {
-				return { id: item.id, name: item.name, price: 0 };
+				return { id: item.id, name: item.name, price: item.price, brand_price: item.price };
 			});
 		}).error(function (response) {
 			toastr.error(response.msg || 'Error en el servidor');
@@ -79,7 +79,7 @@ app.controller('SalespersonsController', function ($scope, $http, $route, $locat
 				if ((record = _.find(prices, { brand_id: item.id })) != undefined) {
 					$scope.brandsPrices[key].price = parseFloat(record.price);
 				} else {
-					$scope.brandsPrices[key].price = 0;
+					$scope.brandsPrices[key].price = $scope.brandsPrices[key].brand_price;
 				}
 			});
 		}).error(function (response) {
