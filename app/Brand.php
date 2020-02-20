@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Brand extends Model
 {
-    protected $fillable = ['name', 'packs_per_box', 'cost'];
+    protected $fillable = ['name', 'packs_per_box', 'cost', 'price'];
 
     protected $casts = [
-    	'cost' => 'float'
+    	'cost'  => 'float',
+        'price' => 'float'
     ];
 
     public function prices()

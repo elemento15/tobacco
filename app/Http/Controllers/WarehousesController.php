@@ -22,7 +22,7 @@ class WarehousesController extends BaseController
     // protected $updateFields = [];
     protected $defaultNulls = [];
     protected $formRules = [
-        'name' => 'required|min:5'
+        'name' => 'unique:warehouses,name,{{id}}|required|min:5'
     ];
 
     protected $allowDelete = true;

@@ -18,13 +18,14 @@ class BrandsController extends BaseController
 
     // params needed for store/update
     //protected $saveFields = ['name','packs_per_box','cost'];
-    protected $storeFields = ['name','packs_per_box','cost'];
-    protected $updateFields = ['name','cost'];
+    protected $storeFields = ['name','packs_per_box','cost','price'];
+    protected $updateFields = ['name','cost','price'];
     protected $defaultNulls = [];
     protected $formRules = [
-        'name' => 'required|min:3',
-        'packs_per_box' => 'required|min:1',
-        'cost' => 'required|min:1',
+        'packs_per_box' => 'required|numeric|min:1|max:9999',
+        'cost'  => 'required|numeric|min:1|max:9999',
+        'price' => 'required|numeric|min:1|max:9999',
+        'name' => 'unique:brands,name,{{id}}|required|min:3',
     ];
 
     protected $allowDelete = true;

@@ -6,10 +6,13 @@
 		<!-- Screen for Salespersons CRUD -->
 		<div class="row" ng-hide="showPrices">
 			<div class="col-sm-3 col-md-2">
-				<div class="cls-filters-title">Filtros</div>
-
-				<!-- status filter -->
-				<div ng-include="tpls.filter_status"></div>
+				<div class="panel panel-default panel-filters">
+					<div class="panel-heading">Filtros</div>
+					<div class="panel-body">
+						<!-- status filter -->
+						<div ng-include="tpls.filter_status"></div>
+					</div>
+				</div>
 			</div>
 			
 			<div class="col-sm-9 col-md-10">
