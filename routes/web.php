@@ -28,6 +28,12 @@ Route::group(['middleware' => ['auth']], function () {
 	// Salespersons
 	Route::resource('salespersons', 'SalespersonsController')->only(['index','show']);
 
+	
+	// Only for: SYS, ADM, AUX
+	Route::group(['middleware' => ['role:SYS,ADM,AUX']], function () {
+		Route::resource('allocations', 'AllocationsController');
+	});
+
 	// Only for: SYS, ADM, INV, ALM
 	Route::group(['middleware' => ['role:SYS,ADM,INV,ALM']], function () {
 		// Warehouses

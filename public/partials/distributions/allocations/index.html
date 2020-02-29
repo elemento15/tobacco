@@ -1,1 +1,237 @@
-<h3 class="cls-title">Entregas</h3>
+<h3 class="cls-title">Entregas a Vendedores</h3>
+
+<!-- Index for allocations -->
+<div class="row" ng-hide="show_form">
+	<div class="col-sm-offset-1 col-sm-10" cg-busy="loading">
+		<div class="row">
+			<div class="col-sm-3 col-md-2">
+				<div class="panel panel-default panel-filters">
+					<div class="panel-heading">Filtros</div>
+					<div class="panel-body">
+						<!-- status filter -->
+						<div ng-include="tpls.filter_status"></div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-sm-9 col-md-10">
+				<div class="row cls-toolbar">
+					<div class="col-sm-6">
+						<!-- new button -->
+						<div ng-include="tpls.new_button" style="display: inline;"></div>
+						<button class="btn btn-danger btn-sm" ng-click="openCancel()" ng-hide="table.selected === null">
+							<span class="glyphicon glyphicon-delete" aria-hidden="true"></span> Cancelar
+						</button>
+					</div>
+
+					<!-- search input -->
+					<div class="col-sm-6" ng-include="tpls.search"></div>
+				</div>
+
+				<table class="table table-condensed table-bordered cls-table">
+					<thead>
+						<tr>
+							<th class="text-center" width="50">Ver</th>
+							<th class="text-center" width="70">Folio</th>
+							<th class="text-center" width="110">Fecha</th>
+							<th class="text-center">Vendedor</th>
+							<th width="100" class="text-center">Estado</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="(key, rec) in table.data" ng-dblclick="view(rec.id)" ng-click="table.selected = key"
+						    ng-class="{'cls-inactive': !rec.active, 'cls-selected': key === table.selected}">
+							<!-- actions buttons -->
+							<td>
+								<div class="cls-actions">
+									<button class="btn btn-info btn-xs" ng-click="view(rec.id)">
+										<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+									</button>
+								</div>
+							</td>
+							<td class="text-right">{{ rec.id }}</td>
+							<td class="text-center">{{ rec.rec_date.substr(0, 10) }}</td>
+							<td class="cls-xsmall">-- Vendedor --</td>
+							<!-- change status component -->
+							<td align="center">
+								<div>
+									<span class="label label-default cls-pointer" ng-if="rec.active">Activo</span>
+									<span class="label label-danger cls-pointer" ng-if="!rec.active">Cancelado</span>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<!-- paginator -->
+				<ul uib-pagination ng-model="table.page" items-per-page="table.items" total-items="table.total" max-size="5"
+				    ng-change="read()"class="pagination-sm" boundary-link-numbers="true" rotate="true"></ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Form for movements -->
+<div class="row" ng-show="show_form">
+	<div class="col-md-offset-1 col-md-10 col-sm-12" cg-busy="loading">
+		<div class="row">
+			<div class="col-sm-6 mb5">
+				<span class="text-info">
+					<b>Entrega</b>
+				</span>
+				<span class="text-info" ng-show="model.id">
+					<b> - Folio: {{ model.id }}</b>
+				</span>
+			</div>
+			<div class="col-sm-6 mb5">
+				<span class="text-danger pull-right" ng-hide="model.active || !model.id" style="margin-left: 15px;">
+					<b>*** CANCELADO ***</b>
+				</span>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-12">
+				<!-- movement panel -->
+				<div class="panel panel-default cls-panel">
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-sm-4" ng-hide="model.id">
+								<div class="form-inline">
+									<div class="form-group">
+										<label class="mr5">Vendedor: </label>
+										<select class="form-control input-sm" ng-model="model.salesperson_id">
+											<option value="">-- Seleccione el vendedor --</option>
+											<option ng-repeat="(key, opt) in salespeople" value="{{opt.id}}">{{ opt.name }}</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row" ng-show="model.id">
+							<div class="col-sm-4 mt10">
+								<span class="text-muted small">
+									<i>Creado por: {{ model.user.name }} - {{ model.rec_date }}</i>
+								</span>
+							</div>
+							<div class="col-sm-4 mt10" ng-show="model.cancellation">
+								<span class="text-danger small">
+									<i>Cancelado por: {{ model.cancellation.user.name }} - {{ model.cancellation.cancel_date }}</i>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-8">
+						<!-- brands panel -->
+						<div class="panel panel-default cls-panel" ng-hide="model.id">
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="form-inline">
+											<div class="form-group mr10">
+												<label>Marca: </label>
+												<select class="form-control input-sm" ng-model="selBrandId">
+													<option value="">-- Seleccione --</option>
+													<option ng-repeat="(key, opt) in brands" value="{{opt.id}}">{{ opt.name }}</option>
+												</select>
+											</div>
+
+											<div class="form-group mr10">
+												<label>Cantidad: </label>
+												<input type="number" class="form-control input-sm text-right" ng-model="quantityDetail"
+												       ng-keyup="enterQuantity($event)" min="0" style="width: 100px;">
+											</div>
+
+											<div class="form-group mr10">
+												<button type="button" class="btn btn-xs btn-info" ng-model="boxesUnityDetail" uib-btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+													<span ng-show="boxesUnityDetail">Cajas</span>
+													<span ng-hide="boxesUnityDetail">Paquetes</span>
+												</button>
+											</div>
+
+											<div class="form-group mr10">
+												<button class="btn btn-xs btn-primary" ng-click="addDetail()">
+													<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-sm-5">
+										<div class="mt5">
+											<span class="text-muted">
+												<i>Paquetes por caja: <b>{{ selBrand.packs_per_box || '-' }}</b></i>
+											</span>
+										</div>
+									</div>
+
+									<div class="col-sm-5">
+										<div class="mt5" ng-show="selBrandId">
+											<span class="text-muted" ng-show="boxesUnityDetail">
+												<i>Total <b>{{ selBrand.packs_per_box * quantityDetail }}</b> paquetes</i>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- details panel -->
+						<div class="row">
+							<div class="col-sm-12">
+								<table class="table table-condensed table-bordered cls-table">
+									<thead>
+										<th>Acciones</th>
+										<th>Marca</th>
+										<th ng-show="boxesUnityDetail" width="200">Cajas</th>
+										<th ng-hide="boxesUnityDetail" width="200">Paquetes</th>
+									</thead>
+									<tbody>
+										<tr ng-repeat="(key, rec) in model.details">
+											<td width="80">
+												<div class="cls-actions">
+													<button class="btn btn-danger btn-xs" ng-click="deleteDetail(key)" ng-hide="model.id">
+														<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+													</button>
+												</div>
+											</td>
+											<td>{{ rec.brand.name }}</td>
+											<td ng-show="boxesUnityDetail">{{ rec.quantity / (rec.packs_per_box || rec.brand.packs_per_box) }}</td>
+											<td ng-hide="boxesUnityDetail">{{ rec.quantity }}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-sm-4">
+						<!-- Comments -->
+						<div class="row">
+							<div class="col-sm-12 mb10">
+								<textarea class="form-control" rows="5" ng-model="model.comments" placeholder="Comentarios"></textarea>
+							</div>
+						</div>
+
+						<!-- Buttons -->
+						<div class="row">
+							<div class="col-sm-12 text-right">
+								<button class="btn btn-success" ng-click="save()" ng-hide="model._saving || model.id">Guardar</button>
+								<button class="btn btn-success" ng-show="model._saving" disabled="disabled">
+							        <img src="images/loading.gif"> Espere
+							    </button>
+								<button class="btn btn-default" ng-click="show_form = false">Cerrar</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
