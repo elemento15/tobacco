@@ -52,9 +52,13 @@ class MovementsController extends BaseController
             return Response::json(array('msg' => 'No puede cancelar un movimiento cancelado'), 500);
         }
 
-        if ($record->transfer_from) {
-            return Response::json(array('msg' => 'No puede cancelar una entrada generada por traspaso'), 500);
+        if ($record->is_automatic) {
+            return Response::json(array('msg' => 'No puede cancelar un movimiento generado automáticamente'), 500);
         }
+
+        /*if ($record->transfer_from) {
+            return Response::json(array('msg' => 'No puede cancelar una entrada generada por traspaso'), 500);
+        }*/
 
         if (empty($request->comments) ||  strlen($request->comments) < 5) {
             return Response::json(array('msg' => 'Comentario inválido ó muy corto'), 500);
@@ -193,6 +197,7 @@ class MovementsController extends BaseController
         $mov->type = 'E';
         $mov->warehouse_id = $data['warehouse_target'];
         $mov->concept_id = ($concept) ? $concept->id : null;
+        $mov->is_automatic = true;
         $mov->transfer_from = $transfer->id;
         $mov->user_id = session('userID');
         $mov->comments = 'Entrada automática por traspaso de otro almacén';

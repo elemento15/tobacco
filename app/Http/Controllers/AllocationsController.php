@@ -4,18 +4,25 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Configuration;
+use App\Brand;
+use App\AllocationBrand;
+use App\Movement;
+use App\MovementConcept;
+use App\MovementBrand;
+use App\Stock;
+use App\Price;
 
 class AllocationsController extends BaseController
 {
     protected $mainModel = 'App\Allocation';
 
     // params needen for index
-    protected $searchFields = ['rec_date'];
+    protected $searchFields = ['id'];
     protected $indexPaginate = 10;
-    protected $indexJoins = [];
+    protected $indexJoins = ['warehouse', 'salesperson'];
 
     // params needer for show
-    protected $showJoins = [];
+    protected $showJoins = ['warehouse', 'salesperson', 'details.brand', 'user'];
 
     // params needed for store/update
     protected $saveFields = ['rec_date','salesperson_id','warehouse_id','type','user_id','comments'];
@@ -74,5 +81,75 @@ class AllocationsController extends BaseController
         $this->request['details'] = $req->details;
 
         return true;
+    }
+
+    protected function afterStore()
+    {
+        $details = $this->request['details'];
+        $warehouse_id = $this->request['warehouse_id'];
+        $movement = false;
+
+        foreach ($details as $key => $item) {
+            // get brand
+            $brand = Brand::find($item['brand']['id']);
+
+            $det = new AllocationBrand;
+            $det->brand_id = $item['brand']['id'];
+            $det->quantity = $item['quantity'];
+            $det->unit_cost = $brand->cost;
+            $det->unit_price = Price::getPrice($item['brand']['id'], $this->request['salesperson_id']);
+
+            $this->savedRecord->details()->save($det);
+        }
+
+        // create movement
+        if ($this->request['type'] == 'E') { // Entrega
+            $concept  = MovementConcept::getByCode('ENTREGA');
+            $movement = $this->generateMovement($this->request, 'S', $concept); // SALIDA
+        } elseif ($this->request['type'] == 'D') { // Devolucion
+            $concept  = MovementConcept::getByCode('DEVOLUC');
+            $movement = $this->generateMovement($this->request, 'E', $concept); // ENTRADA
+        }
+
+        // save movement id to allocation
+        if ($movement) {
+            $this->savedRecord->movement_id = $movement->id;
+            $this->savedRecord->save();
+        }
+        
+        return true;
+    }
+
+
+    private function generateMovement($data, $type, $concept)
+    {
+        $id_allocation = $this->savedRecord->id;
+
+        $mov = new Movement;
+        $mov->mov_date     = $data['rec_date'];
+        $mov->type         = $type;
+        $mov->warehouse_id = $data['warehouse_id'];
+        $mov->concept_id   = $concept->id;
+        $mov->is_automatic = true;
+        $mov->user_id      = session('userID');
+        $mov->comments     = "Movimiento automático por proceso de ventas - ($id_allocation)";
+        $mov->save();
+
+        foreach ($data['details'] as $key => $item) {
+            $mv = new MovementBrand;
+            $mv->brand_id = $item['brand']['id'];
+            $mv->quantity = $item['quantity'];
+
+            $mov->details()->save($mv);
+
+            // updates stock
+            if ($type == 'E') {
+                Stock::addStock($mv->brand->id, $data['warehouse_id'], $item['quantity']);
+            } elseif ($type == 'S') {
+                Stock::substractStock($mv->brand->id, $data['warehouse_id'], $item['quantity']);
+            }
+        }
+
+        return $mov;
     }
 }
