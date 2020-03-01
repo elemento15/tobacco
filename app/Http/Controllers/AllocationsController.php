@@ -25,7 +25,7 @@ class AllocationsController extends BaseController
     protected $indexJoins = ['warehouse', 'salesperson'];
 
     // params needer for show
-    protected $showJoins = ['warehouse', 'salesperson', 'details.brand', 'user'];
+    protected $showJoins = ['warehouse', 'salesperson', 'details.brand', 'user', 'cancellation.user'];
 
     // params needed for store/update
     protected $saveFields = ['rec_date','salesperson_id','warehouse_id','type','user_id','comments'];
