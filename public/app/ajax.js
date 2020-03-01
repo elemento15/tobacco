@@ -164,7 +164,7 @@ app.factory('AllocationService', ['$http', function($http) {
 			return $http.delete('allocations/'+ data.id);
 		},
 		cancel   : function (data) {
-			return $http.post('allocations/'+ data.id +'/cancel');
+			return $http.post('allocations/'+ data.id +'/cancel', data);
 		}
 	} 
 }]);

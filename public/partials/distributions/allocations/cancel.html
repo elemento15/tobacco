@@ -1,0 +1,43 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Cancelar Registro</h4>
+</div>
+<div class="modal-body" id="modal-body">
+    <div>
+        <div class="row">
+            <div class="col-md-offset-1 col-md-10">
+                <h4 class="text-danger text-center mb10 mt3">¿Desea cancelar el registro seleccionado?</h4>
+                <div class="row">
+                    <div class="col-sm-offset-1 col-sm-2">Tipo:</div>
+                    <div class="col-sm-8 text-info">
+                        <span ng-show="$parent.selectedAllocation.type == 'E'">ENTREGA</span>
+                        <span ng-show="$parent.selectedAllocation.type == 'L'">LIQUIDACION</span>
+                        <span ng-show="$parent.selectedAllocation.type == 'D'">DEVOLUCION</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-offset-1 col-sm-2">Vendedor:</div>
+                    <div class="col-sm-8 text-info">{{ $parent.selectedAllocation.salesperson.name }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-offset-1 col-sm-2">Fecha:</div>
+                    <div class="col-sm-8 text-info">{{ $parent.selectedAllocation.rec_date }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-offset-1 col-sm-2">Motivo:</div>
+                    <div class="col-sm-8">
+                        <textarea class="form-control mt3" rows="4" ng-model="$parent.cancel_comment"
+                                  placeholder="Mínimo 5 caracteres"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-danger" type="button" 
+            ng-click="$parent.cancel(); $parent.is_cancelling = true" ng-hide="$parent.is_cancelling">Aceptar</button>
+    <button class="btn btn-danger" type="button" ng-show="$parent.is_cancelling" disabled="disabled">
+        <img src="images/loading.gif"> Espere
+    </button>
+    <button class="btn btn-default" type="button" ng-click="$dismiss(); $parent.cancel_comment = ''">Cerrar</button>
+</div>

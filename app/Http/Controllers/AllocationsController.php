@@ -11,6 +11,9 @@ use App\MovementConcept;
 use App\MovementBrand;
 use App\Stock;
 use App\Price;
+use App\AllocationCancellation;
+use Response;
+use Illuminate\Support\Facades\DB;
 
 class AllocationsController extends BaseController
 {
@@ -40,6 +43,40 @@ class AllocationsController extends BaseController
     protected $except = [];
 
     protected $useTransactions = true;
+
+
+    public function cancel($id, Request $request)
+    {
+        $mainModel = $this->mainModel;
+        $record = $mainModel::find($id);
+
+        if (! $record) {
+            return Response::json(array('msg' => 'Registro no encontrado'), 500);
+        }
+
+        if (! $record->active) {
+            return Response::json(array('msg' => 'No puede cancelar un registro cancelado'), 500);
+        }
+
+        if (empty($request->comments) ||  strlen($request->comments) < 5) {
+            return Response::json(array('msg' => 'Comentario inválido ó muy corto'), 500);
+        }
+        
+        DB::beginTransaction();
+
+        $cancellation = $this->generateCancellation($request->comments);
+
+        $record->active = 0;
+        $record->cancellation_id = $cancellation->id;
+
+        if ($record->save()) {
+            DB::commit();
+            return Response::json($record);
+        } else {
+            DB::rollback();
+            return Response::json(array('msg' => 'Error al cancelar'), 500);
+        }
+    }
 
 
     protected function beforeStore()
@@ -151,5 +188,14 @@ class AllocationsController extends BaseController
         }
 
         return $mov;
+    }
+
+    private function generateCancellation($comments)
+    {
+        return AllocationCancellation::create([
+            'cancel_date' => date('Y-m-d H:i:s'),
+            'user_id' => session('userID'),
+            'comments' => $comments
+        ]);
     }
 }

@@ -60,10 +60,45 @@ app.controller('AllocationsController', function ($scope, $http, $route, $locati
 	$scope.quantityDetail = 0;
 	$scope.boxesUnityDetail = 1; // 0: packages | 1: boxes
 
-	$scope.selectedMovement = {};
+	$scope.selectedAllocation = {};
+
+	$scope.is_cancelling = false;
+	$scope.cancel_comment = '';
 
 	// ========================================================
 	// - Specific methods -
+	$scope.openCancel = function () {
+		$scope.selectedAllocation = $scope.table.data[$scope.table.selected];
+
+		$scope.modalCancel = $uibModal.open({
+			ariaLabelledBy: 'modal-title',
+			ariaDescribedBy: 'modal-body',
+			templateUrl: '/partials/distributions/allocations/cancel.html',
+			size: 'md',
+			backdrop: 'static',
+			controller: function ($scope) {
+				//
+			},
+			controllerAs: '$ctrl',
+			scope: $scope
+		});
+	}
+
+	$scope.cancel = function () {
+		$scope.loading = AllocationService.cancel({
+			id: $scope.selectedAllocation.id,
+			comments: $scope.cancel_comment
+		}).success(function (response) {
+			$scope.modalCancel.dismiss();
+			$scope.is_cancelling = false;
+			$scope.cancel_comment = '';
+			$scope.read(1);
+		}).error(function (response) {
+			$scope.is_cancelling = false;
+			toastr.error(response.msg || 'Error en el servidor');
+		});
+	}
+
 	$scope.fetchBrands = function () {
 		BrandService.read({
 			filters: [{ field: 'active', value: 1 }],

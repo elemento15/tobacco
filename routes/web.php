@@ -28,11 +28,6 @@ Route::group(['middleware' => ['auth']], function () {
 	// Salespersons
 	Route::resource('salespersons', 'SalespersonsController')->only(['index','show']);
 
-	
-	// Only for: SYS, ADM, AUX
-	Route::group(['middleware' => ['role:SYS,ADM,AUX']], function () {
-		Route::resource('allocations', 'AllocationsController');
-	});
 
 	// Only for: SYS, ADM, INV, ALM
 	Route::group(['middleware' => ['role:SYS,ADM,INV,ALM']], function () {
@@ -49,6 +44,11 @@ Route::group(['middleware' => ['auth']], function () {
 		Route::resource('stocks', 'StocksController')->only(['index']);
 		Route::get('stocks/report/{warehouse}', 'StocksController@report');
 		Route::get('stocks/kardex/{warehouse}/{brand}', 'StocksController@kardex');
+
+		// Allocations
+		Route::resource('allocations', 'AllocationsController');
+		Route::post('allocations/{id}/cancel', 'AllocationsController@cancel');
+
 
 		// Only for: SYS, ADM, INV
 		Route::group(['middleware' => ['role:SYS,ADM,INV']], function () {
