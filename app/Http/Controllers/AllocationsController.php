@@ -9,9 +9,11 @@ use App\AllocationBrand;
 use App\Movement;
 use App\MovementConcept;
 use App\MovementBrand;
+use App\MovementCancellation;
 use App\Stock;
 use App\Price;
 use App\AllocationCancellation;
+use App\SalespersonStock;
 use Response;
 use Illuminate\Support\Facades\DB;
 
@@ -68,8 +70,19 @@ class AllocationsController extends BaseController
 
         $record->active = 0;
         $record->cancellation_id = $cancellation->id;
+        
+        $this->cancelMovement($record->movement_id, $record->type);
 
         if ($record->save()) {
+            // update "salesperson_stock"
+            foreach ($record->details as $item) {
+                if ($record->type == 'E') { // ENTREGA
+                    SalespersonStock::substractStock($item->brand_id, $record->salesperson_id, $item['quantity']);
+                } else {
+                    SalespersonStock::addStock($item->brand_id, $record->salesperson_id, $item['quantity']);
+                }
+            }
+
             DB::commit();
             return Response::json($record);
         } else {
@@ -122,8 +135,10 @@ class AllocationsController extends BaseController
 
     protected function afterStore()
     {
-        $details = $this->request['details'];
-        $warehouse_id = $this->request['warehouse_id'];
+        $data = $this->request;
+        $details = $data['details'];
+        $warehouse_id = $data['warehouse_id'];
+        $salesperson_id = $data['salesperson_id'];
         $movement = false;
 
         foreach ($details as $key => $item) {
@@ -134,9 +149,16 @@ class AllocationsController extends BaseController
             $det->brand_id = $item['brand']['id'];
             $det->quantity = $item['quantity'];
             $det->unit_cost = $brand->cost;
-            $det->unit_price = Price::getPrice($item['brand']['id'], $this->request['salesperson_id']);
+            $det->unit_price = Price::getPrice($item['brand']['id'], $salesperson_id);
 
             $this->savedRecord->details()->save($det);
+
+            // updates "salesperson_stocks"
+            if ($data['type'] == 'E') { // ENTREGA
+                SalespersonStock::addStock($det->brand->id, $salesperson_id, $item['quantity']);
+            } else { // LIQUIDACION or DEVOLUCION
+                SalespersonStock::substractStock($mv->brand->id, $salesperson_id, $item['quantity']);
+            }
         }
 
         // create movement
@@ -196,6 +218,47 @@ class AllocationsController extends BaseController
             'cancel_date' => date('Y-m-d H:i:s'),
             'user_id' => session('userID'),
             'comments' => $comments
+        ]);
+    }
+
+    private function cancelMovement($movement_id, $type)
+    {
+        $mov = Movement::find($movement_id);
+
+        $cancellation = $this->generateMovementCancellation($type);
+
+        $mov->cancellation_id = $cancellation->id;
+        $mov->active = false;
+        
+        if ($mov->save()) {
+            foreach ($mov->details as $item) {
+                if ($mov->type == 'E') {
+                    Stock::substractStock($item->brand_id, $mov->warehouse_id, $item['quantity']);
+                } else {
+                    Stock::addStock($item->brand_id, $mov->warehouse_id, $item['quantity']);
+                }
+            }
+        }
+    }
+
+    private function generateMovementCancellation($type)
+    {
+        switch ($type) {
+            case 'E':
+                $txt = 'entrega';
+                break;
+            case 'D':
+                $txt = 'devolución';
+                break;
+            case 'L':
+                $txt = 'liquidación';
+                break;
+        }
+
+        return MovementCancellation::create([
+            'cancel_date' => date('Y-m-d H:i:s'),
+            'user_id' => session('userID'),
+            'comments' => 'Cancelación automática generada por cancelación de '. $txt
         ]);
     }
 }
