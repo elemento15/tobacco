@@ -106,6 +106,17 @@ app.factory('StockService', ['$http', function($http) {
 	} 
 }]);
 
+app.factory('SalespersonStockService', ['$http', function($http) {
+	return {
+		get  : function (data) {
+			return $http.get('salesperson_stocks/'+ data.id);
+		},
+		read : function(data) {
+			return $http.get('salesperson_stocks?'+ jQuery.param(data), data);
+		}
+	} 
+}]);
+
 app.factory('UserService', ['$http', function($http) {
 	return {
 		get      : function (data) {

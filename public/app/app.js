@@ -33,6 +33,10 @@ app.config(function ($routeProvider, $provide, toastrConfig) {
 				controller: 'StocksController',
 				templateUrl: '/partials/warehouses/stocks.html'
 			})
+		.when('/salesperson_stocks',{
+				controller: 'SalespersonStocksController',
+				templateUrl: '/partials/distributions/stocks.html'
+			})
 		.when('/users',{
 				controller: 'UsersController',
 				templateUrl: '/partials/users/index.html'

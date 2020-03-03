@@ -40,10 +40,15 @@ Route::group(['middleware' => ['auth']], function () {
 		// Movements
 		Route::resource('movements', 'MovementsController')->only(['index','show']);
 
-		// Stocks
+		// Stocks - Warehouse
 		Route::resource('stocks', 'StocksController')->only(['index']);
 		Route::get('stocks/report/{warehouse}', 'StocksController@report');
 		Route::get('stocks/kardex/{warehouse}/{brand}', 'StocksController@kardex');
+
+		// Stocks - Salesperson
+		Route::resource('salesperson_stocks', 'SalespersonStocksController')->only(['index']);
+		Route::get('salesperson_stocks/report/{salesperson}', 'SalespersonStocksController@report');
+		Route::get('salesperson_stocks/kardex/{salesperson}/{brand}', 'SalespersonStocksController@kardex');
 
 		// Allocations
 		Route::resource('allocations', 'AllocationsController');

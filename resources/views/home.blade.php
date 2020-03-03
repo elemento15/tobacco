@@ -44,6 +44,8 @@
                             <li><a href="#/allocations">Entregas</a></li>
                             <li><a href="#/liquidations">Liquidaciones</a></li>
                             <li><a href="#/devolutions">Devoluciones</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#/salesperson_stocks">Existencias</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
