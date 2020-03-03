@@ -164,10 +164,10 @@ class AllocationsController extends BaseController
         // create movement
         if ($this->request['type'] == 'E') { // Entrega
             $concept  = MovementConcept::getByCode('ENTREGA');
-            $movement = $this->generateMovement($this->request, 'S', $concept); // SALIDA
+            $movement = $this->generateMovement($this->request, 'S', $concept, 'E'); // SALIDA
         } elseif ($this->request['type'] == 'D') { // Devolucion
             $concept  = MovementConcept::getByCode('DEVOLUC');
-            $movement = $this->generateMovement($this->request, 'E', $concept); // ENTRADA
+            $movement = $this->generateMovement($this->request, 'E', $concept, 'D'); // ENTRADA
         }
 
         // save movement id to allocation
@@ -180,9 +180,18 @@ class AllocationsController extends BaseController
     }
 
 
-    private function generateMovement($data, $type, $concept)
+    private function generateMovement($data, $type, $concept, $allocation_type)
     {
         $id_allocation = $this->savedRecord->id;
+
+        switch ($allocation_type) {
+            case 'E' : 
+                $txt = 'entrega';
+                break;
+            case 'D' : 
+                $txt = 'devolución';
+                break;
+        }
 
         $mov = new Movement;
         $mov->mov_date     = $data['rec_date'];
@@ -191,7 +200,7 @@ class AllocationsController extends BaseController
         $mov->concept_id   = $concept->id;
         $mov->is_automatic = true;
         $mov->user_id      = session('userID');
-        $mov->comments     = "Movimiento automático por proceso de ventas - ($id_allocation)";
+        $mov->comments     = "Movimiento automático por proceso de $txt: #$id_allocation";
         $mov->save();
 
         foreach ($data['details'] as $key => $item) {

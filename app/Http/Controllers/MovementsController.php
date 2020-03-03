@@ -221,7 +221,7 @@ class MovementsController extends BaseController
     {
         $mov = Movement::findOrFail($id);
 
-        $comments = 'Cancelación automática por ser entrada de un traspaso';
+        $comments = 'Cancelación automática por cancelación de traspaso';
         $cancellation = $this->generateCancellation($comments);
 
         $mov->active = 0;
