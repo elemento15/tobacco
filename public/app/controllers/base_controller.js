@@ -1,6 +1,6 @@
 function BaseController($scope, $http, $route, $location, $ngConfirm, $uibModal, $timeout, toastr, ModelService) {
 	var me = this;
-
+	
 	// grid data
 	$scope.table = {
 		data: [],

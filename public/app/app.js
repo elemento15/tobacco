@@ -47,15 +47,15 @@ app.config(function ($routeProvider, $provide, toastrConfig) {
 			})
 		.when('/allocations',{
 				controller: 'AllocationsController',
-				templateUrl: '/partials/distributions/allocations/index.html'
+				templateUrl: '/partials/distributions/index.html'
 			})
 		.when('/liquidations',{
 				controller: 'LiquidationsController',
-				templateUrl: '/partials/distributions/liquidations/index.html'
+				templateUrl: '/partials/distributions/index.html'
 			})
 		.when('/devolutions',{
 				controller: 'DevolutionsController',
-				templateUrl: '/partials/distributions/devolutions/index.html'
+				templateUrl: '/partials/distributions/index.html'
 			})
 
 		.otherwise({ redirectTo: '/' });

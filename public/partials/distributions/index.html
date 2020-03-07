@@ -1,4 +1,8 @@
-<h3 class="cls-title">Entregas a Vendedores</h3>
+<h3 class="cls-title">
+	<span ng-show="modelType == 'E'">Entregas a Vendedores</span>
+	<span ng-show="modelType == 'L'">Liquidaciones de Vendedores</span>
+	<span ng-show="modelType == 'D'">Devoluciones de Vendedores</span>
+</h3>
 
 <!-- Index for allocations -->
 <div class="row" ng-hide="show_form">
@@ -77,7 +81,9 @@
 		<div class="row">
 			<div class="col-sm-6 mb5">
 				<span class="text-info">
-					<b>Entrega</b>
+					<b ng-show="modelType == 'E'">Entrega</b>
+					<b ng-show="modelType == 'L'">Liquidación</b>
+					<b ng-show="modelType == 'D'">Devolución</b>
 				</span>
 				<span class="text-info" ng-show="model.id">
 					<b> - Folio: {{ model.id }}</b>

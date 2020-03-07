@@ -157,7 +157,7 @@ class AllocationsController extends BaseController
             if ($data['type'] == 'E') { // ENTREGA
                 SalespersonStock::addStock($det->brand->id, $salesperson_id, $item['quantity']);
             } else { // LIQUIDACION or DEVOLUCION
-                SalespersonStock::substractStock($mv->brand->id, $salesperson_id, $item['quantity']);
+                SalespersonStock::substractStock($det->brand->id, $salesperson_id, $item['quantity']);
             }
         }
 
