@@ -304,10 +304,36 @@
 					</div>
 
 					<div class="col-sm-4">
-						<!-- Comments -->
-						<div class="row">
+						<!-- Comments - textarea -->
+						<div class="row" ng-hide="model.id">
 							<div class="col-sm-12 mb10">
 								<textarea class="form-control" rows="5" ng-model="model.comments" placeholder="Comentarios"></textarea>
+							</div>
+						</div>
+
+						<!-- Comments - text -->
+						<div class="row" ng-show="model.id">
+							<!-- allocation -->
+							<div class="col-sm-12">
+								<div class="panel panel-default cls-small">
+									<div class="panel-heading text-muted">Comentarios del Registro:</div>
+									<div class="panel-body">
+										<span ng-show="model.comments">{{ model.comments }}</span>
+										<span ng-hide="model.comments" class="text-muted">
+											<i>-- Sin comentarios --</i>
+										</span>
+									</div>
+								</div>
+							</div>
+
+							<!-- cancellation -->
+							<div class="col-sm-12" ng-hide="model.active">
+								<div class="panel panel-danger cls-small">
+									<div class="panel-heading text-muted">Comentarios de Cancelación:</div>
+									<div class="panel-body">
+										{{ model.cancellation.comments }}
+									</div>
+								</div>
 							</div>
 						</div>
 
