@@ -53,6 +53,7 @@ Route::group(['middleware' => ['auth']], function () {
 		// Allocations
 		Route::resource('allocations', 'AllocationsController');
 		Route::post('allocations/{id}/cancel', 'AllocationsController@cancel');
+		Route::post('allocations/getDetailAmounts', 'AllocationsController@getDetailAmounts');
 
 
 		// Only for: SYS, ADM, INV

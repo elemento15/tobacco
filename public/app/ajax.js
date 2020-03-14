@@ -176,6 +176,9 @@ app.factory('AllocationService', ['$http', function($http) {
 		},
 		cancel   : function (data) {
 			return $http.post('allocations/'+ data.id +'/cancel', data);
+		},
+		getDetailAmounts : function (data) {
+			return $http.post('allocations/getDetailAmounts', data);
 		}
 	} 
 }]);

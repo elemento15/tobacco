@@ -122,6 +122,15 @@
 									</div>
 								</div>
 							</div>
+
+							<div class="col-sm-4">&nbsp;</div>
+
+							<!-- show liquidation total amount -->
+							<div class="col-sm-4" ng-show="modelType == 'L'">
+								<span class="text-danger cls-large pull-right">
+									<b>{{ getTotalAmount() | currency }}</b>
+								</span>
+							</div>
 						</div>
 
 						<div class="row" ng-show="model.id">
@@ -202,10 +211,11 @@
 							<div class="col-sm-12">
 								<table class="table table-condensed table-bordered cls-table">
 									<thead>
-										<th>Acciones</th>
+										<th class="text-center">Acciones</th>
+										<th class="text-center" ng-show="boxesUnityDetail" width="100">Cajas</th>
+										<th class="text-center" ng-hide="boxesUnityDetail" width="100">Paquetes</th>
 										<th>Marca</th>
-										<th ng-show="boxesUnityDetail" width="200">Cajas</th>
-										<th ng-hide="boxesUnityDetail" width="200">Paquetes</th>
+										<th class="text-center" ng-show="modelType == 'L'" width="150">Importe</th>
 									</thead>
 									<tbody>
 										<tr ng-repeat="(key, rec) in model.details">
@@ -216,9 +226,10 @@
 													</button>
 												</div>
 											</td>
+											<td ng-show="boxesUnityDetail" class="text-right">{{ rec.quantity / (rec.packs_per_box || rec.brand.packs_per_box) }}</td>
+											<td ng-hide="boxesUnityDetail" class="text-right">{{ rec.quantity }}</td>
 											<td>{{ rec.brand.name }}</td>
-											<td ng-show="boxesUnityDetail">{{ rec.quantity / (rec.packs_per_box || rec.brand.packs_per_box) }}</td>
-											<td ng-hide="boxesUnityDetail">{{ rec.quantity }}</td>
+											<td ng-show="modelType == 'L'" class="text-right">{{ rec.total_price | currency }}</td>
 										</tr>
 									</tbody>
 								</table>

@@ -66,6 +66,8 @@ function DistributionsController($scope, $http, $route, $location, $ngConfirm, $
 	$scope.is_cancelling = false;
 	$scope.cancel_comment = '';
 
+	$scope.total_amount = 0;
+
 	// ========================================================
 	// - Specific methods -
 	$scope.openCancel = function () {
@@ -156,18 +158,52 @@ function DistributionsController($scope, $http, $route, $location, $ngConfirm, $
 			quantity = $scope.quantityDetail * $scope.selBrand.packs_per_box;
 		}
 
-		$scope.model.details.push({
-			brandID: $scope.selBrand.id,
-			brand: {
-				id: $scope.selBrand.id,
-				name: $scope.selBrand.name
-			},
-			quantity: quantity,
-			packs_per_box: $scope.selBrand.packs_per_box
-		});
+		if (self.modelType == 'L') {
+			// for "Liquidaciones" get amounts calculation for detail
+			$scope.loading = AllocationService.getDetailAmounts({
+				salesperson_id: $scope.model.salesperson_id,
+				brand_id: $scope.selBrandId,
+				quantity: quantity
+			}).success(function (response) {
+				$scope.model.details.push({
+					brandID: $scope.selBrand.id,
+					brand: {
+						id: $scope.selBrand.id,
+						name: $scope.selBrand.name
+					},
+					quantity: quantity,
+					packs_per_box: $scope.selBrand.packs_per_box,
+					total_cost: response.cost,
+					total_price: response.price
+				});
 
-		$scope.clearDetail();
-		$('[ng-model="selBrandId"]').focus();
+				$scope.clearDetail();
+				$('[ng-model="selBrandId"]').focus();
+
+			}).error(function (response) {
+				toastr.error(response.msg || 'Error en el servidor');
+			});
+		} else {
+			// for "Entregas" and "Devoluciones" just add to details
+			$scope.model.details.push({
+				brandID: $scope.selBrand.id,
+				brand: {
+					id: $scope.selBrand.id,
+					name: $scope.selBrand.name
+				},
+				quantity: quantity,
+				packs_per_box: $scope.selBrand.packs_per_box
+			});
+
+			$scope.clearDetail();
+			$('[ng-model="selBrandId"]').focus();
+		}
+	}
+
+	$scope.getTotalAmount = function () {
+		return _.reduce($scope.model.details, function(sum, item) {
+			return sum + parseFloat(item.total_price);
+		}, 0);
 	}
 
 	$scope.deleteDetail = function (index) {

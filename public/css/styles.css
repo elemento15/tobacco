@@ -187,6 +187,10 @@ table td .cls-small-collapsed {
 	cursor: pointer;
 }
 
+.cls-large {
+	font-size: 18px;
+}
+
 .cls-small {
 	font-size: 12px;
 }

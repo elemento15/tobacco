@@ -16,3 +16,12 @@ use Illuminate\Foundation\Inspiring;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->describe('Display an inspiring quote');
+
+Artisan::command('calc-amounts', function() {
+	$a = new App\Libraries\Amounts();
+
+	$amounts = $a->getDistributions(1, 2);
+
+	\Log::info('Cost: '. $amounts['cost']);
+	\Log::info('Price: '. $amounts['price']);
+});
