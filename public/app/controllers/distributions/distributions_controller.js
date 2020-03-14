@@ -28,6 +28,7 @@ function DistributionsController($scope, $http, $route, $location, $ngConfirm, $
 		$scope.model = {
 			id: 0,
 			rec_date: '',
+			doc_number: '',
 			type: self.modelType,
 			salesperson_id: '',
 			active: '',

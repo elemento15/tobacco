@@ -24,7 +24,7 @@ class AllocationsController extends BaseController
     protected $mainModel = 'App\Allocation';
 
     // params needen for index
-    protected $searchFields = ['id'];
+    protected $searchFields = ['id','doc_number'];
     protected $indexPaginate = 10;
     protected $indexJoins = ['warehouse', 'salesperson', 'amount'];
 
@@ -32,7 +32,7 @@ class AllocationsController extends BaseController
     protected $showJoins = ['warehouse', 'salesperson', 'details.brand', 'user', 'cancellation.user'];
 
     // params needed for store/update
-    protected $saveFields = ['rec_date','salesperson_id','warehouse_id','type','user_id','comments'];
+    protected $saveFields = ['rec_date','salesperson_id','warehouse_id','type','user_id','doc_number','comments'];
     //protected $storeFields = [];
     //protected $updateFields = [];
     protected $defaultNulls = ['warehouse_id','user_id','cancel_user_id','cancel_date','comments'];
@@ -139,6 +139,7 @@ class AllocationsController extends BaseController
         $this->request['warehouse_id'] = $warehouse->id;
         $this->request['type'] = $req->type;
         $this->request['user_id'] = session('userID');
+        $this->request['doc_number'] = $req->doc_number;
         $this->request['comments'] = $req->comments;
         $this->request['details'] = $req->details;
 

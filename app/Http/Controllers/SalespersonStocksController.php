@@ -115,7 +115,7 @@ class SalespersonStocksController extends BaseController
     {
         $details = AllocationBrand::join('allocations as all', 'all.id', '=', 'allocation_brands.allocation_id')
                                 ->join('brands as b', 'b.id', '=', 'allocation_brands.brand_id')
-                                ->select('all.id AS movID', 'quantity', 'all.rec_date', 'all.type', 'b.packs_per_box', 'all.comments')
+                                ->select('all.id AS movID', 'quantity', 'all.rec_date', 'all.type', 'b.packs_per_box', 'all.doc_number', 'all.comments')
                                 ->where('b.id', $brand->id)
                                 ->where('all.salesperson_id', $salesperson->id)
                                 ->where('all.active', true)

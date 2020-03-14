@@ -38,6 +38,7 @@
 							<th class="text-center" width="50">Ver</th>
 							<th class="text-center" width="70">ID</th>
 							<th class="text-center" width="110">Fecha</th>
+							<th class="text-center" width="100">Folio</th>
 							<th class="text-center" width="100" ng-show="modelType == 'L'">Importe</th>
 							<th class="text-center">Vendedor</th>
 							<th width="100" class="text-center">Estado</th>
@@ -56,6 +57,7 @@
 							</td>
 							<td class="text-right">{{ rec.id }}</td>
 							<td class="text-center">{{ rec.rec_date.substr(0, 10) }}</td>
+							<td class="">{{ rec.doc_number }}</td>
 							<td class="text-right" ng-show="modelType == 'L'">{{ rec.amount.price | currency }}</td>
 							<td class="cls-xsmall">{{ rec.salesperson.name }}</td>
 							<!-- change status component -->
@@ -125,7 +127,14 @@
 								</div>
 							</div>
 
-							<div class="col-sm-4">&nbsp;</div>
+							<div class="col-sm-4">
+								<div class="form-inline">
+									<div class="form-group">
+										<label class="mr5">Folio: </label>
+										<input class="form-control input-sm" type="text" ng-model="model.doc_number" maxlength="10">
+									</div>
+								</div>
+							</div>
 
 							<!-- show liquidation total amount -->
 							<div class="col-sm-4" ng-show="modelType == 'L'">

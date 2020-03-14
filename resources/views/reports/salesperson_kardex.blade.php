@@ -42,13 +42,14 @@
     </h5>
     <hr>
 
-    <div style="text-align: center; margin: 0px 50px;">
+    <div style="text-align: center; margin: 0px 20px;">
         <table class="cls-content" cellspacing="0" cellpadding="4" width="100%">
             <thead>
                 <tr>
-                    <th align="center" width="30">Folio</th>
+                    <th align="center" width="30">ID</th>
                     <th align="center" width="55">Fecha</th>
                     <th align="center" width="45">Tipo</th>
+                    <th align="center" width="50">Folio</th>
                     <th align="right" width="48">Cantidad</th>
                     <th align="right" width="48">Saldo</th>
                     <th width="1">&nbsp;</th>
@@ -73,6 +74,7 @@
                         <td align="right">{{ $item['movID'] }}</td>
                         <td align="center">{{ substr($item['rec_date'], 0, 10) }}</td>
                         <td align="center" class="cls-small">{{ $type }}</td>
+                        <td align="right">{{ $item['doc_number'] }}</td>
                         <td align="right">{{ number_format($quantity, 2) }}</td>
                         @if ($balance >= 0)
                         <td align="right">{{ number_format($balance, 2) }}</td>
@@ -85,7 +87,7 @@
                 @endforeach
 
                 <tr class="cls-total">
-                    <td colspan="4" align="right">Existencia:</td>
+                    <td colspan="5" align="right">Existencia:</td>
                     @if ($balance >= 0)
                     <td align="right">{{ number_format($balance, 2) }}</td>
                     @else

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Allocation extends Model
 {
-    protected $fillable = ['rec_date','type','salesperson_id','warehouse_id','user_id','comments'];
+    protected $fillable = ['rec_date','type','salesperson_id','warehouse_id','user_id','doc_number','comments'];
 
 
     public function salesperson()
