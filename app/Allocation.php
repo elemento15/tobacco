@@ -29,6 +29,11 @@ class Allocation extends Model
         return $this->belongsTo('App\AllocationCancellation');
     }
 
+    public function amount()
+    {
+        return $this->hasOne('App\AllocationAmount');
+    }
+
     public function details()
     {
         return $this->hasMany('App\AllocationBrand');

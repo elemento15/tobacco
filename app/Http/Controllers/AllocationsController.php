@@ -14,6 +14,7 @@ use App\Stock;
 use App\Price;
 use App\AllocationCancellation;
 use App\SalespersonStock;
+use App\AllocationAmount;
 use Response;
 use Illuminate\Support\Facades\DB;
 use App\Libraries\Amounts;
@@ -25,7 +26,7 @@ class AllocationsController extends BaseController
     // params needen for index
     protected $searchFields = ['id'];
     protected $indexPaginate = 10;
-    protected $indexJoins = ['warehouse', 'salesperson'];
+    protected $indexJoins = ['warehouse', 'salesperson', 'amount'];
 
     // params needer for show
     protected $showJoins = ['warehouse', 'salesperson', 'details.brand', 'user', 'cancellation.user'];
@@ -72,7 +73,9 @@ class AllocationsController extends BaseController
         $record->active = 0;
         $record->cancellation_id = $cancellation->id;
         
-        $this->cancelMovement($record->movement_id, $record->type);
+        if ($record->type == 'E' || $record->type == 'D') {
+            $this->cancelMovement($record->movement_id, $record->type);
+        }
 
         if ($record->save()) {
             // update "salesperson_stock"
@@ -152,6 +155,9 @@ class AllocationsController extends BaseController
         $salesperson_id = $data['salesperson_id'];
         $movement = false;
 
+        $sum_cost = 0;
+        $sum_price = 0;
+
         foreach ($details as $key => $item) {
             // get brand
             $brand = Brand::find($item['brand']['id']);
@@ -166,6 +172,9 @@ class AllocationsController extends BaseController
                 $amounts = $objAmount->getDistributions($salesperson_id, $det->brand_id, $det->quantity);
                 $det->total_cost  = $amounts['cost'];
                 $det->total_price = $amounts['price'];
+
+                $sum_cost += $amounts['cost'];
+                $sum_price += $amounts['price'];
             } else {
                 $det->total_cost  = $det->unit_cost  * $det->quantity;
                 $det->total_price = $det->unit_price * $det->quantity;
@@ -188,6 +197,13 @@ class AllocationsController extends BaseController
         } elseif ($this->request['type'] == 'D') { // Devolucion
             $concept  = MovementConcept::getByCode('DEVOLUC');
             $movement = $this->generateMovement($this->request, 'E', $concept, 'D'); // ENTRADA
+        
+        } else {
+            // save amounts for "Liquidaciones"
+            $amount = new AllocationAmount;
+            $amount->cost = $sum_cost;
+            $amount->price = $sum_price;
+            $this->savedRecord->amount()->save($amount);        
         }
 
         // save movement id to allocation
@@ -274,20 +290,20 @@ class AllocationsController extends BaseController
     {
         switch ($type) {
             case 'E':
-                $txt = 'entrega';
+                $txt = "entrega";
                 break;
             case 'D':
-                $txt = 'devolución';
+                $txt = "devolución";
                 break;
             case 'L':
-                $txt = 'liquidación';
+                $txt = "liquidación";
                 break;
         }
 
         return MovementCancellation::create([
             'cancel_date' => date('Y-m-d H:i:s'),
             'user_id' => session('userID'),
-            'comments' => 'Cancelación automática generada por cancelación de '. $txt
+            'comments' => "Cancelación automática generada por cancelación de $txt"
         ]);
     }
 }

@@ -36,8 +36,9 @@
 					<thead>
 						<tr>
 							<th class="text-center" width="50">Ver</th>
-							<th class="text-center" width="70">Folio</th>
+							<th class="text-center" width="70">ID</th>
 							<th class="text-center" width="110">Fecha</th>
+							<th class="text-center" width="100" ng-show="modelType == 'L'">Importe</th>
 							<th class="text-center">Vendedor</th>
 							<th width="100" class="text-center">Estado</th>
 						</tr>
@@ -55,6 +56,7 @@
 							</td>
 							<td class="text-right">{{ rec.id }}</td>
 							<td class="text-center">{{ rec.rec_date.substr(0, 10) }}</td>
+							<td class="text-right" ng-show="modelType == 'L'">{{ rec.amount.price | currency }}</td>
 							<td class="cls-xsmall">{{ rec.salesperson.name }}</td>
 							<!-- change status component -->
 							<td align="center">
@@ -86,7 +88,7 @@
 					<b ng-show="modelType == 'D'">Devolución</b>
 				</span>
 				<span class="text-info" ng-show="model.id">
-					<b> - Folio: {{ model.id }}</b>
+					<b> - ID: {{ model.id }}</b>
 				</span>
 			</div>
 			<div class="col-sm-6 mb5">
@@ -238,10 +240,36 @@
 					</div>
 
 					<div class="col-sm-4">
-						<!-- Comments -->
-						<div class="row">
+						<!-- Comments - textarea -->
+						<div class="row" ng-hide="model.id">
 							<div class="col-sm-12 mb10">
 								<textarea class="form-control" rows="5" ng-model="model.comments" placeholder="Comentarios"></textarea>
+							</div>
+						</div>
+
+						<!-- Comments - text -->
+						<div class="row" ng-show="model.id">
+							<!-- allocation -->
+							<div class="col-sm-12">
+								<div class="panel panel-default cls-small">
+									<div class="panel-heading text-muted">Comentarios del Registro:</div>
+									<div class="panel-body">
+										<span ng-show="model.comments">{{ model.comments }}</span>
+										<span ng-hide="model.comments" class="text-muted">
+											<i>-- Sin comentarios --</i>
+										</span>
+									</div>
+								</div>
+							</div>
+
+							<!-- cancellation -->
+							<div class="col-sm-12" ng-hide="model.active">
+								<div class="panel panel-danger cls-small">
+									<div class="panel-heading text-muted">Comentarios de Cancelación:</div>
+									<div class="panel-body">
+										{{ model.cancellation.comments }}
+									</div>
+								</div>
 							</div>
 						</div>
 
