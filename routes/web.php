@@ -28,6 +28,9 @@ Route::group(['middleware' => ['auth']], function () {
 	// Salespersons
 	Route::resource('salespersons', 'SalespersonsController')->only(['index','show']);
 
+	// Configurations
+	Route::get('configurations', 'ConfigurationsController@get');
+
 
 	// Only for: SYS, ADM, INV, ALM
 	Route::group(['middleware' => ['role:SYS,ADM,INV,ALM']], function () {
@@ -88,6 +91,9 @@ Route::group(['middleware' => ['auth']], function () {
 				Route::post('salespersons/{id}/deactivate', 'SalespersonsController@deactivate');
 				Route::get('salespersons/{id}/prices', 'SalespersonsController@getPrices');
 				Route::post('salespersons/{id}/prices', 'SalespersonsController@savePrices');
+
+				// Configurations
+				Route::post('configurations', 'ConfigurationsController@save');
 
 				// Only for: SYS
 				Route::group(['middleware' => ['role:SYS']], function () {

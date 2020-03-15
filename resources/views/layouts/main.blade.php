@@ -55,6 +55,7 @@
     <!-- controllers -->
     <script src="/app/controllers/base_controller.js"></script>
     <script src="/app/controllers/home_controller.js"></script>
+    <script src="/app/controllers/configurations_controller.js"></script>
     <script src="/app/controllers/brands_controller.js"></script>
     <script src="/app/controllers/salespersons_controller.js"></script>
     <script src="/app/controllers/warehouses_controller.js"></script>

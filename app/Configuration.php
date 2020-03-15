@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Configuration extends Model
 {
+	protected $casts = [
+        'default_warehouse_id' => 'string',
+        'allocation_warehouse_id' => 'string',
+    ];
 
 	public function allocation_warehouse()
     {

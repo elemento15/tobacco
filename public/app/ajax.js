@@ -182,3 +182,14 @@ app.factory('AllocationService', ['$http', function($http) {
 		}
 	} 
 }]);
+
+app.factory('ConfigurationService', ['$http', function($http) {
+	return {
+		get  : function () {
+			return $http.get('configurations');
+		},
+		save : function (data) {
+			return $http.post('configurations', data);
+		}
+	}
+}]);

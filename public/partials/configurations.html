@@ -1,0 +1,31 @@
+<h3 class="cls-title">Configuraciones</h3>
+
+<div class="row">
+	<div class="col-sm-offset-2 col-sm-6" cg-busy="loading">
+		<div class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-6 control-label text-info">Almacén default:</label>
+                <div class="col-sm-6">
+                    <select class="form-control" ng-model="model.default_warehouse_id">
+                        <option value="">-- Seleccione --</option>
+                    <option ng-repeat="(key, opt) in warehouses" value="{{opt.id}}">{{ opt.name }}</option>
+                </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-6 control-label text-info">Almacén de salida de entregas:</label>
+                <div class="col-sm-6">
+                    <select class="form-control" ng-model="model.allocation_warehouse_id">
+                        <option value="">-- Seleccione --</option>
+                    <option ng-repeat="(key, opt) in warehouses" value="{{opt.id}}">{{ opt.name }}</option>
+                </select>
+                </div>
+            </div>
+
+            <div class="pull-right">
+            	<button type="button" class="btn btn-primary" ng-click="save()">Guardar</button>
+            </div>
+        </div>
+	</div>
+</div>
