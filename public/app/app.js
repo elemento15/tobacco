@@ -99,3 +99,13 @@ app.value('cgBusyDefaults',{
 	message: 'Espere un momento',
 	//minDuration: 10000
 });
+
+app.run(['$http', function($http) {
+	// get default warehouse
+	$http.get('configurations')
+		.success(function (response) {
+			window.defaultWarehouseId = response.default_warehouse_id;
+		}).error(function (response) {
+			toastr.error(response.msg || 'Error en el servidor');
+		});
+}]);

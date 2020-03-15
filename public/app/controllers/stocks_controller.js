@@ -1,10 +1,10 @@
-app.controller('StocksController', function ($scope, $http, $route, $location, $ngConfirm, $uibModal, $timeout, 
+app.controller('StocksController', function ($scope, $http, $route, $location, $ngConfirm, $uibModal, $timeout,
 	                                         toastr, StockService, WarehouseService) {
 	var self = this;
 
 	this.list = {
 		//order: { field: 'brand', type: 'asc' },
-		filters: { active: '1', warehouse_id: '' }
+		filters: { active: '1', warehouse_id: window.defaultWarehouseId || '' }
 	}
 
 	this.form = {};

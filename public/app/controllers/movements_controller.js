@@ -4,7 +4,7 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 
 	this.list = {
 		order: { field: 'mov_date', type: 'desc' },
-		filters: { active: '1', warehouse_id: '' }
+		filters: { active: '1', warehouse_id: window.defaultWarehouseId || '' }
 	}
 
 	this.form = {
