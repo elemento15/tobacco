@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Price;
 
 class BrandsController extends BaseController
 {
@@ -33,5 +34,23 @@ class BrandsController extends BaseController
     protected $allowStore  = true;
     protected $except = [];
 
-    protected $useTransactions = false;
+    protected $useTransactions = true;
+
+
+    protected function afterUpdate()
+    {
+        $req = $this->request;
+
+        // Review that salespeople prices isn't lower than current cost
+        $prices = Price::where('brand_id', $req['id'])
+                       ->where('price', '<=', $req['cost'])
+                       ->get();
+
+        foreach ($prices as $price) {
+            $price->price = $req['price'];
+            $price->save();
+        }
+
+        return true;
+    }
 }

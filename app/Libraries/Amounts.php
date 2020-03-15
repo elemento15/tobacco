@@ -115,6 +115,9 @@ class Amounts
 				}
 			}
 		} else {
+			$brand = Brand::find($this->brandID);
+			$this->amounts['cost']  += ($quantity * $brand->cost);
+			$this->amounts['price'] += ($quantity * $brand->price);
 			$quantity = 0;
 		}
 
