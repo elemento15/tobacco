@@ -28,6 +28,9 @@ Route::group(['middleware' => ['auth']], function () {
 	// Salespersons
 	Route::resource('salespersons', 'SalespersonsController')->only(['index','show']);
 
+	// Allocations
+	Route::resource('allocations', 'AllocationsController');
+
 	// Configurations
 	Route::get('configurations', 'ConfigurationsController@get');
 
@@ -53,11 +56,6 @@ Route::group(['middleware' => ['auth']], function () {
 		Route::get('salesperson_stocks/report/{salesperson}', 'SalespersonStocksController@report');
 		Route::get('salesperson_stocks/kardex/{salesperson}/{brand}', 'SalespersonStocksController@kardex');
 
-		// Allocations
-		Route::resource('allocations', 'AllocationsController');
-		Route::post('allocations/{id}/cancel', 'AllocationsController@cancel');
-		Route::post('allocations/getDetailAmounts', 'AllocationsController@getDetailAmounts');
-
 
 		// Only for: SYS, ADM, INV
 		Route::group(['middleware' => ['role:SYS,ADM,INV']], function () {
@@ -69,6 +67,11 @@ Route::group(['middleware' => ['auth']], function () {
 			// Movements
 			Route::resource('movements', 'MovementsController')->only(['store']);
 			Route::post('movements/{id}/cancel', 'MovementsController@cancel');
+
+			// Allocations
+			Route::post('allocations/{id}/cancel', 'AllocationsController@cancel');
+			Route::post('allocations/getDetailAmounts', 'AllocationsController@getDetailAmounts');
+
 
 			// Only for: SYS, ADM
 			Route::group(['middleware' => ['role:SYS,ADM']], function () {

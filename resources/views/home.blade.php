@@ -30,24 +30,43 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="#/brands">Marcas</a></li>
+                            @if (in_array($role, ['SYS','ADM','INV','ALM']))
                             <li><a href="#/warehouses">Almacenes</a></li>
+                            @endif
+                            @if (in_array($role, ['SYS','ADM','INV','AUX']))
                             <li><a href="#/salespersons">Vendedores</a></li>
+                            @endif
+                            @if (in_array($role, ['SYS','ADM']))
                             <li role="separator" class="divider"></li>
                             <li><a href="#/users">Usuarios</a></li>
+                            @endif
                         </ul>
                     </li>
+                    
+                    @if (in_array($role, ['SYS','ADM','INV','AUX']))
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             Ventas <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
+                            @if (in_array($role, ['SYS','ADM','INV']))
                             <li><a href="#/allocations">Entregas</a></li>
+                            @endif
+                            
                             <li><a href="#/liquidations">Liquidaciones</a></li>
+                            
+                            @if (in_array($role, ['SYS','ADM','INV']))
                             <li><a href="#/devolutions">Devoluciones</a></li>
+                            @endif
+                            @if (in_array($role, ['SYS','ADM','INV']))
                             <li role="separator" class="divider"></li>
                             <li><a href="#/salesperson_stocks">Existencias</a></li>
+                            @endif
                         </ul>
                     </li>
+                    @endif
+                    
+                    @if (in_array($role, ['SYS','ADM','INV','ALM']))
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             Inventarios <span class="caret"></span>
@@ -57,6 +76,8 @@
                             <li><a href="#/movements">Movimientos</a></li>
                         </ul>
                     </li>
+                    @endif
+
                     <!--<li><a href="#/expenses">Gastos</a></li>-->
                     <!--<li><a href="#/reports">Reportes</a></li>-->
                 </ul>
@@ -75,7 +96,10 @@
 
                             <ul class="dropdown-menu" role="menu">
                                 <li>
+                                    @if (in_array($role, ['SYS','ADM']))
                                     <a href="#/configuration">Configuración</a>
+                                    @endif
+
                                     <a href="{{ route('logout') }}"
                                         onclick="event.preventDefault();
                                                  document.getElementById('logout-form').submit();">

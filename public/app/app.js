@@ -105,6 +105,7 @@ app.run(['$http', function($http) {
 	$http.get('configurations')
 		.success(function (response) {
 			window.defaultWarehouseId = response.default_warehouse_id;
+			window.roleCode = response.role_code;
 		}).error(function (response) {
 			toastr.error(response.msg || 'Error en el servidor');
 		});
