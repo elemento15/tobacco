@@ -4,7 +4,7 @@ app.controller('StocksController', function ($scope, $http, $route, $location, $
 
 	this.list = {
 		//order: { field: 'brand', type: 'asc' },
-		filters: { active: '1', warehouse_id: window.defaultWarehouseId || '' }
+		filters: { active: '1', warehouse_id: '' }
 	}
 
 	this.form = {};
@@ -29,6 +29,8 @@ app.controller('StocksController', function ($scope, $http, $route, $location, $
 			order: { field: 'name', type: 'asc' }
 		}).success(function (response) {
 			$scope.warehouses = response;
+			$scope.table.filters.warehouse_id = window.defaultWarehouseId;
+			$scope.read(1);
 		}).error(function (response) {
 			toastr.error(response.msg || 'Error en el servidor');
 		});
