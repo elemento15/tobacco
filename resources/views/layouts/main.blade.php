@@ -67,5 +67,6 @@
     <script src="/app/controllers/distributions/allocations_controller.js"></script>
     <script src="/app/controllers/distributions/liquidations_controller.js"></script>
     <script src="/app/controllers/distributions/devolutions_controller.js"></script>
+    <script src="/app/controllers/reports_controller.js"></script>
 </body>
 </html>

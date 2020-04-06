@@ -61,6 +61,10 @@ app.config(function ($routeProvider, $provide, toastrConfig) {
 				controller: 'DevolutionsController',
 				templateUrl: '/partials/distributions/index.html'
 			})
+		.when('/reports',{
+				controller: 'ReportsController',
+				templateUrl: '/partials/reports/index.html'
+			})
 
 		.otherwise({ redirectTo: '/' });
 

@@ -131,6 +131,27 @@ class AllocationsController extends BaseController
             }
         }
 
+
+        // validations for roles 
+        // (review home.blade file to see permissions)
+        $role = session('roleCode');
+        
+        if ($req->type == 'E' && !in_array($role, ['SYS','ADM','INV'])) {
+            $this->msgError = 'Acceso Restringido a Entregas';
+            return false;
+        }
+
+        if ($req->type == 'L' && !in_array($role, ['SYS','ADM','INV','AUX'])) {
+            $this->msgError = 'Acceso Restringido a Liquidaciones';
+            return false;
+        }
+
+        if ($req->type == 'D' && !in_array($role, ['SYS','ADM','INV'])) {
+            $this->msgError = 'Acceso Restringido a Devoluciones';
+            return false;
+        }
+
+
         // get allocation warehouse default
         $warehouse = Configuration::getAllocationWarehouse();
 

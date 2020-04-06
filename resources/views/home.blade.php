@@ -78,8 +78,11 @@
                     </li>
                     @endif
 
+                    @if (in_array($role, ['SYS','ADM']))
+                    <li><a href="#/reports">Reportes</a></li>
+                    @endif
+
                     <!--<li><a href="#/expenses">Gastos</a></li>-->
-                    <!--<li><a href="#/reports">Reportes</a></li>-->
                 </ul>
 
                 <!-- Right Side Of Navbar -->

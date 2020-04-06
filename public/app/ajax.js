@@ -193,3 +193,11 @@ app.factory('ConfigurationService', ['$http', function($http) {
 		}
 	}
 }]);
+
+app.factory('ReportService', ['$http', function($http) {
+	return {
+		get : function (data) {
+			return $http.get('reports?'+ jQuery.param(data), data);
+		}
+	}
+}]);

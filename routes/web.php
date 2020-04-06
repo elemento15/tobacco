@@ -52,11 +52,6 @@ Route::group(['middleware' => ['auth']], function () {
 		Route::get('stocks/report/{warehouse}', 'StocksController@report');
 		Route::get('stocks/kardex/{warehouse}/{brand}', 'StocksController@kardex');
 
-		// Stocks - Salesperson
-		Route::resource('salesperson_stocks', 'SalespersonStocksController')->only(['index']);
-		Route::get('salesperson_stocks/report/{salesperson}', 'SalespersonStocksController@report');
-		Route::get('salesperson_stocks/kardex/{salesperson}/{brand}', 'SalespersonStocksController@kardex');
-
 
 		// Only for: SYS, ADM, INV
 		Route::group(['middleware' => ['role:SYS,ADM,INV']], function () {
@@ -69,8 +64,10 @@ Route::group(['middleware' => ['auth']], function () {
 			Route::resource('movements', 'MovementsController')->only(['store']);
 			Route::post('movements/{id}/cancel', 'MovementsController@cancel');
 
-			// Allocations
-			Route::post('allocations/{id}/cancel', 'AllocationsController@cancel');
+			// Stocks - Salesperson
+			Route::resource('salesperson_stocks', 'SalespersonStocksController')->only(['index']);
+			Route::get('salesperson_stocks/report/{salesperson}', 'SalespersonStocksController@report');
+			Route::get('salesperson_stocks/kardex/{salesperson}/{brand}', 'SalespersonStocksController@kardex');
 
 
 			// Only for: SYS, ADM
@@ -95,8 +92,16 @@ Route::group(['middleware' => ['auth']], function () {
 				Route::get('salespersons/{id}/prices', 'SalespersonsController@getPrices');
 				Route::post('salespersons/{id}/prices', 'SalespersonsController@savePrices');
 
+				// Allocations
+				Route::post('allocations/{id}/cancel', 'AllocationsController@cancel');
+
 				// Configurations
 				Route::post('configurations', 'ConfigurationsController@save');
+
+				// Reports
+				Route::get('reports', 'HomeController@reports');
+				Route::get('download', 'HomeController@download');
+
 
 				// Only for: SYS
 				Route::group(['middleware' => ['role:SYS']], function () {
