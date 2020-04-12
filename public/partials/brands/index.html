@@ -39,6 +39,12 @@
 									<span class="glyphicon glyphicon-chevron-down" ng-show="showOrderIcon('cost', 'desc')"></span>
 								</span>
 							</th>
+							<th>
+								<span class="cls-pointer text-info" ng-click="setOrder('price')">Precio
+									<span class="glyphicon glyphicon-chevron-up" ng-show="showOrderIcon('price', 'asc')"></span>
+									<span class="glyphicon glyphicon-chevron-down" ng-show="showOrderIcon('price', 'desc')"></span>
+								</span>
+							</th>
 							<th width="100" class="text-center">Estado</th>
 						</tr>
 					</thead>
@@ -50,6 +56,7 @@
 							<td>{{ rec.name }}</td>
 							<td class="text-center">{{ rec.packs_per_box | number }}</td>
 							<td class="text-right">{{ rec.cost | currency }}</td>
+							<td class="text-right">{{ rec.price | currency }}</td>
 							<!-- change status component -->
 							<td align="center" ng-include="tpls.change_status"></td>
 						</tr>

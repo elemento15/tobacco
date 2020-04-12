@@ -52,9 +52,13 @@ class MovementsController extends BaseController
             return Response::json(array('msg' => 'No puede cancelar un movimiento cancelado'), 500);
         }
 
-        if ($record->transfer_from) {
-            return Response::json(array('msg' => 'No puede cancelar una entrada generada por traspaso'), 500);
+        if ($record->is_automatic) {
+            return Response::json(array('msg' => 'No puede cancelar un movimiento generado automáticamente'), 500);
         }
+
+        /*if ($record->transfer_from) {
+            return Response::json(array('msg' => 'No puede cancelar una entrada generada por traspaso'), 500);
+        }*/
 
         if (empty($request->comments) ||  strlen($request->comments) < 5) {
             return Response::json(array('msg' => 'Comentario inválido ó muy corto'), 500);
@@ -62,7 +66,7 @@ class MovementsController extends BaseController
         
         DB::beginTransaction();
 
-        $cancellation = $this->generateCancellation($record, $request->comments);
+        $cancellation = $this->generateCancellation($request->comments);
 
         $record->active = 0;
         $record->cancellation_id = $cancellation->id;
@@ -193,6 +197,7 @@ class MovementsController extends BaseController
         $mov->type = 'E';
         $mov->warehouse_id = $data['warehouse_target'];
         $mov->concept_id = ($concept) ? $concept->id : null;
+        $mov->is_automatic = true;
         $mov->transfer_from = $transfer->id;
         $mov->user_id = session('userID');
         $mov->comments = 'Entrada automática por traspaso de otro almacén';
@@ -216,8 +221,8 @@ class MovementsController extends BaseController
     {
         $mov = Movement::findOrFail($id);
 
-        $comments = 'Cancelación automática por ser entrada de un traspaso';
-        $cancellation = $this->generateCancellation($mov, $comments);
+        $comments = 'Cancelación automática por cancelación de traspaso';
+        $cancellation = $this->generateCancellation($comments);
 
         $mov->active = 0;
         $mov->cancellation_id = $cancellation->id;
@@ -228,7 +233,7 @@ class MovementsController extends BaseController
         }
     }
 
-    private function generateCancellation($movement, $comments)
+    private function generateCancellation($comments)
     {
         return MovementCancellation::create([
             'cancel_date' => date('Y-m-d H:i:s'),

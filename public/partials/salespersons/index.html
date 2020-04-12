@@ -6,10 +6,13 @@
 		<!-- Screen for Salespersons CRUD -->
 		<div class="row" ng-hide="showPrices">
 			<div class="col-sm-3 col-md-2">
-				<div class="cls-filters-title">Filtros</div>
-
-				<!-- status filter -->
-				<div ng-include="tpls.filter_status"></div>
+				<div class="panel panel-default panel-filters">
+					<div class="panel-heading">Filtros</div>
+					<div class="panel-body">
+						<!-- status filter -->
+						<div ng-include="tpls.filter_status"></div>
+					</div>
+				</div>
 			</div>
 			
 			<div class="col-sm-9 col-md-10">
@@ -66,7 +69,7 @@
 
 		<!-- Screen for prices management -->
 		<div class="row" ng-show="showPrices">
-			<div class="col-sm-offset-3 col-sm-6">
+			<div class="col-sm-offset-2 col-sm-8">
 				<h5 class="cls-title">Precios por Marca</h5>
 				
 				<div class="row mb5">
@@ -92,15 +95,24 @@
 							<thead>
 								<tr>
 									<th>Marca</th>
-									<th>Precio</th>
+									<th width="150">Precio Marca</th>
+									<th width="150">Precio Vendedor</th>
+									<th width="60" class="text-center">Dif.</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr ng-repeat="(key, rec) in brandsPrices">
 									<td>{{ rec.name }}</td>
+									<td>
+										<span class="text-muted cls-small">{{ rec.brand_price | currency }}</span>
+									</td>
 									<td width="120">
 										<input type="number" class="form-control input-sm text-right" autocomplete="off"
 										       ng-model="brandsPrices[key].price" style="width: 100px;" min="0">
+									</td>
+									<td class="text-center">
+										<span class="label label-light" ng-show="rec.brand_price === brandsPrices[key].price">NO</span>
+										<span class="label label-danger" ng-show="rec.brand_price !== brandsPrices[key].price">SI</span>
 									</td>
 								</tr>
 							</tbody>

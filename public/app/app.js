@@ -17,6 +17,10 @@ app.config(function ($routeProvider, $provide, toastrConfig) {
 				controller: 'HomeController',
 				templateUrl: '/partials/home.html'
 			})
+		.when('/configuration',{
+				controller: 'ConfigurationsController',
+				templateUrl: '/partials/configurations.html'
+			})
 		.when('/salespersons',{
 				controller: 'SalespersonsController',
 				templateUrl: '/partials/salespersons/index.html'
@@ -33,6 +37,10 @@ app.config(function ($routeProvider, $provide, toastrConfig) {
 				controller: 'StocksController',
 				templateUrl: '/partials/warehouses/stocks.html'
 			})
+		.when('/salesperson_stocks',{
+				controller: 'SalespersonStocksController',
+				templateUrl: '/partials/distributions/stocks.html'
+			})
 		.when('/users',{
 				controller: 'UsersController',
 				templateUrl: '/partials/users/index.html'
@@ -43,15 +51,19 @@ app.config(function ($routeProvider, $provide, toastrConfig) {
 			})
 		.when('/allocations',{
 				controller: 'AllocationsController',
-				templateUrl: '/partials/distributions/allocations/index.html'
+				templateUrl: '/partials/distributions/index.html'
 			})
 		.when('/liquidations',{
 				controller: 'LiquidationsController',
-				templateUrl: '/partials/distributions/liquidations/index.html'
+				templateUrl: '/partials/distributions/index.html'
 			})
 		.when('/devolutions',{
 				controller: 'DevolutionsController',
-				templateUrl: '/partials/distributions/devolutions/index.html'
+				templateUrl: '/partials/distributions/index.html'
+			})
+		.when('/reports',{
+				controller: 'ReportsController',
+				templateUrl: '/partials/reports/index.html'
 			})
 
 		.otherwise({ redirectTo: '/' });
@@ -91,3 +103,14 @@ app.value('cgBusyDefaults',{
 	message: 'Espere un momento',
 	//minDuration: 10000
 });
+
+app.run(['$http', function($http) {
+	// get default warehouse
+	$http.get('configurations')
+		.success(function (response) {
+			window.defaultWarehouseId = response.default_warehouse_id;
+			window.roleCode = response.role_code;
+		}).error(function (response) {
+			toastr.error(response.msg || 'Error en el servidor');
+		});
+}]);

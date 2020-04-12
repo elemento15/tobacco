@@ -127,6 +127,7 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 			order: { field: 'name', type: 'asc' }
 		}).success(function (response) {
 			$scope.warehouses = response;
+			$scope.table.filters.warehouse_id = window.defaultWarehouseId;
 		}).error(function (response) {
 			toastr.error(response.msg || 'Error en el servidor');
 		});

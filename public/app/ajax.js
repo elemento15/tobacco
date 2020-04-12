@@ -106,6 +106,17 @@ app.factory('StockService', ['$http', function($http) {
 	} 
 }]);
 
+app.factory('SalespersonStockService', ['$http', function($http) {
+	return {
+		get  : function (data) {
+			return $http.get('salesperson_stocks/'+ data.id);
+		},
+		read : function(data) {
+			return $http.get('salesperson_stocks?'+ jQuery.param(data), data);
+		}
+	} 
+}]);
+
 app.factory('UserService', ['$http', function($http) {
 	return {
 		get      : function (data) {
@@ -164,7 +175,29 @@ app.factory('AllocationService', ['$http', function($http) {
 			return $http.delete('allocations/'+ data.id);
 		},
 		cancel   : function (data) {
-			return $http.post('allocations/'+ data.id +'/cancel');
+			return $http.post('allocations/'+ data.id +'/cancel', data);
+		},
+		getDetailAmounts : function (data) {
+			return $http.post('allocations/getDetailAmounts', data);
 		}
 	} 
+}]);
+
+app.factory('ConfigurationService', ['$http', function($http) {
+	return {
+		get  : function () {
+			return $http.get('configurations');
+		},
+		save : function (data) {
+			return $http.post('configurations', data);
+		}
+	}
+}]);
+
+app.factory('ReportService', ['$http', function($http) {
+	return {
+		get : function (data) {
+			return $http.get('reports?'+ jQuery.param(data), data);
+		}
+	}
 }]);

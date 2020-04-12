@@ -1,0 +1,88 @@
+<h3 class="cls-title">Existencias por Vendedor</h3>
+
+<div class="row">
+	<div class="col-sm-offset-2 col-sm-6" cg-busy="loading">
+		<div class="row">
+			<div class="col-sm-4 col-md-3">
+				<div class="panel panel-default panel-filters">
+					<div class="panel-heading">Filtros</div>
+					<div class="panel-body">
+						<!-- status filter -->
+						<div ng-include="tpls.filter_status"></div>
+					</div>
+				</div>
+
+				<div class="panel panel-default panel-filters">
+					<div class="panel-heading">Opciones</div>
+					<div class="panel-body">
+						<a class="btn btn-block btn-sm btn-default" target="_blank"
+						   href="salesperson_stocks/report/{{ table.filters.salesperson_id }}/?boxes={{ boxesUnityDetail }}" >
+							<span class="glyphicon glyphicon-print" aria-hidden="true"></span> Existencias
+						</a>
+
+						<button type="button" class="btn btn-block btn-sm btn-info" ng-model="boxesUnityDetail" uib-btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+							<span ng-show="boxesUnityDetail">Cajas</span>
+							<span ng-hide="boxesUnityDetail">Paquetes</span>
+						</button>
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-sm-8 col-md-9">
+				<div class="row cls-toolbar">
+					<!-- warehouse selection -->
+					<div class="col-sm-6">
+						<select class="form-control" ng-model="table.filters.salesperson_id" ng-change="read(1)">
+							<option value="">-- Seleccione vendedor --</option>
+							<option ng-repeat="(key, opt) in salespersons" value="{{opt.id}}">{{ opt.name }}</option>
+						</select>
+					</div>
+
+					<!-- search input -->
+					<div class="col-sm-6" ng-include="tpls.search"></div>
+				</div>
+
+				<table class="table table-condensed table-bordered cls-table">
+					<thead>
+						<tr>
+							<th>&nbsp;</th>
+							<th class="text-center">Marca</th>
+							<th class="text-center">
+								<span ng-show="boxesUnityDetail">Cajas</span>
+								<span ng-hide="boxesUnityDetail">Paquetes</span>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="(key, item) in table.data" ng-click="table.selected = key"
+						    ng-class="{'cls-inactive': !item.active, 'cls-selected': key === table.selected}"
+						    ng-show="table.filters.salesperson_id">
+						    <td class="text-center" width="80">
+						    	<div class="cls-actions">
+							    	<a class="btn btn-xs btn-default" target="_blank"
+									   href="salesperson_stocks/kardex/{{ table.filters.salesperson_id }}/{{ item.id }}/?boxes={{ boxesUnityDetail }}" >
+										<span class="glyphicon glyphicon-print" aria-hidden="true"></span> Kardex
+									</a>
+								</div>
+						    </td>
+							<td class="">{{ item.name }}</td>
+							<td class="text-right" ng-class="{'cls-negative': item.stock < 0}">
+								<span ng-show="boxesUnityDetail">{{ item.stock / item.packs_per_box | number }}</span>
+								<span ng-hide="boxesUnityDetail">{{ item.stock | number }}</span>
+							</td>
+						</tr>
+						<tr ng-hide="table.filters.salesperson_id">
+							<td colspan="7">
+								<h4 class="text-center text-muted">Seleccione un vendedor para visualizar la existencia</h4>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<!-- paginator -->
+				<ul uib-pagination ng-model="table.page" items-per-page="table.items" total-items="table.total" max-size="5"
+				    ng-change="read()"class="pagination-sm" boundary-link-numbers="true" rotate="true"></ul>
+			</div>
+		</div>
+	</div>
+</div>
