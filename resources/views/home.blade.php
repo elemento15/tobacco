@@ -58,10 +58,9 @@
                             @if (in_array($role, ['SYS','ADM','INV']))
                             <li><a href="#/devolutions">Devoluciones</a></li>
                             @endif
-                            @if (in_array($role, ['SYS','ADM','INV']))
+                            
                             <li role="separator" class="divider"></li>
                             <li><a href="#/salesperson_stocks">Existencias</a></li>
-                            @endif
                         </ul>
                     </li>
                     @endif
