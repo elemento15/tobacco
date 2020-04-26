@@ -40,7 +40,7 @@
     </h5>
     <hr>
 
-    <div style="text-align: center; margin: 0px 60px;">
+    <div style="text-align: center; margin: 0px 30px;">
         <table class="cls-content" cellspacing="0" cellpadding="4" width="100%">
             <thead>
                 <tr>
@@ -50,14 +50,16 @@
                     <th align="center" width="65">Costo</th>
                     <th align="center" width="65">Utilidad</th>
                     <th align="center" width="40">Cajas</th>
+                    <th align="center" width="50">Paquetes</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($data as $key => $item)
                     @php
                     $sum_price += $item['price'];
-                    $sum_cost += $item['cost'];
+                    $sum_cost  += $item['cost'];
                     $sum_items += $item['items'];
+                    $sum_packs += $item['packs'];
                     @endphp
                     
                     <tr>
@@ -67,6 +69,7 @@
                         <td align="right">$ {{ number_format($item['cost'], 2) }}</td>
                         <td align="right">$ {{ number_format($item['price'] - $item['cost'], 2) }}</td>
                         <td align="right">{{ number_format($item['items'], 1) }}</td>
+                        <td align="right">{{ number_format($item['packs'], 0) }}</td>
                     </tr>
                 @endforeach
 
@@ -76,6 +79,7 @@
                     <td align="right">$ {{ number_format($sum_cost, 2) }}</td>
                     <td align="right">$ {{ number_format($sum_price - $sum_cost, 2) }}</td>
                     <td align="right">{{ number_format($sum_items, 1) }}</td>
+                    <td align="right">{{ number_format($sum_packs, 0) }}</td>
                 </tr>
             </tbody>
         </table>

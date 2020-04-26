@@ -62,15 +62,16 @@
                         <!-- Display report 01  -->
                         <div class="col-sm-8 col-md-9 col-lg-10">
                             <div class="row">
-                                <div class="col-sm-8 col-sm-offset-1">
+                                <div class="col-sm-10 col-sm-offset-1">
                                     <table class="table table-condensed table-bordered cls-table">
                                         <thead>
                                             <th class="text-center">Vendedor</th>
-                                            <th class="text-center" width="80">%</th>
+                                            <th class="text-center" width="70">%</th>
                                             <th class="text-center">Liquidaciones</th>
                                             <th class="text-center">Costo</th>
                                             <th class="text-center">Utilidad</th>
-                                            <th class="text-center">Cajas</th>
+                                            <th class="text-center" width="75">Cajas</th>
+                                            <th class="text-center" width="85">Paquetes</th>
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="rec in rpt01.data">
@@ -80,6 +81,7 @@
                                                 <td class="text-right">{{ rec.cost | currency }}</td>
                                                 <td class="text-right">{{ rec.price - rec.cost | currency }}</td>
                                                 <td class="text-right cls-small">{{ rec.items | number : 1 }}</td>
+                                                <td class="text-right cls-small">{{ rec.packs | number : 0 }}</td>
                                             </tr>
                                         </tbody>
                                         <tfoot>
@@ -89,6 +91,7 @@
                                                 <td class="text-right cls-bold">{{ rpt01.summary.cost | currency }}</td>
                                                 <td class="text-right cls-bold">{{ rpt01.summary.diff | currency }}</td>
                                                 <td class="text-right cls-bold">{{ rpt01.summary.items | number : 1 }}</td>
+                                                <td class="text-right cls-bold">{{ rpt01.summary.packs | number : 0 }}</td>
                                             </tr>
                                         </tfoot>
                                     </table>

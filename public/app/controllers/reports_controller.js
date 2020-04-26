@@ -9,9 +9,10 @@ app.controller('ReportsController', function ($scope, $http, $route, $location, 
 		data: [],
 		summary: {
 			price: 0,
-			cost: 0,
-			diff: 0,
-			items: 0
+			cost:  0,
+			diff:  0,
+			items: 0,
+			packs: 0
 		}
 	};
 
@@ -57,9 +58,10 @@ app.controller('ReportsController', function ($scope, $http, $route, $location, 
 	$scope.$watch('rpt01.data', function(newVal, oldVal) {
 		$scope.rpt01.summary = {
 			price: 0,
-			cost: 0,
-			diff: 0,
-			items: 0
+			cost:  0,
+			diff:  0,
+			items: 0,
+			packs: 0
 		};
 
 		// calculate summary
@@ -68,6 +70,7 @@ app.controller('ReportsController', function ($scope, $http, $route, $location, 
 			$scope.rpt01.summary.cost += item.cost;
 			$scope.rpt01.summary.diff += item.price - item.cost;
 			$scope.rpt01.summary.items += item.items;
+			$scope.rpt01.summary.packs += item.packs;
 		});
 	});
 

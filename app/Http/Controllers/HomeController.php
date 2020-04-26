@@ -62,11 +62,12 @@ class HomeController extends Controller
                 ];
                 $data = [
                     'data' => $rpt->getDateRangeSales($params),
-                    'ini_date' => Carbon::parse($params['ini_date'])->format('d/m/Y'),
-                    'end_date' => Carbon::parse($params['end_date'])->format('d/m/Y'),
+                    'ini_date'  => Carbon::parse($params['ini_date'])->format('d/m/Y'),
+                    'end_date'  => Carbon::parse($params['end_date'])->format('d/m/Y'),
                     'sum_price' => 0,
-                    'sum_cost' => 0,
+                    'sum_cost'  => 0,
                     'sum_items' => 0,
+                    'sum_packs' => 0,
                 ];
                 $view = 'reports/date_range_sales';
                 break;

@@ -32,13 +32,15 @@ class Reports
 			$cost = 0;
 			$price = 0;
 			$items = 0;
+			$packs = 0;
 
 			foreach ($allocations as $alloc) {
 				$cost += $alloc->amount->cost;
 				$price += $alloc->amount->price;
-				// sum of boxes
+				// sum of boxes and packs
 				foreach ($alloc->details as $det) {
 					$items += $det->quantity / $det->brand->packs_per_box;
+					$packs += $det->quantity;
 				}
 			}
 
@@ -47,6 +49,7 @@ class Reports
 				'cost' => $cost,
 				'price' => $price,
 				'items' => $items,
+				'packs' => $packs,
 			];
 
 			$sum_price += $price; // get sum of prices to calculate percents
