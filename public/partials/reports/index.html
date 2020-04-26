@@ -9,7 +9,7 @@
                     <div class="row">
                         <div class="col-sm-4 col-md-3 col-lg-2">
                             <div class="panel panel-default panel-filters">
-                                <div class="panel-heading">Parámetros</div>
+                                <div class="panel-heading">Opciones</div>
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="col-sm-12">
@@ -97,7 +97,6 @@
                                     </table>
                                 </div>    
                             </div>
-                            
                         </div>
                     </div>
                 </div>
@@ -105,15 +104,79 @@
             <!-- End report 01 -->
 
             <!-- Start report 02 -->
-            <uib-tab heading="Ventas Mensuales">
+            <uib-tab heading="Existencias por Vendedor">
+                <div class="cls-tab-pill-contents">
+                    <div class="row">
+                        <div class="col-sm-4 col-md-3 col-lg-2">
+                            <div class="panel panel-default panel-filters">
+                                <div class="panel-heading">Opciones</div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!--<button class="btn btn-success" ng-click="runRpt(1)">Generar</button>-->
+                                            <div class="btn-group" uib-dropdown>
+                                                <button type="button" class="btn btn-success" ng-click="runRpt(2)">Generar</button>
+                                                <button type="button" class="btn btn-success" uib-dropdown-toggle>
+                                                    <span class="caret"></span>
+                                                    <span class="sr-only">Split button!</span>
+                                                </button>
+                                                <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                                                    <li role="menuitem">
+                                                        <a href="javascript:void(0)" ng-click="downloadRpt(2)">Descargar PDF</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Display report 02 -->
+                        <div class="col-sm-8 col-md-9 col-lg-10">
+                            <div class="row">
+                                <div class="col-sm-7 col-sm-offset-1">
+                                    <table class="table table-condensed table-bordered cls-table">
+                                        <thead>
+                                            <th class="text-center">Vendedor</th>
+                                            <th class="text-center" width="75">Cajas</th>
+                                            <th class="text-center" width="85">Paquetes</th>
+                                            <th class="text-center" width="120">Importe</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="rec in rpt02.data">
+                                                <td>{{ rec.name }}</td>
+                                                <td class="text-right cls-small">{{ rec.boxes | number : 1 }}</td>
+                                                <td class="text-right cls-small">{{ rec.packs | number : 0 }}</td>
+                                                <td class="text-right text-primary">{{ rec.amount | currency }}</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr class="cls-small" style="background-color: #f6f6f6;">
+                                                <td class="text-right cls-bold">Total: </td>
+                                                <td class="text-right cls-bold">{{ rpt02.summary.boxes | number : 1 }}</td>
+                                                <td class="text-right cls-bold">{{ rpt02.summary.packs | number : 0 }}</td>
+                                                <td class="text-right text-primary cls-bold">{{ rpt02.summary.amount | currency }}</td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </uib-tab>
+            <!-- End report 02 -->
+
+            <!-- Start report 03 -->
+            <!--<uib-tab heading="Ventas Mensuales">
                 <div class="cls-tab-pill-contents">
                     <div class="row">
                         <div class="col-sm-2"></div>
                         <div class="col-sm-10"></div>
                     </div>
                 </div>
-            </uib-tab>
-            <!-- End report 02 -->
+            </uib-tab>-->
+            <!-- End report 03 -->
         </uib-tabset>
     </div>
 </div>

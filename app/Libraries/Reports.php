@@ -4,6 +4,8 @@ namespace App\Libraries;
 
 use App\Salesperson;
 use App\Allocation;
+use App\SalespersonStock;
+use App\Libraries\Amounts;
 
 class Reports
 {
@@ -58,6 +60,42 @@ class Reports
 		// calculate percents
 		foreach ($data as $key => $item) {
 			$data[$key]['percent'] = ($item['price']) ? $item['price'] / $sum_price : 0;
+		}
+
+		return $data;
+	}
+
+	public function getSalesPersonSummary()
+	{
+		$data = [];
+		$oAmount = new Amounts();
+
+		$salespersons = Salesperson::where('active', true)
+                                   ->orderBy('name')
+		                           ->get();
+
+		foreach ($salespersons as $sp) {
+			$stocks = SalespersonStock::with('brand')
+			                          ->where('salesperson_id', $sp->id)
+			                          ->where('quantity', '!=', 0)
+			                          ->get();
+
+			$packs  = 0;
+			$boxes  = 0;
+			$amount = 0;
+
+			foreach ($stocks as $item) {
+				$packs  += $item->quantity;
+				$boxes  += $item->quantity / $item->brand->packs_per_box;
+				$amount += $oAmount->getDistributionsPrice($sp->id, $item->brand_id);
+			}
+
+			$data[] = [
+				'name'   => $sp->name,
+				'packs'  => $packs,
+				'boxes'  => $boxes,
+				'amount' => $amount
+			];
 		}
 
 		return $data;

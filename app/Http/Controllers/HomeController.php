@@ -43,6 +43,10 @@ class HomeController extends Controller
                 ];
                 $data = $rpt->getDateRangeSales($params);
                 break;
+
+            case 'SalesPersonSummary':
+                $data = $rpt->getSalesPersonSummary();
+                break;
         }
 
         return $data;
@@ -70,6 +74,16 @@ class HomeController extends Controller
                     'sum_packs' => 0,
                 ];
                 $view = 'reports/date_range_sales';
+                break;
+
+            case 'SalesPersonSummary':
+                $data = [
+                    'data' => $rpt->getSalesPersonSummary(),
+                    'sum_packs' => 0,
+                    'sum_boxes' => 0,
+                    'sum_amount' => 0,
+                ];
+                $view = 'reports/salesperson_summary';
                 break;
         }
 
