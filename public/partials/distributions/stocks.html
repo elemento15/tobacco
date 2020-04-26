@@ -16,7 +16,7 @@
 					<div class="panel-heading">Opciones</div>
 					<div class="panel-body">
 						<a class="btn btn-block btn-sm btn-default" target="_blank"
-						   href="salesperson_stocks/report/{{ table.filters.salesperson_id }}/?boxes={{ boxesUnityDetail }}" >
+						   href="salesperson_stocks/report/{{ table.filters.salesperson_id }}" >
 							<span class="glyphicon glyphicon-print" aria-hidden="true"></span> Existencias
 						</a>
 
@@ -47,7 +47,7 @@
 						<tr>
 							<th>&nbsp;</th>
 							<th class="text-center">Marca</th>
-							<th class="text-center">
+							<th class="text-center" width="100">
 								<span ng-show="boxesUnityDetail">Cajas</span>
 								<span ng-hide="boxesUnityDetail">Paquetes</span>
 							</th>
@@ -72,7 +72,7 @@
 							</td>
 						</tr>
 						<tr ng-hide="table.filters.salesperson_id">
-							<td colspan="7">
+							<td colspan="3">
 								<h4 class="text-center text-muted">Seleccione un vendedor para visualizar la existencia</h4>
 							</td>
 						</tr>

@@ -11,7 +11,7 @@
 			margin:	0px 0px 3px 0px;
 		}
 		.cls-content {
-			font-size: 14px;
+			font-size: 12px;
 		}
 		.cls-content thead tr {
 			background-color: #dedede;
@@ -33,34 +33,49 @@
 	<h5>Vendedor: {{ $salesperson }}</h5>
 	<hr>
 
-	<div style="text-align: center; margin: 0px 160px;">
+	<div style="text-align: center; margin: 0px 80px;">
 		<table class="cls-content" cellspacing="0" cellpadding="4" border="1" width="100%">
 			<thead>
 				<tr>
 					<th align="center" width="20">#</th>
 					<th align="center">MARCA</th>
-					@if ($use_boxes)
 					<th align="center" width="55">CAJAS</th>
-					@else
 					<th align="center" width="55">PAQUETES</th>
-					@endif
+					<th align="center" width="65">IMPORTE</th>
 				</tr>
 			</thead>
 			<tbody>
 				@foreach ($stocks as $key => $stock)
 					@php
-					$quantity = $stock['quantity'] / (($use_boxes) ? $stock['packs_per_box'] : 1);
-					$total += $quantity;
+					$boxes = $stock['quantity'] / $stock['packs_per_box'];
+					
+					$sum_boxes += $boxes;
+					$sum_packs += $stock['quantity'];
+					$sum_price += $stock['price'];
 					@endphp
 					
 					<tr>
 						<td align="center" style="font-size: 11px;">{{ $key + 1 }}</td>
 						<td>{{ $stock['name'] }}</td>
 						<td align="right">
-							@if ($quantity >= 0)
-							<span>{{ number_format($quantity, 2) }}</span>
+							@if ($boxes >= 0)
+							<span>{{ number_format($boxes, 2) }}</span>
 							@else
-							<span class="cls-negative">{{ number_format($quantity, 2) }}</span>
+							<span class="cls-negative">{{ number_format($boxes, 2) }}</span>
+							@endif
+						</td>
+						<td align="right">
+							@if ($stock['quantity'] >= 0)
+							<span>{{ number_format($stock['quantity'], 0) }}</span>
+							@else
+							<span class="cls-negative">{{ number_format($stock['quantity'], 0) }}</span>
+							@endif
+						</td>
+						<td align="right">
+							@if ($stock['price'] >= 0)
+							<span>$ {{ number_format($stock['price'], 2) }}</span>
+							@else
+							<span class="cls-negative">$ {{ number_format($stock['price'], 2) }}</span>
 							@endif
 						</td>
 					</tr>
@@ -68,7 +83,9 @@
 
 				<tr class="cls-total">
 					<td colspan="2" align="right">Total: </td>
-					<td align="right">{{ number_format($total, 2) }}</td>
+					<td align="right">{{ number_format($sum_boxes, 2) }}</td>
+					<td align="right">{{ number_format($sum_packs, 0) }}</td>
+					<td align="right">$ {{ number_format($sum_price, 2) }}</td>
 				</tr>
 			</tbody>
 		</table>

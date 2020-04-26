@@ -7,6 +7,7 @@ use App\Brand;
 use App\Salesperson;
 use App\SalespersonStock;
 use App\AllocationBrand;
+use App\Libraries\Amounts;
 use PDF;
 
 class SalespersonStocksController extends BaseController
@@ -92,19 +93,24 @@ class SalespersonStocksController extends BaseController
     public function report(Salesperson $salesperson, Request $request)
     {
         $stocks = SalespersonStock::join('brands', 'brand_id', '=', 'brands.id')
-                                  ->select('name', 'packs_per_box', 'cost', 'quantity')
+                                  ->select('name', 'brand_id', 'packs_per_box', 'cost', 'quantity')
                                   ->where('salesperson_id', $salesperson->id)
                                   ->where('quantity', '!=', 0)
                                   ->orderBy('name')
                                   ->get();
 
-        $boxes = $request->boxes ?? 1;
+        $oAmount = new Amounts();
+
+        foreach ($stocks as $key => $item) {
+            $stocks[$key]['price'] = $oAmount->getDistributionsPrice($salesperson->id, $item->brand_id);
+        }
 
         $data = [
             'salesperson' => $salesperson->name,
-            'use_boxes'   => $boxes,
             'stocks'      => $stocks,
-            'total'       => 0
+            'sum_boxes'   => 0,
+            'sum_packs'   => 0,
+            'sum_price'   => 0
         ];
 
         $pdf = PDF::loadView('reports/salesperson_stocks', $data);
