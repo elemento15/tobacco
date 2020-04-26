@@ -41,6 +41,14 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('configurations', 'ConfigurationsController@get');
 
 
+	// Only for: SYS, ADM, AUX
+	Route::group(['middleware' => ['role:SYS,ADM,AUX']], function () {
+		// Reports
+		Route::get('reports', 'HomeController@reports');
+		Route::get('download', 'HomeController@download');
+	});
+
+
 	// Only for: SYS, ADM, INV, ALM
 	Route::group(['middleware' => ['role:SYS,ADM,INV,ALM']], function () {
 		// Warehouses
@@ -97,10 +105,6 @@ Route::group(['middleware' => ['auth']], function () {
 
 				// Configurations
 				Route::post('configurations', 'ConfigurationsController@save');
-
-				// Reports
-				Route::get('reports', 'HomeController@reports');
-				Route::get('download', 'HomeController@download');
 
 
 				// Only for: SYS

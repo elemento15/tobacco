@@ -136,7 +136,7 @@ class AllocationsController extends BaseController
         // (review home.blade file to see permissions)
         $role = session('roleCode');
         
-        if ($req->type == 'E' && !in_array($role, ['SYS','ADM','INV'])) {
+        if ($req->type == 'E' && !in_array($role, ['SYS','ADM','INV','AUX'])) {
             $this->msgError = 'Acceso Restringido a Entregas';
             return false;
         }

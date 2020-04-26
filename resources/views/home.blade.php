@@ -49,9 +49,7 @@
                             Ventas <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            @if (in_array($role, ['SYS','ADM','INV']))
                             <li><a href="#/allocations">Entregas</a></li>
-                            @endif
                             
                             <li><a href="#/liquidations">Liquidaciones</a></li>
                             
@@ -77,7 +75,7 @@
                     </li>
                     @endif
 
-                    @if (in_array($role, ['SYS','ADM']))
+                    @if (in_array($role, ['SYS','ADM','AUX']))
                     <li><a href="#/reports">Reportes</a></li>
                     @endif
 
