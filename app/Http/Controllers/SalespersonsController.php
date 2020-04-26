@@ -25,7 +25,7 @@ class SalespersonsController extends BaseController
     // protected $updateFields = [];
     protected $defaultNulls = ['mobile'];
     protected $formRules = [
-        'name' => 'required|min:8',
+        'name' => 'required|min:5',
     ];
 
     protected $allowDelete = true;
