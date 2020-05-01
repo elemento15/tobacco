@@ -2,6 +2,8 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 	                                            toastr, MovementService, WarehouseService, BrandService, ConceptService) {
 	var self = this;
 
+	this.omitInitialRead = true; // avoid read on viewContentLoad
+
 	this.list = {
 		order: { field: 'mov_date', type: 'desc' },
 		filters: { active: '1', warehouse_id: '' }
@@ -59,9 +61,9 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 	}
 
 	this.beforeViewLoaded = function () {
-		$scope.fetchWarehouses();
 		$scope.fetchBrands();
 		$scope.fetchConcepts();
+		$scope.fetchWarehouses();
 	}
 
 
@@ -128,6 +130,7 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 		}).success(function (response) {
 			$scope.warehouses = response;
 			$scope.table.filters.warehouse_id = window.defaultWarehouseId;
+			$scope.read();
 		}).error(function (response) {
 			toastr.error(response.msg || 'Error en el servidor');
 		});

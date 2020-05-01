@@ -211,7 +211,10 @@ function BaseController($scope, $http, $route, $location, $ngConfirm, $uibModal,
 		if (me.beforeViewLoaded) me.beforeViewLoaded();
 		
 		me.clearModel();
-		$scope.read();
+
+		if (! me.omitInitialRead) {
+			$scope.read();
+		}
 
 		if (me.afterViewLoaded) me.afterViewLoaded();
 	});
