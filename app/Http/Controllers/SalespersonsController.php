@@ -47,10 +47,20 @@ class SalespersonsController extends BaseController
         $salesperson = Salesperson::findOrFail($id);
         
         foreach ($request->data as $item) {
-            Price::updateOrCreate(
-                ['brand_id' => $item['id'], 'salesperson_id' => $salesperson->id],
-                ['price' => $item['price']]
-            );
+            if ($item['price'] != $item['brand_price']) {
+                Price::updateOrCreate(
+                    ['brand_id' => $item['id'], 'salesperson_id' => $salesperson->id],
+                    ['price' => $item['price']]
+                );
+            } else {
+                $price = Price::where('brand_id', $item['id'])
+                              ->where('salesperson_id', $salesperson->id)
+                              ->first();
+
+                if ($price) {
+                    $price->delete();
+                }
+            }
         }
 
         return Response::json(array('success' => true));

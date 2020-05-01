@@ -5,6 +5,7 @@ namespace App\Libraries;
 use App\Salesperson;
 use App\Allocation;
 use App\SalespersonStock;
+use App\Price;
 //use App\Libraries\Amounts;
 
 class Reports
@@ -88,7 +89,7 @@ class Reports
 				$packs  += $item->quantity;
 				$boxes  += $item->quantity / $item->brand->packs_per_box;
 				//$amount += $oAmount->getDistributionsPrice($sp->id, $item->brand_id);
-				$amount += $item->quantity * $item->brand->price;
+				$amount += $item->quantity * Price::getPrice($item->brand->id, $sp->id);
 			}
 
 			$data[] = [

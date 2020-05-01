@@ -17,7 +17,6 @@ use App\SalespersonStock;
 use App\AllocationAmount;
 use Response;
 use Illuminate\Support\Facades\DB;
-//use App\Libraries\Amounts;
 
 class AllocationsController extends BaseController
 {
@@ -97,15 +96,11 @@ class AllocationsController extends BaseController
 
     public function getDetailAmounts(Request $request)
     {
-        // $amounts = new Amounts();
-        // $data = $amounts->getDistributions($request->salesperson_id, $request->brand_id, $request->quantity);
-        // return Response::json(array('cost' => $data['cost'], 'price' => $data['price']));
-
         $brand = Brand::find($request->brand_id);
         
         return Response::json([
             'cost'  => $brand->cost * $request->quantity, 
-            'price' => $brand->price * $request->quantity
+            'price' => Price::getPrice($brand->id, $request->salesperson_id) * $request->quantity
         ]);
     }
 
@@ -175,8 +170,6 @@ class AllocationsController extends BaseController
 
     protected function afterStore()
     {
-        //$objAmount = new Amounts();
-
         $data = $this->request;
         $details = $data['details'];
         $warehouse_id = $data['warehouse_id'];
@@ -196,24 +189,14 @@ class AllocationsController extends BaseController
             $det->unit_cost = $brand->cost;
             $det->unit_price = Price::getPrice($item['brand']['id'], $salesperson_id);
 
+            $det->total_cost  = $det->unit_cost  * $det->quantity;
+            $det->total_price = $det->unit_price * $det->quantity;
+
             if ($data['type'] == 'L') {
-                //$amounts = $objAmount->getDistributions($salesperson_id, $det->brand_id, $det->quantity);
-                //$det->total_cost  = $amounts['cost'];
-                //$det->total_price = $amounts['price'];
-
-                //$sum_cost += $amounts['cost'];
-                //$sum_price += $amounts['price'];
-
-                $det->total_cost = $brand->cost * $det->quantity;
-                $det->total_price = $brand->price * $det->quantity;
-
                 $sum_cost += $det->total_cost;
                 $sum_price += $det->total_price;
-
-            } else {
-                $det->total_cost  = $det->unit_cost  * $det->quantity;
-                $det->total_price = $det->unit_price * $det->quantity;
             }
+
 
             $this->savedRecord->details()->save($det);
 

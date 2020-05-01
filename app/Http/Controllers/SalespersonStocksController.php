@@ -7,7 +7,7 @@ use App\Brand;
 use App\Salesperson;
 use App\SalespersonStock;
 use App\AllocationBrand;
-use App\Libraries\Amounts;
+use App\Price;
 use PDF;
 
 class SalespersonStocksController extends BaseController
@@ -99,12 +99,10 @@ class SalespersonStocksController extends BaseController
                                   ->orderBy('name')
                                   ->get();
 
-        $oAmount = new Amounts();
-
-        // Now it will take brand's price
-        /*foreach ($stocks as $key => $item) {
-            $stocks[$key]['price'] = $oAmount->getDistributionsPrice($salesperson->id, $item->brand_id);
-        }*/
+        // Now it will take price from salesperson or brand
+        foreach ($stocks as $key => $item) {
+            $stocks[$key]['price'] = Price::getPrice($item->brand_id, $salesperson->id);
+        }
 
         $data = [
             'salesperson' => $salesperson->name,
