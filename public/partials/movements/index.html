@@ -23,6 +23,19 @@
 								</select>
 							</div>
 						</div>
+
+						<!-- class filter -->
+						<div class="form">
+							<div class="form-group">
+								<label class="cls-small">Clase:</label>
+								<select class="form-control" ng-model="table.filters.is_automatic" ng-change="read(1)">
+									<option value="">(Todos)</option>
+									<option value="1">Automáticos</option>
+									<option value="0">Manuales</option>
+								</select>
+							</div>
+						</div>
+
 					</div>
 				</div>
 			</div>
@@ -87,8 +100,8 @@
 								<span class="cls-xsmall text-muted" ng-show="rec.transfer_to" title="Destino">{{ rec.transfer_to }} - {{ rec.transfer_to_warehouse }}</span>
 							</td>
 							<td class="text-center">
-								<span class="label label-light" ng-hide="rec.is_automatic" title="Manual">M</span>
-								<span class="label label-info" ng-show="rec.is_automatic" title="Automático">A</span>
+								<span class="label label-info" ng-hide="rec.is_automatic" title="Manual">M</span>
+								<span class="label label-light" ng-show="rec.is_automatic" title="Automático">A</span>
 							</td>
 							<!-- change status component -->
 							<td align="center">
