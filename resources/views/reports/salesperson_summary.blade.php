@@ -22,7 +22,7 @@
         }
         .cls-negative {
             color: red;
-            font-weight: bold;
+            /*font-weight: bold;*/
         }
         .cls-small {
             font-size: 11px;
@@ -60,17 +60,31 @@
                     
                     <tr>
                         <td>{{ $item['name'] }}</td>
+                        
+                        @if ($item['packs'] >= 0)
                         <td align="right">{{ number_format($item['boxes'], 1) }}</td>
                         <td align="right">{{ number_format($item['packs'], 0) }}</td>
                         <td align="right">$ {{ number_format($item['amount'], 2) }}</td>
+                        @else
+                        <td align="right" class="cls-negative">{{ number_format($item['boxes'], 1) }}</td>
+                        <td align="right" class="cls-negative">{{ number_format($item['packs'], 0) }}</td>
+                        <td align="right" class="cls-negative">$ {{ number_format($item['amount'], 2) }}</td>
+                        @endif
                     </tr>
                 @endforeach
 
                 <tr class="cls-total">
                     <td>Total</td>
+
+                    @if ($sum_packs >= 0)
                     <td align="right">{{ number_format($sum_boxes, 1) }}</td>
                     <td align="right">{{ number_format($sum_packs, 0) }}</td>
                     <td align="right">$ {{ number_format($sum_amount, 2) }}</td>
+                    @else
+                    <td align="right" class="cls-negative">{{ number_format($sum_boxes, 1) }}</td>
+                    <td align="right" class="cls-negative">{{ number_format($sum_packs, 0) }}</td>
+                    <td align="right" class="cls-negative">$ {{ number_format($sum_amount, 2) }}</td>
+                    @endif
                 </tr>
             </tbody>
         </table>

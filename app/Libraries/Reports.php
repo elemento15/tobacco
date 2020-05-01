@@ -5,7 +5,7 @@ namespace App\Libraries;
 use App\Salesperson;
 use App\Allocation;
 use App\SalespersonStock;
-use App\Libraries\Amounts;
+//use App\Libraries\Amounts;
 
 class Reports
 {
@@ -68,7 +68,7 @@ class Reports
 	public function getSalesPersonSummary()
 	{
 		$data = [];
-		$oAmount = new Amounts();
+		//$oAmount = new Amounts();
 
 		$salespersons = Salesperson::where('active', true)
                                    ->orderBy('name')
@@ -87,7 +87,8 @@ class Reports
 			foreach ($stocks as $item) {
 				$packs  += $item->quantity;
 				$boxes  += $item->quantity / $item->brand->packs_per_box;
-				$amount += $oAmount->getDistributionsPrice($sp->id, $item->brand_id);
+				//$amount += $oAmount->getDistributionsPrice($sp->id, $item->brand_id);
+				$amount += $item->quantity * $item->brand->price;
 			}
 
 			$data[] = [

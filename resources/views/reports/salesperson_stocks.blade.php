@@ -48,10 +48,11 @@
 				@foreach ($stocks as $key => $stock)
 					@php
 					$boxes = $stock['quantity'] / $stock['packs_per_box'];
-					
+					$item_price = $stock['quantity'] * $stock['price'];
+
 					$sum_boxes += $boxes;
 					$sum_packs += $stock['quantity'];
-					$sum_price += $stock['price'];
+					$sum_price += $item_price;
 					@endphp
 					
 					<tr>
@@ -72,10 +73,10 @@
 							@endif
 						</td>
 						<td align="right">
-							@if ($stock['price'] >= 0)
-							<span>$ {{ number_format($stock['price'], 2) }}</span>
+							@if ($item_price >= 0)
+							<span>$ {{ number_format($item_price, 2) }}</span>
 							@else
-							<span class="cls-negative">$ {{ number_format($stock['price'], 2) }}</span>
+							<span class="cls-negative">$ {{ number_format($item_price, 2) }}</span>
 							@endif
 						</td>
 					</tr>

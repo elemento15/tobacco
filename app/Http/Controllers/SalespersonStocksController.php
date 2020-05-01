@@ -93,7 +93,7 @@ class SalespersonStocksController extends BaseController
     public function report(Salesperson $salesperson, Request $request)
     {
         $stocks = SalespersonStock::join('brands', 'brand_id', '=', 'brands.id')
-                                  ->select('name', 'brand_id', 'packs_per_box', 'cost', 'quantity')
+                                  ->select('name', 'brand_id', 'packs_per_box', 'cost', 'price', 'quantity')
                                   ->where('salesperson_id', $salesperson->id)
                                   ->where('quantity', '!=', 0)
                                   ->orderBy('name')
@@ -101,9 +101,10 @@ class SalespersonStocksController extends BaseController
 
         $oAmount = new Amounts();
 
-        foreach ($stocks as $key => $item) {
+        // Now it will take brand's price
+        /*foreach ($stocks as $key => $item) {
             $stocks[$key]['price'] = $oAmount->getDistributionsPrice($salesperson->id, $item->brand_id);
-        }
+        }*/
 
         $data = [
             'salesperson' => $salesperson->name,
