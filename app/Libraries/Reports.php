@@ -96,7 +96,8 @@ class Reports
 				'name'   => $sp->name,
 				'packs'  => $packs,
 				'boxes'  => $boxes,
-				'amount' => $amount
+				'amount' => $amount,
+				'has_prices' => $sp->prices->count()
 			];
 		}
 

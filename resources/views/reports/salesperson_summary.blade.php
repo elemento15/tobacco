@@ -25,7 +25,7 @@
             /*font-weight: bold;*/
         }
         .cls-small {
-            font-size: 11px;
+            font-size: 10px;
         }
         .cls-total {
             font-weight: bold;
@@ -59,7 +59,12 @@
                     @endphp
                     
                     <tr>
-                        <td>{{ $item['name'] }}</td>
+                        <td>
+                            <span>{{ $item['name'] }} </span>
+                            @if($item['has_prices'])
+                            <span class="cls-small">[$]</span>
+                            @endif
+                        </td>
                         
                         @if ($item['packs'] >= 0)
                         <td align="right">{{ number_format($item['boxes'], 1) }}</td>

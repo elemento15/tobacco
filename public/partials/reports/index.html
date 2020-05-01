@@ -137,6 +137,7 @@
                                 <div class="col-sm-7 col-sm-offset-1">
                                     <table class="table table-condensed table-bordered cls-table">
                                         <thead>
+                                            <th width="40">&nbsp;</th>
                                             <th class="text-center">Vendedor</th>
                                             <th class="text-center" width="75">Cajas</th>
                                             <th class="text-center" width="85">Paquetes</th>
@@ -144,7 +145,14 @@
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="rec in rpt02.data">
-                                                <td>{{ rec.name }}</td>
+                                                <td class="text-center">
+                                                    <span class="label label-warning" ng-show="rec.has_prices" 
+                                                          title="Vendedor con precios especiales">$</span>
+                                                    &nbsp;
+                                                </td>
+                                                <td>
+                                                    {{ rec.name }}
+                                                </td>
                                                 <td class="text-right cls-small" ng-class="{'cls-negative': rec.boxes < 0}">{{ rec.boxes | number : 1 }}</td>
                                                 <td class="text-right cls-small" ng-class="{'cls-negative': rec.packs < 0}">{{ rec.packs | number : 0 }}</td>
                                                 <td class="text-right text-primary" ng-hide="rec.amount < 0">{{ rec.amount | currency }}</td>
@@ -153,7 +161,7 @@
                                         </tbody>
                                         <tfoot>
                                             <tr class="cls-small" style="background-color: #f6f6f6;">
-                                                <td class="text-right cls-bold">Total: </td>
+                                                <td class="text-right cls-bold" colspan="2">Total: </td>
                                                 <td class="text-right cls-bold" ng-class="{'cls-negative': rpt02.summary.boxes < 0}">
                                                     {{ rpt02.summary.boxes | number : 1 }}
                                                 </td>
