@@ -6,6 +6,10 @@ use App\Salesperson;
 use App\Allocation;
 use App\SalespersonStock;
 use App\Price;
+use App\MovementCancellation;
+use App\Movement;
+use App\AllocationCancellation;
+use Carbon\Carbon;
 //use App\Libraries\Amounts;
 
 class Reports
@@ -99,6 +103,95 @@ class Reports
 				'amount' => $amount,
 				'has_prices' => $sp->prices->count()
 			];
+		}
+
+		return $data;
+	}
+
+	public function getCancellations($params)
+	{
+		$data = [];
+
+		if ($params['doc_type'] == 'M') {
+			$data = $this->getMovementsCancellations($params['ini_date']);
+		} else {
+			$data = $this->getDistributionsCancellations($params['ini_date']);
+		}
+
+		return $data;
+	}
+
+
+	private function getMovementsCancellations($date)
+	{
+		$data = collect();
+		$docs = MovementCancellation::with('user:id,name')
+		                            ->where('cancel_date', '>=', $date)
+		                            ->select('id','cancel_date','user_id')
+		                            ->get();
+
+		foreach ($docs as $item) {
+			$mov = Movement::with('warehouse:id,name', 'concept:id,name', 'user:id,name')
+			               ->where('cancellation_id', $item->id)
+			               ->select('id','mov_date','type','warehouse_id','concept_id','user_id')
+			               ->first();
+
+			$mov_date = Carbon::create($mov->mov_date);
+			$diff_days = $mov_date->diffInDays($item->cancel_date);
+
+			$data->push([
+				'cancel_id' => $item->id,
+				'cancel_date' => $item->cancel_date,
+				'cancel_user_id' => $item->user->id,
+				'cancel_user_name' => $item->user->name,
+				'mov_id'   => $mov->id,
+				'mov_date' => $mov->mov_date,
+				'mov_type' => $mov->type,
+				'mov_warehouse_id' => $mov->warehouse->id,
+				'mov_warehouse_name' => $mov->warehouse->name,
+				'mov_concept_id' => $mov->concept->id,
+				'mov_concept_name' => $mov->concept->name,
+				'mov_user_id' => $mov->user->id,
+				'mov_user_name' => $mov->user->name,
+				'days' => $diff_days
+			]);
+		}
+
+		return $data;
+	}
+
+	private function getDistributionsCancellations($date)
+	{
+		$data = collect();
+		$docs = AllocationCancellation::with('user:id,name')
+		                              ->where('cancel_date', '>=', $date)
+		                              ->select('id','cancel_date','user_id')
+		                              ->get();
+
+		foreach ($docs as $item) {
+			$mov = Allocation::with('user:id,name', 'salesperson:id,name')
+			                 ->where('cancellation_id', $item->id)
+			                 ->select('id','rec_date','type','doc_number','salesperson_id','user_id')
+			                 ->first();
+
+			$mov_date = Carbon::create($mov->rec_date);
+			$diff_days = $mov_date->diffInDays($item->cancel_date);
+
+			$data->push([
+				'cancel_id' => $item->id,
+				'cancel_date' => $item->cancel_date,
+				'cancel_user_id' => $item->user->id,
+				'cancel_user_name' => $item->user->name,
+				'mov_id'   => $mov->id,
+				'mov_date' => $mov->rec_date,
+				'mov_type' => $mov->type,
+				'doc_number' => $mov->doc_number,
+				'mov_salesperson_id' => $mov->salesperson->id,
+				'mov_salesperson_name' => $mov->salesperson->name,
+				'mov_user_id' => $mov->user->id,
+				'mov_user_name' => $mov->user->name,
+				'days' => $diff_days
+			]);
 		}
 
 		return $data;

@@ -47,6 +47,14 @@ class HomeController extends Controller
             case 'SalesPersonSummary':
                 $data = $rpt->getSalesPersonSummary();
                 break;
+
+            case 'Cancellations':
+                $params = [
+                    'ini_date' => $req->ini_date . ' 00:00:00',
+                    'doc_type' => $req->doc_type
+                ];
+                $data = $rpt->getCancellations($params);
+                break;
         }
 
         return $data;

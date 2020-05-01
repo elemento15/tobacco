@@ -25,6 +25,14 @@ app.controller('ReportsController', function ($scope, $http, $route, $location, 
 		}
 	}
 
+	$scope.rpt03 = {
+		date_ini: moment().subtract(30, 'days').toDate(),
+		date_ini_opened: false,
+		doc_type: 'M',
+		data_movs: [],
+		data_docs: []
+	}
+
 	$scope.runRpt = function (opt) {
 		if (opt == 1) {
 			var rpt = $scope.rpt01;
@@ -53,6 +61,25 @@ app.controller('ReportsController', function ($scope, $http, $route, $location, 
 					toastr.error(response.msg || 'Error en el servidor');
 				});
 		}
+
+		if (opt == 3) {
+			var rpt = $scope.rpt03;
+
+			$scope.loading = ReportService.get({
+					type: 'Cancellations',
+					doc_type: rpt.doc_type,
+					ini_date: moment(rpt.date_ini).format('YYYY-MM-DD'),
+				}).success(function(response) {
+					if (rpt.doc_type == 'M') {
+						rpt.data_movs = response;
+					} else {
+						rpt.data_docs = response;
+					}
+				})
+				.error(function(response) {
+					toastr.error(response.msg || 'Error en el servidor');
+				});
+		}
 	}
 
 	$scope.downloadRpt = function (opt) {
@@ -76,6 +103,9 @@ app.controller('ReportsController', function ($scope, $http, $route, $location, 
 				break;
 			case 'rpt01-end' : 
 				$scope.rpt01.date_end_opened = true;
+				break;
+			case 'rpt03-ini' : 
+				$scope.rpt03.date_ini_opened = true;
 				break;
 		}
 	}

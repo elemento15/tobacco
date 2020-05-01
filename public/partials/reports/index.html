@@ -41,7 +41,6 @@
                                     </div>
                                     <div class="row mt15">
                                         <div class="col-sm-12">
-                                            <!--<button class="btn btn-success" ng-click="runRpt(1)">Generar</button>-->
                                             <div class="btn-group" uib-dropdown>
                                                 <button type="button" class="btn btn-success" ng-click="runRpt(1)">Generar</button>
                                                 <button type="button" class="btn btn-success" uib-dropdown-toggle>
@@ -186,14 +185,117 @@
             <!-- End report 02 -->
 
             <!-- Start report 03 -->
-            <!--<uib-tab heading="Ventas Mensuales">
+            <uib-tab heading="Cancelaciones">
                 <div class="cls-tab-pill-contents">
                     <div class="row">
-                        <div class="col-sm-2"></div>
-                        <div class="col-sm-10"></div>
+                        <div class="col-sm-4 col-md-3 col-lg-2">
+                            <div class="panel panel-default panel-filters">
+                                <div class="panel-heading">Opciones</div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <label>Tipo: </label>
+                                            <select class="form-control" ng-model="rpt03.doc_type">
+                                                <option value="M">Movimientos</option>
+                                                <option value="V">Ventas</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mt15">
+                                        <div class="col-sm-12">
+                                            <label>Fecha inicial: </label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" uib-datepicker-popup="yyyy-MM-dd" datepicker-options="dateOptions"
+                                                       ng-model="rpt03.date_ini" is-open="rpt03.date_ini_opened" show-button-bar="false">
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="btn btn-default" ng-click="openDatePicker('rpt03-ini')">
+                                                        <i class="glyphicon glyphicon-calendar"></i>
+                                                    </button>
+                                              </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt15">
+                                        <div class="col-sm-12">
+                                            <button class="btn btn-success" ng-click="runRpt(3)">Generar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Display report 03 -->
+                        <div class="col-sm-8 col-md-9 col-lg-10">
+                            <div class="row">
+                                <!-- display Movements -->
+                                <div class="col-sm-12" ng-show="rpt03.doc_type == 'M'">
+                                    <table class="table table-condensed table-bordered cls-table">
+                                        <thead>
+                                            <th class="text-center">ID</th>
+                                            <th class="text-center">Fecha Mov.</th>
+                                            <th class="text-center">Tipo Mov.</th>
+                                            <th class="text-center">Almacén</th>
+                                            <th class="text-center">Usuario</th>
+                                            <th class="text-center">Fecha Cancelación</th>
+                                            <th class="text-center">Usuario Cancela</th>
+                                            <th class="text-center" title="Días transcuridos">Días</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="rec in rpt03.data_movs">
+                                                <td class="text-right">{{ rec.mov_id }}</td>
+                                                <td class="text-center cls-small">{{ rec.mov_date.substr(0, 10) }}</td>
+                                                <td class="text-center cls-small">
+                                                    <span ng-show="rec.mov_type == 'E'">Entrada</span>
+                                                    <span ng-show="rec.mov_type == 'S'">Salida</span>
+                                                    <span ng-show="rec.mov_type == 'T'">Traspaso</span>
+                                                </td>
+                                                <td class="text-left cls-small">{{ rec.mov_warehouse_name }}</td>
+                                                <td class="text-left cls-small">{{ rec.mov_user_name }}</td>
+                                                <td class="text-center cls-small">{{ rec.cancel_date.substr(0, 10) }}</td>
+                                                <td class="text-left cls-small">{{ rec.cancel_user_name }}</td>
+                                                <td class="text-right text-warning cls-bold">{{ rec.days }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- display Allocations -->
+                                <div class="col-sm-12" ng-show="rpt03.doc_type == 'V'">
+                                    <table class="table table-condensed table-bordered cls-table">
+                                        <thead>
+                                            <th class="text-center">ID</th>
+                                            <th class="text-center">Folio</th>
+                                            <th class="text-center">Fecha Doc.</th>
+                                            <th class="text-center">Tipo</th>
+                                            <th class="text-center">Vendedor</th>
+                                            <th class="text-center">Usuario</th>
+                                            <th class="text-center">Fecha Cancelación</th>
+                                            <th class="text-center">Usuario Cancela</th>
+                                            <th class="text-center" title="Días transcuridos">Días</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="rec in rpt03.data_docs">
+                                                <td class="text-right">{{ rec.mov_id }}</td>
+                                                <td class="text-right">{{ rec.doc_number }}</td>
+                                                <td class="text-center cls-small">{{ rec.mov_date.substr(0, 10) }}</td>
+                                                <td class="text-center">
+                                                    <span ng-show="rec.mov_type == 'E'">Entrega</span>
+                                                    <span ng-show="rec.mov_type == 'L'">Liquidación</span>
+                                                    <span ng-show="rec.mov_type == 'D'">Devolución</span>
+                                                </td>
+                                                <td class="text-left cls-small">{{ rec.mov_salesperson_name }}</td>
+                                                <td class="text-left cls-small">{{ rec.mov_user_name }}</td>
+                                                <td class="text-center cls-small">{{ rec.cancel_date.substr(0, 10) }}</td>
+                                                <td class="text-left cls-small">{{ rec.cancel_user_name }}</td>
+                                                <td class="text-right text-warning cls-bold">{{ rec.days }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </uib-tab>-->
+            </uib-tab>
             <!-- End report 03 -->
         </uib-tabset>
     </div>
