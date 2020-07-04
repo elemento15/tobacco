@@ -25,6 +25,7 @@
     <script src="/libs/bootstrap.min.js"></script>
     <script src="/libs/moment.min.js"></script>
     <script src="/libs/lodash.js"></script>
+    <script src="/libs/canvasjs.js"></script>
     <script src="/libs/angular.min.js"></script>
     <script src="/libs/angular-locale_es-mx.js"></script>
     <script src="/libs/angular-route.min.js"></script>
@@ -68,5 +69,9 @@
     <script src="/app/controllers/distributions/liquidations_controller.js"></script>
     <script src="/app/controllers/distributions/devolutions_controller.js"></script>
     <script src="/app/controllers/reports_controller.js"></script>
+
+    <script type="text/javascript">
+        window.userRole = '{{ Auth::user()->role->code }}';
+    </script>
 </body>
 </html>

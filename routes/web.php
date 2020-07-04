@@ -41,6 +41,13 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('configurations', 'ConfigurationsController@get');
 
 
+	// Only for: SYS, ADM
+	Route::group(['middleware' => ['role:SYS,ADM']], function () {
+		// Charts
+		Route::get('charts/sales', 'ChartsController@sales');
+		Route::get('charts/salesperson', 'ChartsController@salesperson');
+	});
+
 	// Only for: SYS, ADM, AUX
 	Route::group(['middleware' => ['role:SYS,ADM,AUX']], function () {
 		// Reports

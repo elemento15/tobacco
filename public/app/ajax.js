@@ -201,3 +201,14 @@ app.factory('ReportService', ['$http', function($http) {
 		}
 	}
 }]);
+
+app.factory('ChartService', ['$http', function($http) {
+	return {
+		sales : function (data) {
+			return $http.get('charts/sales', data);
+		},
+		salesperson : function (data) {
+			return $http.get('charts/salesperson', data);
+		}
+	}
+}]);

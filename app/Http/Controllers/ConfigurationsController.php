@@ -13,10 +13,11 @@ class ConfigurationsController extends Controller
     	if (! $config = Configuration::first()) {
     		$config = [
     			'default_warehouse_id' => '',
-    			'allocation_warehouse_id' => '',
-                'role_code' => session('roleCode'),
+    			'allocation_warehouse_id' => ''
     		];
     	}
+        
+        $config['role_code'] = session('roleCode');
 
     	return Response::json($config);
     }

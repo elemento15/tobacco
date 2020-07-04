@@ -1,1 +1,30 @@
 <h3 class="cls-title">Bienvenido</h3>
+
+<!-- charts only for ADMIN -->
+<div class="row" ng-show="userRole == 'ADM' || userRole == 'SYS'">
+	<div class="col-sm-12">
+		<div class="row">
+			<div class="col-md-8">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<div class="text-primary">Ventas Mensuales</div>
+					</div>
+					<div class="panel-body">
+						<div id="chartMonthlySales" style="height: 350px;"></div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-4">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<div class="text-primary">Top 10 Vendedores - (ultimos 30 días)</div>
+					</div>
+					<div class="panel-body">
+						<div id="chartSalesperson" style="height: 350px;"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
