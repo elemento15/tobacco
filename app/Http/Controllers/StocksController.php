@@ -7,7 +7,10 @@ use App\Brand;
 use App\Stock;
 use App\Warehouse;
 use App\MovementBrand;
+use App\Configuration;
+use Carbon\Carbon;
 use PDF;
+use DB;
 
 class StocksController extends BaseController
 {
@@ -35,6 +38,16 @@ class StocksController extends BaseController
 
     protected $useTransactions = false;
 
+    protected $kardexDate = false;
+
+
+    public function __construct()
+    {
+        if ($days = Configuration::getKardexDays()) {
+            $dt = Carbon::now();
+            $this->kardexDate = $dt->subDays($days)->format('Y-m-d');
+        }
+    }
 
     public function index(Request $request)
     {
@@ -113,27 +126,51 @@ class StocksController extends BaseController
 
     public function kardex(Warehouse $warehouse, Brand $brand, Request $request)
     {
+        $balance = 0;
         $details = MovementBrand::join('movements as mov', 'mov.id', '=', 'movement_brands.movement_id')
                                 ->join('brands as b', 'b.id', '=', 'movement_brands.brand_id')
                                 ->join('movement_concepts as mc', 'mc.id', '=', 'mov.concept_id')
                                 ->select('mov.id AS movID', 'quantity', 'mov.mov_date', 'mov.type', 'b.packs_per_box', 'mc.name', 'mov.comments')
                                 ->where('b.id', $brand->id)
                                 ->where('mov.warehouse_id', $warehouse->id)
-                                ->where('mov.active', true)
-                                ->orderBy('mov.mov_date')
-                                ->get();
+                                ->where('mov.active', true);
+
+        if ($this->kardexDate) {
+            $details = $details->where('mov.mov_date', '>=', $this->kardexDate); // filter by date
+            $balance = $this->getInitialBalance($brand, $warehouse); // get the balance for previous dates
+        }
+        
+        $details = $details->orderBy('mov.mov_date')->get();
 
         $boxes = $request->boxes ?? 1;
 
         $data = [
-            'warehouse' => $warehouse->name,
-            'brand'     => $brand->name,
-            'use_boxes' => $boxes,
-            'details'   => $details,
-            'balance'   => 0
+            'warehouse'     => $warehouse->name,
+            'brand'         => $brand->name,
+            'use_boxes'     => $boxes,
+            'packs_per_box' => $brand->packs_per_box,
+            'details'       => $details,
+            'balance'       => $balance,
+            'from_date'     => ($this->kardexDate) ? 'Desde: '. $this->kardexDate : '',
         ];
 
         $pdf = PDF::loadView('reports/kardex', $data);
         return $pdf->stream('rpt_kardex.pdf', ['Attachment' => false]);
+    }
+
+
+    private function getInitialBalance($brand, $warehouse)
+    {
+        $select = 'SUM(IF(mov.`type` = "E", movement_brands.quantity, movement_brands.quantity * -1)) AS balance';
+
+        $rec = MovementBrand::select(DB::raw($select))
+                            ->join('movements as mov', 'mov.id', '=', 'movement_brands.movement_id')
+                            ->where('mov.mov_date', '<', $this->kardexDate)
+                            ->where('movement_brands.brand_id', $brand->id)
+                            ->where('mov.warehouse_id', $warehouse->id)
+                            ->where('mov.active', true)
+                            ->first();
+
+        return $rec->balance ?? 0;
     }
 }

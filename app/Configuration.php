@@ -22,4 +22,10 @@ class Configuration extends Model
     	$record = self::first();
     	return $record->allocation_warehouse;
     }
+
+    public static function getKardexDays($type = 'M')
+    {
+        $rec = self::first();
+        return ($type == 'S') ? $rec->sales_kardex_days : $rec->movements_kardex_days;
+    }
 }

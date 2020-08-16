@@ -31,14 +31,18 @@
             font-weight: bold;
             background-color: #dedede;
         }
+        h5 div {
+            text-align: left;
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
     <h3>Reporte de Kardex</h3>
     <h5>
-        <div style="float: left">Marca: {{ $brand }}</div>
-        <div style="float: right">Almacén: {{ $warehouse }}</div>
-        <div style="clear: both;"></div>
+        <div style="width: 30%;">Marca: {{ $brand }}</div>
+        <div style="width: 38%; text-align: center;">Almacén: {{ $warehouse }}</div>
+        <div style="width: 30%; text-align: right;">{{ $from_date }}</div>
     </h5>
     <hr>
 
@@ -57,6 +61,28 @@
                 </tr>
             </thead>
             <tbody>
+                @if ($from_date)
+                    @php
+                    $balance = ($use_boxes) ? $balance / $packs_per_box : $balance;
+                    @endphp
+
+                    <tr>
+                        <td align="right">-</td>
+                        <td align="center">-</td>
+                        <td align="center" class="cls-small">-</td>
+                        <td class="cls-small"><i>SALDO ANTERIOR</i></td>
+                        @if ($balance >= 0)
+                        <td align="right">{{ number_format($balance, 2) }}</td>
+                        <td align="right">{{ number_format($balance, 2) }}</td>
+                        @else
+                        <td align="right" class="cls-negative">{{ number_format($balance, 2) }}</td>
+                        <td align="right" class="cls-negative">{{ number_format($balance, 2) }}</td>
+                        @endif
+                        <td>&nbsp;</td>
+                        <td class="cls-small">&nbsp;</td>
+                    </tr>
+                @endif
+
                 @foreach ($details as $key => $item)
                     @php
                     $quantity = ($use_boxes) ? $item['quantity'] / $item['packs_per_box'] : $item['quantity'];

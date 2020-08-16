@@ -3,7 +3,9 @@ app.controller('ConfigurationsController', function ($scope, $http, $route, $loc
     
     $scope.model = {
     	allocation_warehouse_id: '',
-    	default_warehouse_id: ''
+    	default_warehouse_id: '',
+    	movements_kardex_days: 0,
+    	sales_kardex_days: 0
     };
 
     $scope.warehouses = [];

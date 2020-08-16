@@ -8,7 +8,10 @@ use App\Salesperson;
 use App\SalespersonStock;
 use App\AllocationBrand;
 use App\Price;
+use App\Configuration;
+use Carbon\Carbon;
 use PDF;
+use DB;
 
 class SalespersonStocksController extends BaseController
 {
@@ -36,6 +39,16 @@ class SalespersonStocksController extends BaseController
 
     protected $useTransactions = false;
 
+    protected $kardexDate = false;
+
+
+    public function __construct()
+    {
+        if ($days = Configuration::getKardexDays('S')) {
+            $dt = Carbon::now();
+            $this->kardexDate = $dt->subDays($days)->format('Y-m-d');
+        }
+    }
 
     public function index(Request $request)
     {
@@ -118,26 +131,50 @@ class SalespersonStocksController extends BaseController
 
     public function kardex(Salesperson $salesperson, Brand $brand, Request $request)
     {
+        $balance = 0;
         $details = AllocationBrand::join('allocations as all', 'all.id', '=', 'allocation_brands.allocation_id')
                                 ->join('brands as b', 'b.id', '=', 'allocation_brands.brand_id')
                                 ->select('all.id AS movID', 'quantity', 'all.rec_date', 'all.type', 'b.packs_per_box', 'all.doc_number', 'all.comments')
                                 ->where('b.id', $brand->id)
                                 ->where('all.salesperson_id', $salesperson->id)
-                                ->where('all.active', true)
-                                ->orderBy('all.rec_date')
-                                ->get();
+                                ->where('all.active', true);
+
+        if ($this->kardexDate) {
+            $details = $details->where('all.rec_date', '>=', $this->kardexDate); // filter by date
+            $balance = $this->getInitialBalance($brand, $salesperson); // get the balance for previous dates
+        }
+
+        $details = $details->orderBy('all.rec_date')->get();
 
         $boxes = $request->boxes ?? 1;
 
         $data = [
-            'salesperson' => $salesperson->name,
-            'brand'       => $brand->name,
-            'use_boxes'   => $boxes,
-            'details'     => $details,
-            'balance'     => 0
+            'salesperson'   => $salesperson->name,
+            'brand'         => $brand->name,
+            'use_boxes'     => $boxes,
+            'packs_per_box' => $brand->packs_per_box,
+            'details'       => $details,
+            'balance'       => $balance,
+            'from_date'     => ($this->kardexDate) ? 'Desde: '. $this->kardexDate : '',
         ];
 
         $pdf = PDF::loadView('reports/salesperson_kardex', $data);
         return $pdf->stream('rpt_kardex_ventas.pdf', ['Attachment' => false]);
+    }
+
+
+    private function getInitialBalance($brand, $salesperson)
+    {
+        $select = 'SUM(IF(a.`type` = "L", allocation_brands.quantity * -1, allocation_brands.quantity)) AS balance';
+
+        $rec = AllocationBrand::select(DB::raw($select))
+                              ->join('allocations as a', 'a.id', '=', 'allocation_brands.allocation_id')
+                              ->where('a.rec_date', '<', $this->kardexDate)
+                              ->where('allocation_brands.brand_id', $brand->id)
+                              ->where('a.salesperson_id', $salesperson->id)
+                              ->where('a.active', true)
+                              ->first();
+
+        return $rec->balance ?? 0;
     }
 }

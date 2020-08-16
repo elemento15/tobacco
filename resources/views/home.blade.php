@@ -69,8 +69,8 @@
                             Inventarios <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="#/stocks">Existencias</a></li>
                             <li><a href="#/movements">Movimientos</a></li>
+                            <li><a href="#/stocks">Existencias</a></li>
                         </ul>
                     </li>
                     @endif
