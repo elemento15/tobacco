@@ -71,15 +71,24 @@ class SalespersonStocksController extends BaseController
         $key = array_search('active', array_column($request->filters, 'field'));
         if ($key !== false) {
             $active = $request->filters[$key]['value'];
-            $model = $model->where('active', $active);
+            $model = $model->where('brands.active', $active);
+        }
+
+        // filter brand_type
+        $key = array_search('brand_type_id', array_column($request->filters, 'field'));
+        if ($key !== false) {
+            $type = $request->filters[$key]['value'];
+            $model = $model->where('brand_type_id', $type);
         }
 
         if ($search) {
-            $model = $model->where('name', 'like', '%'.$search.'%');
+            $model = $model->where('brands.name', 'like', '%'.$search.'%');
         }
 
-        $model = $model->orderBy('name', 'asc');
-        $model = $model->paginate($this->indexPaginate);
+        $model = $model->join('brand_types', 'brand_types.id', '=', 'brands.brand_type_id')
+                       ->orderBy('brands.name', 'asc')
+                       ->select('brands.id','brands.name','brands.active','packs_per_box','brand_types.name AS type')
+                       ->paginate($this->indexPaginate);
 
         $model = json_decode(json_encode($model));
 
@@ -93,6 +102,7 @@ class SalespersonStocksController extends BaseController
             $data[] = [
                 'id'     => $item->id,
                 'name'   => $item->name,
+                'type'   => $item->type,
                 'active' => $item->active,
                 'stock'  => floatval($quantity),
                 'packs_per_box' => $item->packs_per_box
@@ -105,12 +115,19 @@ class SalespersonStocksController extends BaseController
 
     public function report(Salesperson $salesperson, Request $request)
     {
-        $stocks = SalespersonStock::join('brands', 'brand_id', '=', 'brands.id')
-                                  ->select('name', 'brand_id', 'packs_per_box', 'cost', 'price', 'quantity')
-                                  ->where('salesperson_id', $salesperson->id)
-                                  ->where('quantity', '!=', 0)
-                                  ->orderBy('name')
-                                  ->get();
+        $stocks = SalespersonStock::join('brands AS b', 'salesperson_stocks.brand_id', '=', 'b.id')
+                                  ->join('brand_types AS bt', 'bt.id', '=', 'b.brand_type_id')
+                                  ->select('b.name', 'bt.name AS type', 'salesperson_stocks.brand_id', 'b.packs_per_box', 
+                                           'b.cost', 'b.price', 'salesperson_stocks.quantity')
+                                  ->where('salesperson_stocks.salesperson_id', $salesperson->id)
+                                  ->where('salesperson_stocks.quantity', '!=', 0);
+
+        if ($request->type) {
+            $stocks = $stocks->where('b.brand_type_id', $request->type);
+        }
+        
+        $stocks = $stocks->orderBy('name')
+                         ->get();
 
         // Now it will take price from salesperson or brand
         foreach ($stocks as $key => $item) {

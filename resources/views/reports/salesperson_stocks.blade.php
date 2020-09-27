@@ -21,6 +21,9 @@
 			color: red;
 			font-weight: bold;
 		}
+		.cls-small {
+			font-size: 11px;
+		}
 		.cls-total {
 			font-weight: bold;
 			font-style: italic;
@@ -33,12 +36,13 @@
 	<h5>Vendedor: {{ $salesperson }}</h5>
 	<hr>
 
-	<div style="text-align: center; margin: 0px 80px;">
+	<div style="text-align: center; margin: 0px 60px;">
 		<table class="cls-content" cellspacing="0" cellpadding="4" border="1" width="100%">
 			<thead>
 				<tr>
 					<th align="center" width="20">#</th>
 					<th align="center">MARCA</th>
+					<th align="center" width="60">TIPO</th>
 					<th align="center" width="55">CAJAS</th>
 					<th align="center" width="55">PAQUETES</th>
 					<th align="center" width="65">IMPORTE</th>
@@ -58,6 +62,7 @@
 					<tr>
 						<td align="center" style="font-size: 11px;">{{ $key + 1 }}</td>
 						<td>{{ $stock['name'] }}</td>
+						<td class="cls-small">{{ $stock['type'] }}</td>
 						<td align="right">
 							@if ($boxes >= 0)
 							<span>{{ number_format($boxes, 2) }}</span>
@@ -83,7 +88,7 @@
 				@endforeach
 
 				<tr class="cls-total">
-					<td colspan="2" align="right">Total: </td>
+					<td colspan="3" align="right">Total: </td>
 					<td align="right">{{ number_format($sum_boxes, 2) }}</td>
 					<td align="right">{{ number_format($sum_packs, 0) }}</td>
 					<td align="right">$ {{ number_format($sum_price, 2) }}</td>
