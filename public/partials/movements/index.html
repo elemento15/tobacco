@@ -238,6 +238,14 @@
 									<div class="col-sm-12">
 										<div class="form-inline">
 											<div class="form-group mr10">
+												<label>Tipo: </label>
+												<select class="form-control input-sm" ng-model="selBrandTypeId" ng-change="changeBrandType()">
+													<option value="">-- Seleccione --</option>
+													<option ng-repeat="(key, opt) in brand_types" value="{{opt.id}}">{{ opt.name }}</option>
+												</select>
+											</div>
+
+											<div class="form-group mr10">
 												<label>Marca: </label>
 												<select class="form-control input-sm" ng-model="selBrandId">
 													<option value="">-- Seleccione --</option>

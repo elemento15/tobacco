@@ -1,5 +1,5 @@
-app.controller('MovementsController', function ($scope, $http, $route, $location, $ngConfirm, $uibModal, $timeout, 
-	                                            toastr, MovementService, WarehouseService, BrandService, ConceptService) {
+app.controller('MovementsController', function ($scope, $http, $route, $location, $ngConfirm, $uibModal, $timeout, toastr, 
+	                                            MovementService, WarehouseService, BrandService, ConceptService, BrandTypeService) {
 	var self = this;
 
 	this.omitInitialRead = true; // avoid read on viewContentLoad
@@ -61,7 +61,8 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 	}
 
 	this.beforeViewLoaded = function () {
-		$scope.fetchBrands();
+		$scope.fetchBrandTypes();
+		//$scope.fetchBrands();
 		$scope.fetchConcepts();
 		$scope.fetchWarehouses();
 	}
@@ -75,6 +76,9 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 
 	$scope.concepts = [];
 	$scope.filteredConcepts = [];
+
+	$scope.brand_types = [];
+	$scope.selBrandTypeId = '';
 
 	$scope.brands = [];
 	$scope.selBrandId = '';
@@ -136,9 +140,23 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 		});
 	}
 
-	$scope.fetchBrands = function () {
-		BrandService.read({
-			filters: [{ field: 'active', value: 1 }],
+	$scope.fetchBrandTypes = function () {
+		BrandTypeService.read({
+			//filters: [{ field: 'active', value: 1 }],
+			order: { field: 'name', type: 'asc' }
+		}).success(function (response) {
+			$scope.brand_types = response;
+		}).error(function (response) {
+			toastr.error(response.msg || 'Error en el servidor');
+		});
+	}
+
+	$scope.fetchBrands = function (type) {
+		$scope.loading = BrandService.read({
+			filters: [
+				{ field: 'active', value: 1 },
+				{ field: 'brand_type_id', value: type },
+			],
 			order: { field: 'name', type: 'asc' }
 		}).success(function (response) {
 			$scope.brands = response;
@@ -214,6 +232,10 @@ app.controller('MovementsController', function ($scope, $http, $route, $location
 		$scope.filteredConcepts = _.filter($scope.concepts || [], function (o) {
 			return o.type == option;
 		});
+	}
+
+	$scope.changeBrandType = function () {
+		$scope.fetchBrands($scope.selBrandTypeId);
 	}
 	// ========================================================
 
