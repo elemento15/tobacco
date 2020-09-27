@@ -14,6 +14,17 @@
 					<div class="panel-body">
 						<!-- status filter -->
 						<div ng-include="tpls.filter_status"></div>
+
+						<!-- brand type filter -->
+						<div class="form">
+							<div class="form-group">
+								<label class="cls-small">Tipo:</label>
+								<select class="form-control" ng-model="table.filters.brand_type_id" ng-change="read(1)">
+									<option value="">(Todos)</option>
+									<option ng-repeat="(key, opt) in brand_types" value="{{opt.id}}">{{ opt.name }}</option>
+								</select>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -39,6 +50,7 @@
 							<th class="text-center" width="70">ID</th>
 							<th class="text-center" width="110">Fecha</th>
 							<th class="text-center" width="100">Folio</th>
+							<th class="text-center">Tipo</th>
 							<th class="text-center" width="100" ng-show="modelType == 'L'">Importe</th>
 							<th class="text-center">Vendedor</th>
 							<th width="100" class="text-center">Estado</th>
@@ -58,6 +70,7 @@
 							<td class="text-right">{{ rec.id }}</td>
 							<td class="text-center">{{ rec.rec_date.substr(0, 10) }}</td>
 							<td class="">{{ rec.doc_number }}</td>
+							<td class="cls-small">{{ rec.brand_type.name }}</td>
 							<td class="text-right" ng-show="modelType == 'L'">{{ rec.amount.price | currency }}</td>
 							<td class="cls-xsmall">{{ rec.salesperson.name }}</td>
 							<!-- change status component -->
@@ -106,38 +119,69 @@
 				<div class="panel panel-default cls-panel">
 					<div class="panel-body">
 						<div class="row">
-							<div class="col-sm-4" ng-hide="model.id">
-								<div class="form-inline">
-									<div class="form-group">
-										<label class="mr5">Vendedor: </label>
-										<select class="form-control input-sm" ng-model="model.salesperson_id">
-											<option value="">-- Seleccione el vendedor --</option>
-											<option ng-repeat="(key, opt) in salespeople" value="{{opt.id}}">{{ opt.name }}</option>
-										</select>
+							<div class="col-sm-3">
+								<div ng-hide="model.id">
+									<div class="form">
+										<div class="form-group">
+											<label>Vendedor:</label>
+											<select class="form-control input-sm" ng-model="model.salesperson_id">
+												<option value="">-- Seleccione el vendedor --</option>
+												<option ng-repeat="(key, opt) in salespeople" value="{{opt.id}}">{{ opt.name }}</option>
+											</select>
+										</div>
+									</div>
+								</div>
+
+								<div ng-show="model.id">
+									<div class="form">
+										<div class="form-group">
+											<label>Vendedor:</label>
+											<!--<span class="text-info">{{ model.salesperson.name }}</span>-->
+											<p class="text-info form-control-static">
+												<b>{{ model.salesperson.name }}</b>
+											</p>
+										</div>
 									</div>
 								</div>
 							</div>
 
-							<div class="col-sm-4" ng-show="model.id">
-								<div class="form-inline">
-									<div class="form-group">
-										<label class="mr5">Vendedor: </label>
-										<span class="text-info">{{ model.salesperson.name }}</span>
+							<div class="col-sm-3">
+								<div ng-hide="model.id">
+									<div class="form">
+										<div class="form-group">
+											<label>Tipo: </label>
+											<select class="form-control input-sm" ng-model="model.brand_type_id" ng-change="changeBrandType()">
+												<option value="">-- Seleccione el tipo --</option>
+												<option ng-repeat="(key, opt) in brand_types" value="{{opt.id}}">{{ opt.name }}</option>
+											</select>
+										</div>
+									</div>
+								</div>
+
+								<div ng-show="model.id">
+									<div class="form">
+										<div class="form-group">
+											<label>Tipo:</label>
+											<p class="form-control-static">
+												{{ model.brand_type.name }}
+											</p>
+										</div>
 									</div>
 								</div>
 							</div>
 
-							<div class="col-sm-4">
-								<div class="form-inline">
+							<div class="col-sm-3">
+								<div class="form">
 									<div class="form-group">
-										<label class="mr5">Folio: </label>
-										<input class="form-control input-sm" type="text" ng-model="model.doc_number" maxlength="10">
+										<label>Folio:</label>
+										<input class="form-control input-sm cls-input-medium" type="text" maxlength="10" 
+										       ng-model="model.doc_number" >
 									</div>
 								</div>
 							</div>
 
 							<!-- show liquidation total amount -->
-							<div class="col-sm-4" ng-show="modelType == 'L'">
+							<div class="col-sm-3" ng-show="modelType == 'L'" style="margin-top: 25px;">
 								<span class="text-danger cls-large pull-right">
 									<b>{{ getTotalAmount() | currency }}</b>
 								</span>

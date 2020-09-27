@@ -25,6 +25,9 @@ Route::group(['middleware' => ['auth']], function () {
 	//Brands
 	Route::resource('brands', 'BrandsController')->only(['index','show']);
 
+	//Brand Types
+	Route::resource('brand_types', 'BrandTypesController')->only(['index','show']);
+
 	// Salespersons
 	Route::resource('salespersons', 'SalespersonsController')->only(['index','show']);
 

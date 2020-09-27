@@ -8,7 +8,18 @@
 					<div class="panel-heading">Filtros</div>
 					<div class="panel-body">
 						<!-- status filter -->
-						<div ng-include="tpls.filter_status"></div>
+						<div ng-include="	tpls.filter_status"></div>
+
+						<!-- brand type filter -->
+						<div class="form">
+							<div class="form-group">
+								<label class="cls-small">Tipo:</label>
+								<select class="form-control" ng-model="table.filters.brand_type_id" ng-change="read(1)">
+									<option value="">(Todos)</option>
+									<option ng-repeat="(key, opt) in types" value="{{opt.id}}">{{ opt.name }}</option>
+								</select>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -32,6 +43,7 @@
 									<span class="glyphicon glyphicon-chevron-down" ng-show="showOrderIcon('name', 'desc')"></span>
 								</span>
 							</th>
+							<th>Tipo</th>
 							<th class="text-center">Paquetes por caja</th>
 							<th>
 								<span class="cls-pointer text-info" ng-click="setOrder('cost')">Costo
@@ -54,6 +66,7 @@
 							<!-- actions buttons -->
 							<td ng-include="tpls.actions"></td>
 							<td>{{ rec.name }}</td>
+							<td>{{ rec.type.name }}</td>
 							<td class="text-center">{{ rec.packs_per_box | number }}</td>
 							<td class="text-right">{{ rec.cost | currency }}</td>
 							<td class="text-right">{{ rec.price | currency }}</td>

@@ -12,20 +12,21 @@ class BrandsController extends BaseController
     // params needen for index
     protected $searchFields = ['name'];
     protected $indexPaginate = 10;
-    protected $indexJoins = [];
+    protected $indexJoins = ['type'];
 
     // params needer for show
-    protected $showJoins = [];
+    protected $showJoins = ['type'];
 
     // params needed for store/update
     //protected $saveFields = ['name','packs_per_box','cost'];
-    protected $storeFields = ['name','packs_per_box','cost','price'];
+    protected $storeFields = ['name','brand_type_id','packs_per_box','cost','price'];
     protected $updateFields = ['name','cost','price'];
     protected $defaultNulls = [];
     protected $formRules = [
         'packs_per_box' => 'required|numeric|min:1|max:9999',
         'cost'  => 'required|numeric|min:1|max:9999',
         'price' => 'required|numeric|min:1|max:9999',
+        'brand_type_id' => 'required',
         'name' => 'unique:brands,name,{{id}}|required|min:3',
     ];
 

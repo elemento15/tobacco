@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Allocation extends Model
 {
-    protected $fillable = ['rec_date','type','salesperson_id','warehouse_id','user_id','doc_number','comments'];
+    protected $fillable = ['rec_date','type','brand_type_id','salesperson_id','warehouse_id','user_id','doc_number','comments'];
 
 
     public function salesperson()
@@ -27,6 +27,11 @@ class Allocation extends Model
     public function cancellation()
     {
         return $this->belongsTo('App\AllocationCancellation');
+    }
+
+    public function brand_type()
+    {
+        return $this->belongsTo('App\BrandType');
     }
 
     public function amount()

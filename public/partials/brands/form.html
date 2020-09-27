@@ -15,6 +15,20 @@
                     </div>
 
                     <div class="form-group">
+                        <label class="col-sm-4 control-label">Tipo de Marca:</label>
+                        <div class="col-sm-6">
+                            <!-- Only for new -->
+                            <select class="form-control" ng-model="$parent.model.brand_type_id" ng-hide="$parent.model.id">
+                                <option value="">-- Seleccione el Tipo --</option>
+                                <option ng-repeat="(key, opt) in types" value="{{opt.id}}">{{ opt.name }}</option>
+                            </select>
+                            <!-- Only for existent -->
+                            <input type="text" class="form-control" ng-model="$parent.model.type.name" 
+                                   disabled="disabled" ng-show="$parent.model.id">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label class="col-sm-4 control-label" title="Paquetes por caja">Paquetes por Caja:</label>
                         <div class="col-sm-4">
                             <!-- Only for new -->

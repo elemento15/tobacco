@@ -15,6 +15,7 @@ use App\Price;
 use App\AllocationCancellation;
 use App\SalespersonStock;
 use App\AllocationAmount;
+use App\BrandType;
 use Response;
 use Illuminate\Support\Facades\DB;
 
@@ -25,19 +26,20 @@ class AllocationsController extends BaseController
     // params needen for index
     protected $searchFields = ['id','doc_number'];
     protected $indexPaginate = 10;
-    protected $indexJoins = ['warehouse', 'salesperson', 'amount'];
+    protected $indexJoins = ['warehouse', 'salesperson', 'amount', 'brand_type'];
 
     // params needer for show
-    protected $showJoins = ['warehouse', 'salesperson', 'details.brand', 'user', 'cancellation.user'];
+    protected $showJoins = ['warehouse', 'salesperson', 'brand_type', 'details.brand', 'user', 'cancellation.user'];
 
     // params needed for store/update
-    protected $saveFields = ['rec_date','salesperson_id','warehouse_id','type','user_id','doc_number','comments'];
+    protected $saveFields = ['rec_date','salesperson_id','warehouse_id','type','brand_type_id','user_id','doc_number','comments'];
     //protected $storeFields = [];
     //protected $updateFields = [];
     protected $defaultNulls = ['warehouse_id','user_id','cancel_user_id','cancel_date','comments'];
     protected $formRules = [
         'salesperson_id' => 'required',
         'type' => 'required',
+        'brand_type_id' => 'required'
     ];
 
     protected $allowDelete = false;
@@ -119,6 +121,11 @@ class AllocationsController extends BaseController
             return false;
         }
 
+        if (! $req->brand_type_id) {
+            $this->msgError = 'Tipo de marca inválida';
+            return false;
+        }
+
         if (gettype($req->details) != 'array' || count($req->details) == 0) {
             $this->msgError = 'Agregue los detalles del registro';
             return false;
@@ -132,6 +139,14 @@ class AllocationsController extends BaseController
             }
         }
 
+        // validate all brands belong to a single brand type
+        foreach ($req->details as $item) {
+            $brand = Brand::find($item['brandID']);
+            if ($brand->brand_type_id != $req->brand_type_id) {
+                $this->msgError = 'Los marca '. $brand->name .' no corresponse con el tipo seleccionado';
+                return false;
+            }
+        }
 
         // validations for roles 
         // (review home.blade file to see permissions)
@@ -153,13 +168,14 @@ class AllocationsController extends BaseController
         }
 
 
-        // get allocation warehouse default
-        $warehouse = Configuration::getAllocationWarehouse();
+        // get allocation warehouse from brand_type
+        $brand_type = BrandType::find($req->brand_type_id);
 
         $this->request['rec_date'] = date('Y-m-d H:i:s');
         $this->request['salesperson_id'] = $req->salesperson_id;
-        $this->request['warehouse_id'] = $warehouse->id;
+        $this->request['warehouse_id'] = $brand_type->warehouse_id;
         $this->request['type'] = $req->type;
+        $this->request['brand_type_id'] = $req->brand_type_id;
         $this->request['user_id'] = session('userID');
         $this->request['doc_number'] = $req->doc_number;
         $this->request['comments'] = $req->comments;

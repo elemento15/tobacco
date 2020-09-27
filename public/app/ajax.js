@@ -32,6 +32,29 @@ app.factory('BrandService', ['$http', function($http) {
 	} 
 }]);
 
+app.factory('BrandTypeService', ['$http', function($http) {
+	return {
+		get      : function (data) {
+			return $http.get('brand_types/'+ data.id);
+		},
+		//save     : function (data) {
+		//	return (data.id) ? $http.patch('brand_types/'+ data.id, data) : $http.post('brand_types', data);
+		//},
+		read     : function(data) {
+			return $http.get('brand_types?'+ jQuery.param(data), data);
+		},
+		//delete   : function(data) {
+		//	return $http.delete('brand_types/'+ data.id);
+		//},
+		//activate : function(data) {
+		//	return $http.post('brand_types/'+ data.id +'/activate');
+		//},
+		//deactivate : function(data) {
+		//	return $http.post('brand_types/'+ data.id +'/deactivate');
+		//}
+	} 
+}]);
+
 app.factory('SalespersonService', ['$http', function($http) {
 	return {
 		get      : function (data) {

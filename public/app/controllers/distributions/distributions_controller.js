@@ -1,5 +1,5 @@
 function DistributionsController($scope, $http, $route, $location, $ngConfirm, $uibModal, $timeout, toastr, 
-	                             AllocationService, SalespersonService, BrandService) {
+	                             AllocationService, SalespersonService, BrandService, BrandTypeService) {
 
 	var self = this;
 
@@ -29,6 +29,7 @@ function DistributionsController($scope, $http, $route, $location, $ngConfirm, $
 			id: 0,
 			rec_date: '',
 			doc_number: '',
+			brand_type_id: '',
 			type: self.modelType,
 			salesperson_id: '',
 			active: '',
@@ -46,7 +47,8 @@ function DistributionsController($scope, $http, $route, $location, $ngConfirm, $
 
 	this.beforeViewLoaded = function () {
 		$scope.fetchSalespeople();
-		$scope.fetchBrands();
+		$scope.fetchBrandTypes();
+		//$scope.fetchBrands();
 	}
 
 
@@ -68,6 +70,8 @@ function DistributionsController($scope, $http, $route, $location, $ngConfirm, $
 	$scope.cancel_comment = '';
 
 	$scope.total_amount = 0;
+
+	$scope.brand_types = [];
 
 	// ========================================================
 	// - Specific methods -
@@ -103,9 +107,12 @@ function DistributionsController($scope, $http, $route, $location, $ngConfirm, $
 		});
 	}
 
-	$scope.fetchBrands = function () {
-		BrandService.read({
-			filters: [{ field: 'active', value: 1 }],
+	$scope.fetchBrands = function (type) {
+		$scope.loading = BrandService.read({
+			filters: [
+				{ field: 'brand_type_id', value: type },
+				{ field: 'active', value: 1 }
+			],
 			order: { field: 'name', type: 'asc' }
 		}).success(function (response) {
 			$scope.brands = response;
@@ -120,6 +127,17 @@ function DistributionsController($scope, $http, $route, $location, $ngConfirm, $
 			order: { field: 'name', type: 'asc' }
 		}).success(function (response) {
 			$scope.salespeople = response;
+		}).error(function (response) {
+			toastr.error(response.msg || 'Error en el servidor');
+		});
+	}
+
+	$scope.fetchBrandTypes = function () {
+		BrandTypeService.read({
+			//filters: [{ field: 'active', value: 1 }],
+			order: { field: 'name', type: 'asc' }
+		}).success(function (response) {
+			$scope.brand_types = response;
 		}).error(function (response) {
 			toastr.error(response.msg || 'Error en el servidor');
 		});
@@ -210,6 +228,11 @@ function DistributionsController($scope, $http, $route, $location, $ngConfirm, $
 	$scope.deleteDetail = function (index) {
 		$scope.model.details.splice(index, 1);
 	}
+
+	$scope.changeBrandType = function () {
+		$scope.fetchBrands($scope.model.brand_type_id);
+		$scope.selBrandId = '';
+	}
 	// ========================================================
 
 	
@@ -228,7 +251,6 @@ function DistributionsController($scope, $http, $route, $location, $ngConfirm, $
 	$scope.new = function () {
 		self.clearModel();
 		$scope.openForm(false);
-		//$scope.filterConcepts('E');
 	}
 
 	$scope.save = function () {

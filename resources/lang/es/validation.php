@@ -150,6 +150,7 @@ return [
         'price' => 'Precio',
         'cost' => 'Costo',
         'packs_per_box' => 'Paquetes por Caja',
+        'brand_type_id' => 'Tipo de Marca',
     ],
 
 ];

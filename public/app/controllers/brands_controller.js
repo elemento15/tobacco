@@ -1,5 +1,5 @@
 app.controller('BrandsController', function ($scope, $http, $route, $location, $ngConfirm, $uibModal, $timeout, 
-	                                         toastr, BrandService) {
+	                                         toastr, BrandService, BrandTypeService) {
 
 	this.list = {
 		order: { field: 'name', type: 'asc' },
@@ -20,6 +20,10 @@ app.controller('BrandsController', function ($scope, $http, $route, $location, $
 		
 		if (! data.name) {
 			invalid = toastr.warning('Nombre requerido', 'Validaciones');
+		}
+
+		if (! data.brand_type_id) {
+			invalid = toastr.warning('Tipo de Marca requerido', 'Validaciones');
 		}
 
 		if (! data.packs_per_box || data.packs_per_box < 0) {
@@ -49,8 +53,28 @@ app.controller('BrandsController', function ($scope, $http, $route, $location, $
 			packs_per_box: 0,
 			cost: 0,
 			price: 0,
+			brand_type_id: '',
 			_saving: false
 		};
+	}
+
+	this.beforeViewLoaded = function () {
+		$scope.fetchBrandTypes();
+	}
+
+
+	$scope.types = [];
+
+
+	$scope.fetchBrandTypes = function () {
+		BrandTypeService.read({
+			//filters: [{ field: 'active', value: 1 }],
+			order: { field: 'name', type: 'asc' }
+		}).success(function (response) {
+			$scope.types = response;
+		}).error(function (response) {
+			toastr.error(response.msg || 'Error en el servidor');
+		});
 	}
 
 

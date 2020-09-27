@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Brand extends Model
 {
-    protected $fillable = ['name', 'packs_per_box', 'cost', 'price'];
+    protected $fillable = ['name', 'brand_type_id', 'packs_per_box', 'cost', 'price'];
 
     protected $casts = [
     	'cost'  => 'float',
@@ -21,5 +21,10 @@ class Brand extends Model
     public function stocks()
     {
         return $this->hasMany('App\Stock');
+    }
+
+    public function type()
+    {
+        return $this->belongsTo('App\BrandType', 'brand_type_id');
     }
 }
