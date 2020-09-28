@@ -1,4 +1,4 @@
-app.controller('ReportsController', function ($scope, $http, $route, $location, $uibModal, toastr, ReportService) {
+app.controller('ReportsController', function ($scope, $http, $route, $location, $uibModal, toastr, ReportService, BrandTypeService) {
 
 
 	$scope.rpt01 = {
@@ -6,6 +6,8 @@ app.controller('ReportsController', function ($scope, $http, $route, $location, 
 		date_end: moment().toDate(),
 		date_ini_opened: false,
 		date_end_opened: false,
+		brand_type_id: '',
+		omit_zero: false,
 		data: [],
 		summary: {
 			price: 0,
@@ -17,6 +19,8 @@ app.controller('ReportsController', function ($scope, $http, $route, $location, 
 	};
 
 	$scope.rpt02 = {
+		brand_type_id: '',
+		omit_zero: false,
 		data: [],
 		summary: {
 			packs: 0,
@@ -33,6 +37,8 @@ app.controller('ReportsController', function ($scope, $http, $route, $location, 
 		data_docs: []
 	}
 
+	$scope.brand_types = [];
+
 	$scope.runRpt = function (opt) {
 		if (opt == 1) {
 			var rpt = $scope.rpt01;
@@ -41,6 +47,8 @@ app.controller('ReportsController', function ($scope, $http, $route, $location, 
 					type: 'DateRangeSales',
 					ini_date: moment(rpt.date_ini).format('YYYY-MM-DD'),
 					end_date: moment(rpt.date_end).format('YYYY-MM-DD'),
+					brand_type_id: rpt.brand_type_id,
+					omit_zero: (rpt.omit_zero) ? 1 : 0
 				}).success(function(response) {
 					rpt.data = response;
 				})
@@ -53,7 +61,9 @@ app.controller('ReportsController', function ($scope, $http, $route, $location, 
 			var rpt = $scope.rpt02;
 
 			$scope.loading = ReportService.get({
-					type: 'SalesPersonSummary'
+					type: 'SalesPersonSummary',
+					brand_type_id: rpt.brand_type_id,
+					omit_zero: (rpt.omit_zero) ? 1 : 0
 				}).success(function(response) {
 					rpt.data = response;
 				})
@@ -84,15 +94,21 @@ app.controller('ReportsController', function ($scope, $http, $route, $location, 
 
 	$scope.downloadRpt = function (opt) {
 		if (opt == 1) {
-			var rpt = $scope.rpt01;
-			var ini = moment(rpt.date_ini).format('YYYY-MM-DD');
-			var end = moment(rpt.date_end).format('YYYY-MM-DD');
+			var rpt  = $scope.rpt01;
+			var ini  = moment(rpt.date_ini).format('YYYY-MM-DD');
+			var end  = moment(rpt.date_end).format('YYYY-MM-DD');
+			var type = rpt.brand_type_id || 0;
+			var zero = (rpt.omit_zero) ? 1 : 0;
 
-			window.open('download?type=DateRangeSales&ini_date='+ ini +'&end_date='+ end);
+			window.open('download?type=DateRangeSales&ini_date='+ ini +'&end_date='+ end +'&brand_type_id='+ type +'&omit_zero='+ zero);
 		}
 
 		if (opt == 2) {
-			window.open('download?type=SalesPersonSummary');
+			var rpt  = $scope.rpt02;
+			var type = rpt.brand_type_id || 0;
+			var zero = (rpt.omit_zero) ? 1 : 0;
+
+			window.open('download?type=SalesPersonSummary&brand_type_id='+ type +'&omit_zero='+ zero);
 		}
 	}
 
@@ -108,6 +124,20 @@ app.controller('ReportsController', function ($scope, $http, $route, $location, 
 				$scope.rpt03.date_ini_opened = true;
 				break;
 		}
+	}
+
+	$scope.fetchBrandTypes = function () {
+		BrandTypeService.read({
+			order: { field: 'name', type: 'asc' }
+		}).success(function (response) {
+			$scope.brand_types = response;
+		}).error(function (response) {
+			toastr.error(response.msg || 'Error en el servidor');
+		});
+	}
+
+	$scope.switchOmitZero = function (obj) {
+		obj.omit_zero = !obj.omit_zero;
 	}
 
 
@@ -147,7 +177,7 @@ app.controller('ReportsController', function ($scope, $http, $route, $location, 
 
 
     $scope.$on('$viewContentLoaded', function (view) {
-		// ---
+		$scope.fetchBrandTypes();
 	});
 
 });

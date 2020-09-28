@@ -21,6 +21,9 @@
 			color: red;
 			font-weight: bold;
 		}
+		.cls-small {
+			font-size: 11px;
+		}
 		.cls-total {
 			font-weight: bold;
 			font-style: italic;
@@ -33,12 +36,13 @@
 	<h5>Almacén: {{ $warehouse }}</h5>
 	<hr>
 
-	<div style="text-align: center; margin: 0px 160px;">
+	<div style="text-align: center; margin: 0px 140px;">
 		<table class="cls-content" cellspacing="0" cellpadding="4" border="1" width="100%">
 			<thead>
 				<tr>
 					<th align="center" width="20">#</th>
 					<th align="center">MARCA</th>
+					<th align="center" width="60">TIPO</th>
 					@if ($use_boxes)
 					<th align="center" width="55">CAJAS</th>
 					@else
@@ -56,6 +60,7 @@
 					<tr>
 						<td align="center" style="font-size: 11px;">{{ $key + 1 }}</td>
 						<td>{{ $stock['name'] }}</td>
+						<td class="cls-small">{{ $stock['type'] }}</td>
 						<td align="right">
 							@if ($quantity >= 0)
 							<span>{{ number_format($quantity, 2) }}</span>
@@ -67,7 +72,7 @@
 				@endforeach
 
 				<tr class="cls-total">
-					<td colspan="2" align="right">Total: </td>
+					<td colspan="3" align="right">Total: </td>
 					<td align="right">{{ number_format($total, 2) }}</td>
 				</tr>
 			</tbody>

@@ -33,8 +33,13 @@ class Reports
 			                          ->whereBetween('rec_date', [$params['ini_date'], $params['end_date']])
 			                          ->where('type', 'L')
 			                          ->where('salesperson_id', $sp->id)
-			                          ->where('active', true)
-			                          ->get();
+			                          ->where('active', true);
+
+			if ($params['type']) {
+				$allocations = $allocations->where('brand_type_id', $params['type']);
+			}
+			
+			$allocations = $allocations->get();
 
 			$cost = 0;
 			$price = 0;
@@ -51,6 +56,10 @@ class Reports
 				}
 			}
 
+			if ($params['omit_zero'] && !$items) {
+				continue;
+			}
+			
 			$data[] = [
 				'name' => $sp->name,
 				'cost' => $cost,
@@ -70,9 +79,10 @@ class Reports
 		return $data;
 	}
 
-	public function getSalesPersonSummary()
+	public function getSalesPersonSummary($params)
 	{
 		$data = [];
+		$type = $params['type'];
 		//$oAmount = new Amounts();
 
 		$salespersons = Salesperson::where('active', true)
@@ -82,8 +92,15 @@ class Reports
 		foreach ($salespersons as $sp) {
 			$stocks = SalespersonStock::with('brand')
 			                          ->where('salesperson_id', $sp->id)
-			                          ->where('quantity', '!=', 0)
-			                          ->get();
+			                          ->where('quantity', '!=', 0);
+
+			if ($type) {
+				$stocks = $stocks->whereHas('brand', function ($q) use ($type) {
+					$q->where('brand_type_id', $type);
+				});
+			}
+			
+			$stocks = $stocks->get();
 
 			$packs  = 0;
 			$boxes  = 0;
@@ -94,6 +111,10 @@ class Reports
 				$boxes  += $item->quantity / $item->brand->packs_per_box;
 				//$amount += $oAmount->getDistributionsPrice($sp->id, $item->brand_id);
 				$amount += $item->quantity * Price::getPrice($item->brand->id, $sp->id);
+			}
+
+			if ($params['omit_zero'] && !$packs) {
+				continue;
 			}
 
 			$data[] = [

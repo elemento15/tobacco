@@ -13,7 +13,6 @@ class ConfigurationsController extends Controller
     	if (! $config = Configuration::first()) {
     		$config = [
     			'default_warehouse_id' => '',
-    			'allocation_warehouse_id' => '',
                 'movements_kardex_days' => 0,
                 'sales_kardex_days' => 0,
     		];
@@ -31,7 +30,6 @@ class ConfigurationsController extends Controller
     	}
 
 		$config->default_warehouse_id = $request->default_warehouse_id;
-		$config->allocation_warehouse_id = $request->allocation_warehouse_id;
         $config->movements_kardex_days = $request->movements_kardex_days;
         $config->sales_kardex_days = $request->sales_kardex_days;
 		$config->save();

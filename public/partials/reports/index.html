@@ -41,6 +41,27 @@
                                     </div>
                                     <div class="row mt15">
                                         <div class="col-sm-12">
+                                            <label>Tipo: </label>
+                                            <div class="input-group">
+                                              <select class="form-control input-sm" ng-model="rpt01.brand_type_id">
+                                                <option value="">(Todos)</option>
+                                                <option ng-repeat="(key, opt) in brand_types" value="{{opt.id}}">{{ opt.name }}</option>
+                                              </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt15">
+                                        <div class="col-sm-12">
+                                            <button type="button" class="btn btn-default btn-sm" ng-class="{'btn-info': rpt01.omit_zero}" 
+                                                    ng-click="switchOmitZero(rpt01)">
+                                                <span class="glyphicon glyphicon-unchecked" ng-hide="rpt01.omit_zero"></span> 
+                                                <span class="glyphicon glyphicon-check" ng-show="rpt01.omit_zero"></span> 
+                                                Omitir ceros
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="row mt15">
+                                        <div class="col-sm-12">
                                             <div class="btn-group" uib-dropdown>
                                                 <button type="button" class="btn btn-success" ng-click="runRpt(1)">Generar</button>
                                                 <button type="button" class="btn btn-success" uib-dropdown-toggle>
@@ -112,7 +133,27 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <!--<button class="btn btn-success" ng-click="runRpt(1)">Generar</button>-->
+                                            <label>Tipo: </label>
+                                            <div class="input-group">
+                                              <select class="form-control" ng-model="rpt02.brand_type_id">
+                                                <option value="">(Todos)</option>
+                                                <option ng-repeat="(key, opt) in brand_types" value="{{opt.id}}">{{ opt.name }}</option>
+                                              </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt15">
+                                        <div class="col-sm-12">
+                                            <button type="button" class="btn btn-default btn-sm" ng-class="{'btn-info': rpt02.omit_zero}" 
+                                                    ng-click="switchOmitZero(rpt02)">
+                                                <span class="glyphicon glyphicon-unchecked" ng-hide="rpt02.omit_zero"></span> 
+                                                <span class="glyphicon glyphicon-check" ng-show="rpt02.omit_zero"></span> 
+                                                Omitir ceros
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="row mt15">
+                                        <div class="col-sm-12">
                                             <div class="btn-group" uib-dropdown>
                                                 <button type="button" class="btn btn-success" ng-click="runRpt(2)">Generar</button>
                                                 <button type="button" class="btn btn-success" uib-dropdown-toggle>

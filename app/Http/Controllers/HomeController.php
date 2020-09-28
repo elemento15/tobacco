@@ -38,14 +38,20 @@ class HomeController extends Controller
         switch ($type) {
             case 'DateRangeSales':
                 $params = [
-                    'ini_date' => $req->ini_date . ' 00:00:00', 
-                    'end_date' => $req->end_date . ' 23:59:59'
+                    'ini_date'  => $req->ini_date . ' 00:00:00', 
+                    'end_date'  => $req->end_date . ' 23:59:59',
+                    'type'      => $req->brand_type_id ?? false,
+                    'omit_zero' => intval($req->omit_zero)
                 ];
                 $data = $rpt->getDateRangeSales($params);
                 break;
 
             case 'SalesPersonSummary':
-                $data = $rpt->getSalesPersonSummary();
+                $params = [
+                    'type'      => $req->brand_type_id ?? false,
+                    'omit_zero' => intval($req->omit_zero)
+                ];
+                $data = $rpt->getSalesPersonSummary($params);
                 break;
 
             case 'Cancellations':
@@ -70,7 +76,9 @@ class HomeController extends Controller
             case 'DateRangeSales':
                 $params = [
                     'ini_date' => $req->ini_date . ' 00:00:00', 
-                    'end_date' => $req->end_date . ' 23:59:59'
+                    'end_date' => $req->end_date . ' 23:59:59',
+                    'type'      => $req->brand_type_id ?? false,
+                    'omit_zero' => intval($req->omit_zero)
                 ];
                 $data = [
                     'data' => $rpt->getDateRangeSales($params),
@@ -85,8 +93,12 @@ class HomeController extends Controller
                 break;
 
             case 'SalesPersonSummary':
+                $params = [
+                    'type'      => $req->brand_type_id ?? false,
+                    'omit_zero' => intval($req->omit_zero)
+                ];
                 $data = [
-                    'data' => $rpt->getSalesPersonSummary(),
+                    'data' => $rpt->getSalesPersonSummary($params),
                     'sum_packs' => 0,
                     'sum_boxes' => 0,
                     'sum_amount' => 0,

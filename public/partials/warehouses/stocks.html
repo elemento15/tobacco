@@ -1,7 +1,7 @@
 <h3 class="cls-title">Existencias por Almacén</h3>
 
 <div class="row">
-	<div class="col-sm-offset-2 col-sm-6" cg-busy="loading">
+	<div class="col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-7" cg-busy="loading">
 		<div class="row">
 			<div class="col-sm-4 col-md-3">
 				<div class="panel panel-default panel-filters">
@@ -9,6 +9,17 @@
 					<div class="panel-body">
 						<!-- status filter -->
 						<div ng-include="tpls.filter_status"></div>
+
+						<!-- brand type filter -->
+						<div class="form">
+							<div class="form-group">
+								<label class="cls-small">Tipo:</label>
+								<select class="form-control input-sm" ng-model="table.filters.brand_type_id" ng-change="read(1)">
+									<option value="">(Todos)</option>
+									<option ng-repeat="(key, opt) in brand_types" value="{{opt.id}}">{{ opt.name }}</option>
+								</select>
+							</div>
+						</div>
 					</div>
 				</div>
 
@@ -16,7 +27,7 @@
 					<div class="panel-heading">Opciones</div>
 					<div class="panel-body">
 						<a class="btn btn-block btn-sm btn-default" target="_blank"
-						   href="stocks/report/{{ table.filters.warehouse_id }}/?boxes={{ boxesUnityDetail }}" >
+						   href="stocks/report/{{ table.filters.warehouse_id }}/?boxes={{ boxesUnityDetail }}&type={{ table.filters.brand_type_id || '0' }}" >
 							<span class="glyphicon glyphicon-print" aria-hidden="true"></span> Existencias
 						</a>
 
@@ -47,7 +58,8 @@
 						<tr>
 							<th>&nbsp;</th>
 							<th class="text-center">Marca</th>
-							<th class="text-center">
+							<th class="text-center">Tipo</th>
+							<th class="text-center" width="100">
 								<span ng-show="boxesUnityDetail">Cajas</span>
 								<span ng-hide="boxesUnityDetail">Paquetes</span>
 							</th>
@@ -56,7 +68,8 @@
 					<tbody>
 						<tr ng-repeat="(key, item) in table.data" ng-click="table.selected = key"
 						    ng-class="{'cls-inactive': !item.active, 'cls-selected': key === table.selected}"
-						    ng-show="table.filters.warehouse_id">
+						    ng-show="table.filters.warehouse_id"
+						    style="height: 33px;">
 						    <td class="text-center" width="80">
 						    	<div class="cls-actions">
 							    	<a class="btn btn-xs btn-default" target="_blank"
@@ -66,6 +79,7 @@
 								</div>
 						    </td>
 							<td class="">{{ item.name }}</td>
+							<td class="small">{{ item.type }}</td>
 							<td class="text-right" ng-class="{'cls-negative': item.stock < 0}">
 								<span ng-show="boxesUnityDetail">{{ item.stock / item.packs_per_box | number }}</span>
 								<span ng-hide="boxesUnityDetail">{{ item.stock | number }}</span>

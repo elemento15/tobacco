@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Configuration;
 use App\Brand;
 use App\AllocationBrand;
 use App\Movement;

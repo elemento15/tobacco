@@ -2,7 +2,6 @@ app.controller('ConfigurationsController', function ($scope, $http, $route, $loc
 	                                                 WarehouseService, ConfigurationService) {
     
     $scope.model = {
-    	allocation_warehouse_id: '',
     	default_warehouse_id: '',
     	movements_kardex_days: 0,
     	sales_kardex_days: 0
