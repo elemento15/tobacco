@@ -213,7 +213,7 @@
 										<div class="form-inline">
 											<div class="form-group mr10">
 												<label>Marca: </label>
-												<select class="form-control input-sm" ng-model="selBrandId">
+												<select class="form-control input-sm" ng-model="selBrandId" style="width: 200px;">
 													<option value="">-- Seleccione --</option>
 													<option ng-repeat="(key, opt) in brands" value="{{opt.id}}">{{ opt.name }}</option>
 												</select>
@@ -222,7 +222,7 @@
 											<div class="form-group mr10">
 												<label>Cantidad: </label>
 												<input type="number" class="form-control input-sm text-right" ng-model="quantityDetail"
-												       ng-keyup="enterQuantity($event)" min="0" style="width: 100px;">
+												       ng-keyup="enterQuantity($event)" min="0" style="width: 85px;">
 											</div>
 
 											<div class="form-group mr10">
