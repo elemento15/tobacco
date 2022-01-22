@@ -4,30 +4,49 @@ namespace App\Http\Controllers;
 
 use App\Allocation;
 use Illuminate\Http\Request;
-use Response;
-use DB;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class ChartsController extends Controller
 {
     public function sales()
     {
+        $records = [];
+        $date = Carbon::now()->startOfMonth()->addMonth(-11);
+
         $data = DB::table('allocations AS a')
                   ->join('allocation_amounts AS aa', 'aa.allocation_id', '=', 'a.id')
                   ->select(DB::raw('DATE_FORMAT(a.rec_date, "%Y-%m") AS period, SUM(aa.price) AS amount'))
+                  ->where('a.rec_date', '>', $date->format('Y-m-d'))
                   ->where('a.type', 'L')
                   ->where('a.active', true)
                   ->groupBy('period')
-                  ->orderBy('period', 'desc')
-                  ->limit(12)
+                  ->orderBy('period')
                   ->get();
 
-        foreach ($data as $key => $item) {
-            $dt = Carbon::parse($item->period);
-            $data[$key]->period = $dt->year .'-'. ucfirst($dt->locale('es')->shortMonthName);
+        for ($i=0; $i < 12; $i++) {
+            if ($data[$i] ?? false) {
+                $records[] = [
+                    'period' => $date->format('Y-m'),
+                    'amount' => $data[$i]->amount
+                ];
+            } else {
+                $records[] = [
+                    'period' => $date->format('Y-m'),
+                    'amount' => 0
+                ];
+            }
+
+            $date->addMonth();
         }
 
-        return Response::json(array_reverse($data->toArray()));
+        foreach ($records as $key => $item) {
+            $dt = Carbon::parse($item['period']);
+            $records[$key]['period'] = $dt->year .'-'. ucfirst($dt->locale('es')->shortMonthName);
+        }
+
+        return Response::json($records);
     }
 
     public function salesperson()
