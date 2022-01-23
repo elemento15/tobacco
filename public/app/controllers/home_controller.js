@@ -33,6 +33,18 @@ app.controller('HomeController', function ($scope, $http, $route, $location, Cha
         }]
     });
 
+    $scope.chart_weekly_sales = new CanvasJS.Chart("chartWeeklySales", {
+        animationEnabled: true,
+        theme: "light2",
+        data: [{
+            color: "#bdc1ec",
+            type: "column",
+            showInLegend: false,
+            legendMarkerColor: "grey",
+            dataPoints: []
+        }]
+    });
+
     $scope.$on('$viewContentLoaded', function (view) {
         var role = window.userRole;
 
@@ -80,6 +92,23 @@ app.controller('HomeController', function ($scope, $http, $route, $location, Cha
 
                     $scope.chart_salesperson.options.data[0].dataPoints = data;
                     $scope.chart_salesperson.render();
+                }).error(function (response) {
+                    toastr.error(response.msg || 'Error en el servidor');
+                });
+            
+            ChartService.weekly()
+                .success(function (response) {
+                    var data = [];
+
+                    response.forEach(function (item) {
+                        data.push({
+                            label: item.label,
+                            y: parseFloat(item.amount)
+                        });
+                    });
+
+                    $scope.chart_weekly_sales.options.data[0].dataPoints = data;
+                    $scope.chart_weekly_sales.render();
                 }).error(function (response) {
                     toastr.error(response.msg || 'Error en el servidor');
                 });

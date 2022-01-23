@@ -49,6 +49,7 @@ Route::group(['middleware' => ['auth']], function () {
 		// Charts
 		Route::get('charts/sales', 'ChartsController@sales');
 		Route::get('charts/salesperson', 'ChartsController@salesperson');
+		Route::get('charts/weekly', 'ChartsController@weekly');
 	});
 
 	// Only for: SYS, ADM, AUX

@@ -232,6 +232,9 @@ app.factory('ChartService', ['$http', function($http) {
 		},
 		salesperson : function (data) {
 			return $http.get('charts/salesperson', data);
+		},
+		weekly : function (data) {
+			return $http.get('charts/weekly', data);
 		}
 	}
 }]);

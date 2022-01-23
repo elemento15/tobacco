@@ -24,9 +24,7 @@ class Reports
 		$data = [];
 		$sum_price = 0;
 
-		$salespersons = Salesperson::where('active', true)
-                                   ->orderBy('name')
-		                           ->get();
+		$salespersons = Salesperson::orderBy('name')->get();
 
 		foreach ($salespersons as $sp) {
 			$allocations =  Allocation::with('amount')
@@ -56,7 +54,7 @@ class Reports
 				}
 			}
 
-			if ($params['omit_zero'] && !$items) {
+			if ($params['omit_zero'] && !$items || !$sp->active && !$items) {
 				continue;
 			}
 			
@@ -85,9 +83,7 @@ class Reports
 		$type = $params['type'];
 		//$oAmount = new Amounts();
 
-		$salespersons = Salesperson::where('active', true)
-                                   ->orderBy('name')
-		                           ->get();
+		$salespersons = Salesperson::orderBy('name')->get();
 
 		foreach ($salespersons as $sp) {
 			$stocks = SalespersonStock::with('brand')
@@ -113,7 +109,7 @@ class Reports
 				$amount += $item->quantity * Price::getPrice($item->brand->id, $sp->id);
 			}
 
-			if ($params['omit_zero'] && !$packs) {
+			if (($params['omit_zero'] && !$packs) || (!$sp->active && !$packs)) {
 				continue;
 			}
 

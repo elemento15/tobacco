@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use DateTime;
 
 class ChartsController extends Controller
 {
@@ -65,5 +66,48 @@ class ChartsController extends Controller
                   ->get();
 
         return Response::json($data);
+    }
+
+    public function weekly()
+    {
+        $records = collect();
+        $date = Carbon::now()->addYear(-1);
+
+        $data = DB::table('allocations AS a')
+                  ->join('allocation_amounts AS aa', 'aa.allocation_id', '=', 'a.id')
+                  ->select(DB::raw('YEAR(a.rec_date) AS year_num, WEEK(a.rec_date, 1) AS week_num, SUM(aa.price) AS amount'))
+                  ->where('a.rec_date', '>=', $date->format('Y-m-d'))
+                  ->where('a.type', 'L')
+                  ->where('a.active', true)
+                  ->groupBy('year_num')
+                  ->groupBy('week_num')
+                  ->orderBy('year_num')
+                  ->orderBy('week_num')
+                  ->get();
+        
+        foreach ($data as $key => $item) {
+            if ($key == 0) continue; // omit first week
+
+            $records->push([
+                'year_num' => $item->year_num,
+                'week_num' => $item->week_num,
+                'label'    => $this->getWeekLabel($item->year_num, $item->week_num),
+                'amount'   => $item->amount,
+            ]);
+        }
+
+        return Response::json($records);
+    }
+
+
+    private function getWeekLabel($year, $week)
+    {
+        $dt = new DateTime();
+        $date = $dt->setISODate($year, $week, "1")->format('Y-m-d');
+        
+        $dt = Carbon::create($date);
+        $day  = $dt->format('d');
+        $year = $dt->format('Y');
+        return $day .'/'. ucfirst($dt->locale('es')->shortMonthName) .'/'. $year;
     }
 }
