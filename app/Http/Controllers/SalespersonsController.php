@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Salesperson;
-use App\Price;
+use App\Models\Salesperson;
+use App\Models\Price;
 use Illuminate\Http\Request;
 use Response;
 
 class SalespersonsController extends BaseController
 {
-    protected $mainModel = 'App\Salesperson';
+    protected $mainModel = 'App\Models\Salesperson';
 
     // params needen for index
     protected $searchFields = ['name','mobile'];

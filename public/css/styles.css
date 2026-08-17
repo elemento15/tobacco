@@ -345,3 +345,7 @@ input.cls-error {
 .panel-filters .panel-body {
 	background-color: #f6f6f6;
 }
+
+a.canvasjs-chart-credit {
+	display: none;
+}

@@ -2,9 +2,9 @@
 
 namespace App\Libraries;
 
-use App\Brand;
-use App\SalespersonStock;
-use App\Allocation;
+use App\Models\Brand;
+use App\Models\SalespersonStock;
+use App\Models\Allocation;
 
 class Amounts
 {

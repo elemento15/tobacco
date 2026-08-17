@@ -3,18 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Brand;
-use App\Stock;
-use App\Warehouse;
-use App\MovementBrand;
-use App\Configuration;
+use App\Models\Brand;
+use App\Models\Stock;
+use App\Models\Warehouse;
+use App\Models\MovementBrand;
+use App\Models\Configuration;
 use Carbon\Carbon;
 use PDF;
 use DB;
 
 class StocksController extends BaseController
 {
-    protected $mainModel = 'App\Stock';
+    protected $mainModel = 'App\Models\Stock';
 
     // params needen for index
     protected $searchFields = [];

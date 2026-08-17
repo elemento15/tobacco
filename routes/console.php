@@ -27,7 +27,7 @@ Artisan::command('calc-amounts', function() {
 });
 
 Artisan::command('normalize-brand-types', function () {
-	if (! App\BrandType::count()) {
+	if (! App\Models\BrandType::count()) {
 		// create 2 brand_types and relate with warehouse
 		$types = [
 			['code' => 'CIGAR', 'name' => 'CIGARROS', 'warehouse_id' => 2],
@@ -35,14 +35,14 @@ Artisan::command('normalize-brand-types', function () {
 		];
 
 		foreach ($types as $type) {
-			App\BrandType::create($type);
+			App\Models\BrandType::create($type);
 		}
 		$this->comment('- Tipos de marca creados (CIGARROS, DULCERIA)');
 
-		$type = App\BrandType::where('code', 'CIGAR')->first();
+		$type = App\Models\BrandType::where('code', 'CIGAR')->first();
 
 		// set "CIGAR" brand type to all existing brands
-		$brands = App\Brand::all();
+		$brands = App\Models\Brand::all();
 		foreach ($brands as $brand) {
 			$brand->brand_type_id = $type->id;
 			$brand->save();
@@ -50,7 +50,7 @@ Artisan::command('normalize-brand-types', function () {
 		$this->comment('- Asignado tipo de marca a todas las marcas');
 
 		// set "CIGAR" brand type to all existing allocations
-		$allocations = App\Allocation::all();
+		$allocations = App\Models\Allocation::all();
 		foreach ($allocations as $item) {
 			$item->brand_type_id = $type->id;
 			$item->save();

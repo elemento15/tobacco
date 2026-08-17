@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class BrandTypesController extends BaseController
 {
-    protected $mainModel = 'App\BrandType';
+    protected $mainModel = 'App\Models\BrandType';
 
     // params needen for index
     protected $searchFields = ['name','code'];

@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Price;
+use App\Models\Price;
 
 class BrandsController extends BaseController
 {
-    protected $mainModel = 'App\Brand';
+    protected $mainModel = 'App\Models\Brand';
 
     // params needen for index
     protected $searchFields = ['name'];

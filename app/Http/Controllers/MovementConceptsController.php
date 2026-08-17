@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class MovementConceptsController extends BaseController
 {
-    protected $mainModel = 'App\MovementConcept';
+    protected $mainModel = 'App\Models\MovementConcept';
 
     // params needen for index
     protected $searchFields = ['name'];

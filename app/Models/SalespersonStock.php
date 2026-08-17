@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,12 +12,12 @@ class SalespersonStock extends Model
 
     public function brand()
     {
-        return $this->belongsTo('App\Brand');
+        return $this->belongsTo('App\Models\Brand');
     }
 
     public function salesperson()
     {
-        return $this->belongsTo('App\Salesperon');
+        return $this->belongsTo('App\Models\Salesperson');
     }
 
     public static function addStock($brand_id, $salesperson_id, $quantity = 0)

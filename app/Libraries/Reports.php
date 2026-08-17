@@ -2,13 +2,13 @@
 
 namespace App\Libraries;
 
-use App\Salesperson;
-use App\Allocation;
-use App\SalespersonStock;
-use App\Price;
-use App\MovementCancellation;
-use App\Movement;
-use App\AllocationCancellation;
+use App\Models\Salesperson;
+use App\Models\Allocation;
+use App\Models\SalespersonStock;
+use App\Models\Price;
+use App\Models\MovementCancellation;
+use App\Models\Movement;
+use App\Models\AllocationCancellation;
 use Carbon\Carbon;
 //use App\Libraries\Amounts;
 

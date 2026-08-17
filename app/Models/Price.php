@@ -1,9 +1,9 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
-use App\Brand;
-use App\Salesperson;
+use App\Models\Brand;
+use App\Models\Salesperson;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,12 +13,12 @@ class Price extends Model
 
     public function brand()
     {
-        return $this->belongsTo('App\Brand');
+        return $this->belongsTo('App\Models\Brand');
     }
 
     public function salesperson()
     {
-        return $this->belongsTo('App\Salesperson');
+        return $this->belongsTo('App\Models\Salesperson');
     }
 
 

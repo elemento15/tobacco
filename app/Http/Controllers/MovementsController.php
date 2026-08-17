@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Movement;
-use App\MovementBrand;
-use App\MovementConcept;
-use App\MovementCancellation;
-use App\Stock;
-use App\Warehouse;
+use App\Models\Movement;
+use App\Models\MovementBrand;
+use App\Models\MovementConcept;
+use App\Models\MovementCancellation;
+use App\Models\Stock;
+use App\Models\Warehouse;
 use Illuminate\Http\Request;
 use Response;
 use Illuminate\Support\Facades\DB;
 
 class MovementsController extends BaseController
 {
-    protected $mainModel = 'App\Movement';
+    protected $mainModel = 'App\Models\Movement';
 
     // params needen for index
     protected $searchFields = ['id'];

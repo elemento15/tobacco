@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,16 +15,16 @@ class Brand extends Model
 
     public function prices()
     {
-        return $this->hasMany('App\Price');
+        return $this->hasMany('App\Models\Price');
     }
 
     public function stocks()
     {
-        return $this->hasMany('App\Stock');
+        return $this->hasMany('App\Models\Stock');
     }
 
     public function type()
     {
-        return $this->belongsTo('App\BrandType', 'brand_type_id');
+        return $this->belongsTo('App\Models\BrandType', 'brand_type_id');
     }
 }

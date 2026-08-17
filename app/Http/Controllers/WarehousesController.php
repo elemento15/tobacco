@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class WarehousesController extends BaseController
 {
-    protected $mainModel = 'App\Warehouse';
+    protected $mainModel = 'App\Models\Warehouse';
 
     // params needen for index
     protected $searchFields = ['name'];

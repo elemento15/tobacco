@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class RolesController extends BaseController
 {
-    protected $mainModel = 'App\Role';
+    protected $mainModel = 'App\Models\Role';
 
     // params needen for index
     protected $searchFields = ['name','code'];

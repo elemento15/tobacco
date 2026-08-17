@@ -1,8 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
-//use App\Warehouse;
+//use App\Models\Warehouse;
 use Illuminate\Database\Eloquent\Model;
 
 class Movement extends Model
@@ -14,12 +14,12 @@ class Movement extends Model
 
 	public function warehouse()
     {
-        return $this->belongsTo('App\Warehouse');
+        return $this->belongsTo('App\Models\Warehouse');
     }
 
     public function concept()
     {
-        return $this->belongsTo('App\MovementConcept');
+        return $this->belongsTo('App\Models\MovementConcept');
     }
 
     public function user()
@@ -29,12 +29,12 @@ class Movement extends Model
 
     public function cancellation()
     {
-        return $this->belongsTo('App\MovementCancellation');
+        return $this->belongsTo('App\Models\MovementCancellation');
     }
 
     public function details()
     {
-        return $this->hasMany('App\MovementBrand');
+        return $this->hasMany('App\Models\MovementBrand');
     }
 
     /**

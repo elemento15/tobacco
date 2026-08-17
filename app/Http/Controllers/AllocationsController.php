@@ -3,24 +3,24 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Brand;
-use App\AllocationBrand;
-use App\Movement;
-use App\MovementConcept;
-use App\MovementBrand;
-use App\MovementCancellation;
-use App\Stock;
-use App\Price;
-use App\AllocationCancellation;
-use App\SalespersonStock;
-use App\AllocationAmount;
-use App\BrandType;
+use App\Models\Brand;
+use App\Models\AllocationBrand;
+use App\Models\Movement;
+use App\Models\MovementConcept;
+use App\Models\MovementBrand;
+use App\Models\MovementCancellation;
+use App\Models\Stock;
+use App\Models\Price;
+use App\Models\AllocationCancellation;
+use App\Models\SalespersonStock;
+use App\Models\AllocationAmount;
+use App\Models\BrandType;
 use Response;
 use Illuminate\Support\Facades\DB;
 
 class AllocationsController extends BaseController
 {
-    protected $mainModel = 'App\Allocation';
+    protected $mainModel = 'App\Models\Allocation';
 
     // params needen for index
     protected $searchFields = ['id','doc_number'];
