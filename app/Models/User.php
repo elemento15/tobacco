@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -41,6 +41,6 @@ class User extends Authenticatable
 
     public function role()
     {
-        return $this->belongsTo('App\Role');
+        return $this->belongsTo(\App\Role::class);
     }
 }

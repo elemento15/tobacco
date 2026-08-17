@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UsersController extends BaseController
 {
-    protected $mainModel = 'App\User';
+    protected $mainModel = 'App\Models\User';
 
     // params needen for index
     protected $searchFields = ['name','email'];
