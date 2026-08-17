@@ -10,6 +10,6 @@ class AllocationCancellation extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\Models\User');
     }
 }
